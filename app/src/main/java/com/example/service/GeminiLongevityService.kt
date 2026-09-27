@@ -65,7 +65,7 @@ class GeminiLongevityService {
         result: BiologicalTwinResult,
         hc: HealthConnectData
     ): MorningLongevityBriefing? {
-        val modelName = "gemini-3.5-flash"
+        val modelName = "gemini-3.8-flash"
         val url = "https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey"
 
         val bioAgeDiff = (result.phenoAge - profile.chronologicalAge * 10.0).roundToInt() / 10.0

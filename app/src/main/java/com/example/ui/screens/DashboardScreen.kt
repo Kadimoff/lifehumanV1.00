@@ -1,5 +1,9 @@
 package com.example.ui.screens
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,10 +28,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.DocumentScanner
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.MultilineChart
 import androidx.compose.material.icons.filled.Science
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.ViewInAr
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -56,17 +64,17 @@ import com.example.ui.components.HeroAgeCard
 import com.example.ui.components.ProjectedIndependenceCard
 import com.example.ui.components.RadarChart
 import com.example.ui.components.ReserveItemCard
-import com.example.ui.components.LongevityEmojiAvatar
 import com.example.ui.theme.AppTheme
-import com.example.ui.theme.BorderSubtle
 import com.example.ui.theme.CardBorder
 import com.example.ui.theme.DarkBackground
 import com.example.ui.theme.DarkSurface
 import com.example.ui.theme.DarkSurfaceVariant
 import com.example.ui.theme.SleekAmber
+import com.example.ui.theme.SleekCyan
 import com.example.ui.theme.SleekGreen
 import com.example.ui.theme.SleekOnPrimary
 import com.example.ui.theme.SleekPrimary
+import com.example.ui.theme.SleekRose
 import com.example.ui.theme.SleekSecondary
 import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
@@ -89,112 +97,117 @@ fun DashboardScreen(
     val currentUser by viewModel.currentUserProfile.collectAsStateWithLifecycle()
 
     var savedMessage by remember { mutableStateOf<String?>(null) }
-    var twinViewMode by remember { mutableStateOf("3D") } // "3D", "RADAR", "BOTH"
+    // Focused Dashboard View Modes: "3D" (Volumetric Twin), "AI_BRIEF" (Gemini Analysis), "MATRIX" (8-Axis Radar & Reserves)
+    var dashboardTab by remember { mutableStateOf("3D") }
 
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(colors.background),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // 1. Header Profile & Status
+        // 1. HERO AGE & VELOCITY CARD (High Contrast, Clear Metrics)
+        item {
+            HeroAgeCard(result = twinResult)
+        }
+
+        // 2. AT-A-GLANCE VITALS ROW (Glanceable 3 key metrics)
         item {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier.clickable { viewModel.openEntryMenu() }
+                // Longevity Reserve Score
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(colors.surface)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
+                        .padding(horizontal = 10.dp, vertical = 8.dp)
                 ) {
-                    LongevityEmojiAvatar(
-                        emoji = currentUser.avatarEmoji,
-                        size = 44.dp,
-                        fontSize = 22f,
-                        onClick = { viewModel.openEntryMenu() }
-                    )
-
-                    Column {
-                        Text(
-                            text = "LIFEMAP HUMAN™",
-                            color = colors.primary,
-                            fontSize = 11.5.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 1.sp
-                        )
-                        Text(
-                            text = "${currentUser.name}, ${profile.chronologicalAge.toInt()} yrs",
-                            color = colors.textPrimary,
-                            fontSize = 14.5.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Icon(Icons.Default.Shield, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(12.dp))
+                            Text("LRS SKORU", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Text("${twinResult.longevityReserveScore.toInt()}/100", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Black)
                     }
                 }
 
-                // Bookmark / Save assessment
+                // Resting Heart Rate
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
+                        .weight(1f)
+                        .clip(RoundedCornerShape(14.dp))
                         .background(colors.surface)
-                        .border(1.dp, colors.cardBorder, CircleShape)
-                        .clickable {
-                            viewModel.saveCurrentAssessment()
-                            savedMessage = "Saved"
-                        },
-                    contentAlignment = Alignment.Center
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
+                        .padding(horizontal = 10.dp, vertical = 8.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Bookmark,
-                        contentDescription = "Save Assessment",
-                        tint = if (savedMessage != null) colors.green else colors.primary,
-                        modifier = Modifier.size(18.dp)
-                    )
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Icon(Icons.Default.Favorite, contentDescription = null, tint = SleekRose, modifier = Modifier.size(12.dp))
+                            Text("DİNLENİK NABIZ", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Text("${profile.restingPulseBpm.toInt()} bpm", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Black)
+                    }
+                }
+
+                // Daily Steps
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(colors.surface)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
+                        .padding(horizontal = 10.dp, vertical = 8.dp)
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Icon(Icons.Default.DirectionsWalk, contentDescription = null, tint = SleekGreen, modifier = Modifier.size(12.dp))
+                            Text("GÜNLÜK ADIM", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Text("${profile.dailySteps}", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Black)
+                    }
                 }
             }
         }
 
-        // 2. Preset Biological Profiles
+        // 3. BIOLOGICAL PRESET PROFILES (Clean, compact horizontal selector)
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
-                    text = "BIOLOGICAL PRESET PROFILES",
+                    text = "BİYOLOJİK SENARYOLAR",
                     color = TextMuted,
                     fontSize = 10.5.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
                 )
-                LazyRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(viewModel.presetProfiles) { preset ->
                         Box(
                             modifier = Modifier
-                                .clip(RoundedCornerShape(14.dp))
-                                .background(DarkSurface)
-                                .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(colors.surface)
+                                .border(1.dp, colors.cardBorder, RoundedCornerShape(12.dp))
                                 .clickable {
                                     viewModel.applyPreset(preset.id)
                                     savedMessage = null
                                 }
-                                .padding(horizontal = 14.dp, vertical = 9.dp)
+                                .padding(horizontal = 12.dp, vertical = 7.dp)
                         ) {
-                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                                 Text(
                                     text = preset.title,
                                     color = TextPrimary,
-                                    fontSize = 12.sp,
+                                    fontSize = 11.5.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
                                     text = preset.tag,
                                     color = SleekPrimary,
-                                    fontSize = 10.sp,
+                                    fontSize = 9.5.sp,
                                     fontWeight = FontWeight.Medium
                                 )
                             }
@@ -204,65 +217,49 @@ fun DashboardScreen(
             }
         }
 
-        // 3. AI Morning Dashboard Summary Widget
-        item {
-            AiMorningBriefingWidget(
-                viewModel = viewModel,
-                profile = profile,
-                result = twinResult
-            )
-        }
-
-        // 3.1 Hero Age Delta Card
-        item {
-            HeroAgeCard(result = twinResult)
-        }
-
-        // 3.5 Health Connect Live Biometric Sync Card
-        item {
-            HealthConnectSyncCard(viewModel = viewModel)
-        }
-
-        // 4. View Switcher: 3D Twin vs 8-Axis Radar
+        // 4. SEGMENTED HUB BAR (3D Dijital İkiz | AI Brifing | Biyolojik Matris)
         item {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(DarkSurface)
-                    .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                    .background(colors.surfaceVariant)
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
                     .padding(4.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 val tabs = listOf(
-                    Triple("3D", "3D Digital Twin", Icons.Default.ViewInAr),
-                    Triple("RADAR", "8-Axis Radar", Icons.Default.AutoAwesome),
-                    Triple("BOTH", "Dual View", Icons.Default.Description)
+                    Triple("3D", "3D İkiz", Icons.Default.ViewInAr),
+                    Triple("AI_BRIEF", "AI Brifing", Icons.Default.Lightbulb),
+                    Triple("MATRIX", "Biyo-Matris", Icons.Default.AutoAwesome)
                 )
+
                 tabs.forEach { (mode, label, icon) ->
-                    val isSelected = twinViewMode == mode
+                    val isSelected = dashboardTab == mode
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isSelected) SleekOnPrimary else Color.Transparent)
-                            .border(1.dp, if (isSelected) SleekPrimary else Color.Transparent, RoundedCornerShape(10.dp))
-                            .clickable { twinViewMode = mode }
+                            .background(if (isSelected) colors.primary else Color.Transparent)
+                            .clickable { dashboardTab = mode }
                             .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        ) {
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
                                 modifier = Modifier.size(14.dp),
-                                tint = if (isSelected) SleekPrimary else TextMuted
+                                tint = if (isSelected) colors.onPrimary else TextMuted
                             )
                             Text(
                                 text = label,
-                                color = if (isSelected) SleekPrimary else TextMuted,
-                                fontSize = 11.sp,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                color = if (isSelected) colors.onPrimary else TextSecondary,
+                                fontSize = 11.5.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                             )
                         }
                     }
@@ -270,62 +267,79 @@ fun DashboardScreen(
             }
         }
 
-        // 5. 3D Digital Twin Visualizer
-        if (twinViewMode == "3D" || twinViewMode == "BOTH") {
-            item {
-                DigitalTwin3DVisualizer(
-                    profile = profile,
-                    twinResult = twinResult
-                )
+        // 5. TABBED FOCUSED DISPLAY
+        when (dashboardTab) {
+            "3D" -> {
+                item {
+                    DigitalTwin3DVisualizer(
+                        profile = profile,
+                        twinResult = twinResult
+                    )
+                }
             }
-        }
-
-        // 6. Dynamic 8-Axis Radar Chart
-        if (twinViewMode == "RADAR" || twinViewMode == "BOTH") {
-            item {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(1.dp, CardBorder, RoundedCornerShape(22.dp)),
-                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
-                    shape = RoundedCornerShape(22.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+            "AI_BRIEF" -> {
+                item {
+                    AiMorningBriefingWidget(
+                        viewModel = viewModel,
+                        profile = profile,
+                        result = twinResult
+                    )
+                }
+            }
+            "MATRIX" -> {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(1.dp, colors.cardBorder, RoundedCornerShape(22.dp)),
+                        colors = CardDefaults.cardColors(containerColor = colors.surface),
+                        shape = RoundedCornerShape(22.dp)
                     ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Text(
-                                text = "BIOLOGICAL RESERVE MAP",
-                                color = SleekSecondary,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.8.sp
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "BİYOLOJİK REZERV HARİTASI",
+                                    color = SleekSecondary,
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.8.sp
+                                )
+                                Text(
+                                    text = "8-Eksenli İkiz Matrisi",
+                                    color = SleekPrimary,
+                                    fontSize = 10.5.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+
+                            RadarChart(
+                                reserves = twinResult.reserves,
+                                longevityReserveScore = twinResult.longevityReserveScore
                             )
-                            Text(
-                                text = "8-Axis Twin Matrix",
-                                color = SleekPrimary,
-                                fontSize = 10.5.sp,
-                                fontWeight = FontWeight.Medium
-                            )
+
+                            DominantAgingPhenotypeCard(result = twinResult)
                         }
-
-                        RadarChart(
-                            reserves = twinResult.reserves,
-                            longevityReserveScore = twinResult.longevityReserveScore
-                        )
-
-                        DominantAgingPhenotypeCard(result = twinResult)
                     }
+                }
+
+                items(twinResult.reserves) { reserve ->
+                    ReserveItemCard(reserve = reserve)
                 }
             }
         }
 
-        // 7. Projected Functional Independence
+        // 6. HEALTH CONNECT & FUNCTIONAL INDEPENDENCE
+        item {
+            HealthConnectSyncCard(viewModel = viewModel)
+        }
+
         item {
             ProjectedIndependenceCard(
                 projectedYears = twinResult.projectedIndependenceYears,
@@ -333,120 +347,107 @@ fun DashboardScreen(
             )
         }
 
-        // 8. Quick Feature Action Cards
+        // 7. QUICK ACTION TILES (2x2 Clean Grid)
         item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
-                        .clickable { onNavigateToOcr() },
-                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
-                    shape = RoundedCornerShape(16.dp)
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    text = "HIZLI EYLEMLER & MODÜLLER",
+                    color = TextMuted,
+                    fontSize = 10.5.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.8.sp
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    Card(
+                        modifier = Modifier
+                            .weight(1f)
+                            .border(1.dp, colors.cardBorder, RoundedCornerShape(16.dp))
+                            .clickable { onNavigateToOcr() },
+                        colors = CardDefaults.cardColors(containerColor = colors.surface),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Column(
+                            modifier = Modifier.padding(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
                             Box(
                                 modifier = Modifier
-                                    .size(30.dp)
+                                    .size(32.dp)
                                     .clip(CircleShape)
                                     .background(SleekPrimary.copy(alpha = 0.15f)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(imageVector = Icons.Default.DocumentScanner, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(16.dp))
+                                Icon(Icons.Default.DocumentScanner, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(16.dp))
                             }
-                            Text("AI Vision OCR", color = TextPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            Text("AI Tahlil OCR", color = TextPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+                            Text("Laboratuvar raporunu tara ve dijitalleştir", color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
                         }
-                        Text("Scan & digitize lab reports with Nemotron™ AI Vision", color = TextSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
                     }
-                }
 
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
-                        .clickable { onNavigateToWhitepaper() },
-                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
-                    shape = RoundedCornerShape(16.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(14.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    Card(
+                        modifier = Modifier
+                            .weight(1f)
+                            .border(1.dp, colors.cardBorder, RoundedCornerShape(16.dp))
+                            .clickable { onNavigateToWhitepaper() },
+                        colors = CardDefaults.cardColors(containerColor = colors.surface),
+                        shape = RoundedCornerShape(16.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Column(
+                            modifier = Modifier.padding(14.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
                             Box(
                                 modifier = Modifier
-                                    .size(30.dp)
+                                    .size(32.dp)
                                     .clip(CircleShape)
                                     .background(SleekAmber.copy(alpha = 0.15f)),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Icon(imageVector = Icons.Default.Description, contentDescription = null, tint = SleekAmber, modifier = Modifier.size(16.dp))
+                                Icon(Icons.Default.Description, contentDescription = null, tint = SleekAmber, modifier = Modifier.size(16.dp))
                             }
-                            Text("Whitepaper 2026", color = TextPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            Text("Whitepaper 2026", color = TextPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+                            Text("Levine PhenoAge ve 8 klinik model", color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
                         }
-                        Text("Mathematical equations, 8 models & Flutter code", color = TextSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Button(
+                        onClick = onNavigateToInput,
+                        modifier = Modifier.weight(1f).height(42.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colors.surfaceVariant,
+                            contentColor = TextPrimary
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(Icons.Default.Science, contentDescription = null, modifier = Modifier.size(15.dp), tint = SleekPrimary)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Biyobelirteçler", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    }
+
+                    Button(
+                        onClick = onNavigateToTests,
+                        modifier = Modifier.weight(1f).height(42.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colors.surfaceVariant,
+                            contentColor = TextPrimary
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(Icons.Default.FitnessCenter, contentDescription = null, modifier = Modifier.size(15.dp), tint = SleekGreen)
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Canlı Testler", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
-        }
-
-        // Quick Navigation Buttons
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Button(
-                    onClick = onNavigateToInput,
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = SleekOnPrimary,
-                        contentColor = SleekPrimary
-                    ),
-                    shape = RoundedCornerShape(14.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Science, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("BioData Inputs", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                }
-
-                Button(
-                    onClick = onNavigateToTests,
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = DarkSurfaceVariant,
-                        contentColor = TextPrimary
-                    ),
-                    shape = RoundedCornerShape(14.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.FitnessCenter, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Live Tests", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-
-        // 9. System Reserve Scorecards
-        item {
-            Text(
-                text = "SYSTEM RESERVE SCORECARDS",
-                color = TextMuted,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.8.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-
-        items(twinResult.reserves) { reserve ->
-            ReserveItemCard(reserve = reserve)
         }
 
         item {

@@ -61,32 +61,30 @@ fun HeroAgeCard(
 ) {
     val isYounger = result.ageDifference <= 0
     val diffYears = abs(result.ageDifference)
-    val diffTag = if (isYounger) "-$diffYears YEARS GAIN" else "+$diffYears YEARS ACCEL"
+    val diffTag = if (isYounger) "▼ ${String.format("%.1f", diffYears)} Yıl Daha Genç" else "▲ ${String.format("%.1f", diffYears)} Yıl İleri"
 
-    // Sleek Interface Hero Card: Luminous Lilac Container with Deep Purple Typography
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = SleekPrimary),
-        shape = RoundedCornerShape(24.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+        shape = RoundedCornerShape(22.dp),
+        border = androidx.compose.foundation.BorderStroke(
+            1.2.dp,
+            androidx.compose.ui.graphics.Brush.horizontalGradient(
+                listOf(
+                    if (isYounger) SleekGreen else SleekCoral,
+                    SleekPrimary.copy(alpha = 0.5f)
+                )
+            )
+        )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(22.dp)
+                .padding(20.dp)
         ) {
-            // Decorative background radial circle
-            Box(
-                modifier = Modifier
-                    .size(120.dp)
-                    .align(Alignment.BottomEnd)
-                    .clip(CircleShape)
-                    .background(Color(0xFFEADDFF).copy(alpha = 0.45f))
-            )
-
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 // Top Header Row
                 Row(
@@ -94,20 +92,31 @@ fun HeroAgeCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "PHENOTYPIC AGE",
-                        color = SleekOnPrimary.copy(alpha = 0.85f),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 1.2.sp
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .clip(CircleShape)
+                                .background(if (isYounger) SleekGreen else SleekCoral)
+                        )
+                        Text(
+                            text = "BİYOLOJİK YAŞ (PHENOAGE)",
+                            color = SleekPrimary,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 1.sp
+                        )
+                    }
 
                     Text(
-                        text = "CHRONOLOGICAL",
-                        color = SleekOnPrimary.copy(alpha = 0.65f),
-                        fontSize = 10.sp,
+                        text = "KRONOLOJİK: ${String.format("%.1f", result.chronologicalAge)} YAŞ",
+                        color = TextSecondary,
+                        fontSize = 10.5.sp,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.8.sp
+                        letterSpacing = 0.6.sp
                     )
                 }
 
@@ -118,54 +127,76 @@ fun HeroAgeCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Biological Age
-                    Column {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
                                 text = "${result.phenoAge}",
-                                color = SleekOnPrimary,
-                                fontSize = 48.sp,
-                                fontWeight = FontWeight.Light,
-                                letterSpacing = (-1.5).sp
+                                color = TextPrimary,
+                                fontSize = 44.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = (-1).sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "yrs",
-                                color = SleekOnPrimary.copy(alpha = 0.9f),
-                                fontSize = 18.sp,
+                                text = "yaş",
+                                color = TextSecondary,
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                modifier = Modifier.padding(bottom = 6.dp)
                             )
                         }
 
                         // Delta Badge Pill
                         Box(
                             modifier = Modifier
-                                .clip(CircleShape)
-                                .background(SleekOnPrimary)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(if (isYounger) SleekGreen.copy(alpha = 0.18f) else SleekCoral.copy(alpha = 0.18f))
+                                .border(1.dp, if (isYounger) SleekGreen else SleekCoral, RoundedCornerShape(8.dp))
                                 .padding(horizontal = 10.dp, vertical = 4.dp)
                         ) {
                             Text(
                                 text = diffTag,
-                                color = SleekPrimary,
-                                fontSize = 10.5.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.4.sp
+                                color = if (isYounger) SleekGreen else SleekCoral,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 0.3.sp
                             )
                         }
                     }
 
-                    // Chronological Age Value
-                    Column(horizontalAlignment = Alignment.End) {
+                    // Chronological Age Value & Pace
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(DarkSurfaceVariant)
+                                .border(1.dp, CardBorder, RoundedCornerShape(10.dp))
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(
+                                    text = "YAŞLANMA HIZI",
+                                    color = TextMuted,
+                                    fontSize = 9.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.5.sp
+                                )
+                                Text(
+                                    text = "${result.paceOfAging}x",
+                                    color = if (result.paceOfAging <= 1.0) SleekGreen else SleekCoral,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.ExtraBold
+                                )
+                            }
+                        }
+
                         Text(
-                            text = String.format("%.1f", result.chronologicalAge),
-                            color = SleekOnPrimary.copy(alpha = 0.95f),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            text = "${result.paceOfAging}x pace",
-                            color = SleekOnPrimary.copy(alpha = 0.7f),
-                            fontSize = 11.sp,
+                            text = if (result.paceOfAging <= 1.0) "Biyolojik Gençleşme" else "Hızlanmış Yıpranma",
+                            color = if (result.paceOfAging <= 1.0) SleekGreen else SleekCoral,
+                            fontSize = 10.5.sp,
                             fontWeight = FontWeight.Medium
                         )
                     }
