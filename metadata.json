@@ -1,0 +1,6 @@
+{
+  "name": "LIFEMAP HUMAN",
+  "description": "Digital Twin of Human Longevity with multi-system reserve scoring, Morgan Levine PhenoAge, trajectory forecasting, cognitive tests, and medical longevity reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

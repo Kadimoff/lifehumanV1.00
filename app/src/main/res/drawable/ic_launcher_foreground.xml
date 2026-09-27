@@ -1,0 +1,54 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Center glow aura -->
+    <path
+        android:pathData="M54,54m-30,0a30,30 0 1,0 60,0a30,30 0 1,0 -60,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="54"
+                android:centerY="54"
+                android:gradientRadius="30"
+                android:type="radial">
+                <item android:offset="0.0" android:color="#3300F5D4" />
+                <item android:offset="1.0" android:color="#0000F5D4" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Head -->
+    <path
+        android:pathData="M54,30 A7,7 0 1,0 54,44 A7,7 0 1,0 54,30"
+        android:fillColor="#00F5D4" />
+    
+    <!-- Torso & Core Node -->
+    <path
+        android:pathData="M44,47 C44,47 47,46 54,46 C61,46 64,47 64,47 C67,49 68,54 67,59 L63,73 C62.5,75 60.5,76 58.5,76 L49.5,76 C47.5,76 45.5,75 45,73 L41,59 C40,54 41,49 44,47 Z"
+        android:fillColor="#00BBF9" />
+
+    <!-- DNA Double Helix / Orbiting Longevity Arcs -->
+    <path
+        android:pathData="M33,48 C33,36 43,33 54,33 C65,33 75,36 75,48 C75,60 65,63 54,63 C43,63 33,66 33,78"
+        android:strokeWidth="2.8"
+        android:strokeColor="#7B2CBF"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <path
+        android:pathData="M75,48 C75,36 65,33 54,33 C43,33 33,36 33,48 C33,60 43,63 54,63 C65,63 75,66 75,78"
+        android:strokeWidth="2.8"
+        android:strokeColor="#00F5D4"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+
+    <!-- Cross rungs / base pairs -->
+    <path
+        android:pathData="M42,40 L66,40 M38,56 L70,56 M42,70 L66,70"
+        android:strokeWidth="1.8"
+        android:strokeColor="#FEE440"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>
