@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.AiMorningBriefingWidget
-import com.example.ui.components.DigitalTwin3DVisualizer
+import com.example.ui.components.HologramTwinView
 import com.example.ui.components.DominantAgingPhenotypeCard
 import com.example.ui.components.HealthConnectSyncCard
 import com.example.ui.components.HeroAgeCard
@@ -271,7 +271,7 @@ fun DashboardScreen(
         when (dashboardTab) {
             "3D" -> {
                 item {
-                    DigitalTwin3DVisualizer(
+                    HologramTwinView(
                         profile = profile,
                         twinResult = twinResult
                     )
