@@ -72,7 +72,7 @@ import com.example.ui.theme.AppTheme
 import java.util.UUID
 
 /**
- * Sadeleştirilmiş, Sezgisel Giriş & Profil Yönetim Hub'ı (Entry Menu Dialog)
+ * Streamlined, intuitive entry & profile management hub (Entry Menu Dialog)
  */
 @Composable
 fun EntryMenuDialog(
@@ -88,15 +88,15 @@ fun EntryMenuDialog(
 ) {
     val colors = AppTheme.colors
 
-    // 3 Segmented Tabs: "PROFILE" (Profilim), "SWITCH" (Hesap Değiştir), "SETTINGS" (Ayarlar)
+    // 3 Segmented Tabs: "PROFILE" (My Profile), "SWITCH" (Switch Account), "SETTINGS" (Settings)
     var activeTab by remember { mutableStateOf("PROFILE") }
 
     // New User form state
     var showCreateForm by remember { mutableStateOf(false) }
     var newUserName by remember { mutableStateOf("") }
     var newUserAge by remember { mutableStateOf("35") }
-    var newUserGoal by remember { mutableStateOf("Biyolojik Yaşımı 5 Yıl Gençleştirmek") }
-    var newUserSex by remember { mutableStateOf("Erkek") }
+    var newUserGoal by remember { mutableStateOf("Reverse My Biological Age by 5 Years") }
+    var newUserSex by remember { mutableStateOf("Male") }
     var selectedNewAvatar by remember { mutableStateOf("🧬") }
     var showEmojiPicker by remember { mutableStateOf(false) }
 
@@ -158,7 +158,7 @@ fun EntryMenuDialog(
                                 letterSpacing = 0.5.sp
                             )
                             Text(
-                                text = "Kullanıcı & Profil Merkezi",
+                                text = "User & Profile Center",
                                 fontSize = 10.5.sp,
                                 color = colors.primary,
                                 fontWeight = FontWeight.Bold
@@ -172,7 +172,7 @@ fun EntryMenuDialog(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Kapat",
+                            contentDescription = "Close",
                             tint = colors.textSecondary,
                             modifier = Modifier.size(18.dp)
                         )
@@ -181,7 +181,7 @@ fun EntryMenuDialog(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                // 2. SEGMENTED NAVIGATION TABS (Sade, seçilebilir menü)
+                // 2. SEGMENTED NAVIGATION TABS (simple, selectable menu)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -191,9 +191,9 @@ fun EntryMenuDialog(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     val tabs = listOf(
-                        Triple("PROFILE", "Profilim", Icons.Default.Person),
-                        Triple("SWITCH", "Hesaplar", Icons.Default.SwapHoriz),
-                        Triple("SETTINGS", "Ayarlar", Icons.Default.Settings)
+                        Triple("PROFILE", "My Profile", Icons.Default.Person),
+                        Triple("SWITCH", "Accounts", Icons.Default.SwapHoriz),
+                        Triple("SETTINGS", "Settings", Icons.Default.Settings)
                     )
 
                     tabs.forEach { (tabId, label, icon) ->
@@ -238,7 +238,7 @@ fun EntryMenuDialog(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     when (activeTab) {
-                        // TAB 1: AKTİF PROFİLİM
+                        // TAB 1: MY ACTIVE PROFILE
                         "PROFILE" -> {
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
@@ -258,7 +258,7 @@ fun EntryMenuDialog(
                                             emoji = currentUser.avatarEmoji,
                                             size = 52.dp,
                                             fontSize = 26f,
-                                            badgeText = "Aktif"
+                                            badgeText = "Active"
                                         )
 
                                         Column(modifier = Modifier.weight(1f)) {
@@ -269,13 +269,13 @@ fun EntryMenuDialog(
                                                 color = colors.textPrimary
                                             )
                                             Text(
-                                                text = "${currentUser.avatarBadgeTitle} • ${currentUser.chronologicalAge.toInt()} Yaş",
+                                                text = "${currentUser.avatarBadgeTitle} • ${currentUser.chronologicalAge.toInt()} y/o",
                                                 fontSize = 11.sp,
                                                 color = colors.primary,
                                                 fontWeight = FontWeight.SemiBold
                                             )
                                             Text(
-                                                text = "${currentUser.biologicalSex} • Kan: ${currentUser.bloodType}",
+                                                text = "${currentUser.biologicalSex} • Blood: ${currentUser.bloodType}",
                                                 fontSize = 10.5.sp,
                                                 color = colors.textSecondary
                                             )
@@ -293,16 +293,16 @@ fun EntryMenuDialog(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Column {
-                                            Text("Biyolojik Fark", fontSize = 10.sp, color = colors.textMuted)
+                                            Text("Biological Gap", fontSize = 10.sp, color = colors.textMuted)
                                             Text(
-                                                text = String.format("%.1f yıl", twinResult.ageDifference),
+                                                text = String.format("%.1f yrs", twinResult.ageDifference),
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = if (twinResult.ageDifference <= 0) colors.green else colors.coral
                                             )
                                         }
                                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                            Text("LRS Skoru", fontSize = 10.sp, color = colors.textMuted)
+                                            Text("LRS Score", fontSize = 10.sp, color = colors.textMuted)
                                             Text(
                                                 text = "${twinResult.longevityReserveScore.toInt()}/100",
                                                 fontSize = 12.sp,
@@ -311,9 +311,9 @@ fun EntryMenuDialog(
                                             )
                                         }
                                         Column(horizontalAlignment = Alignment.End) {
-                                            Text("Aktif Seri", fontSize = 10.sp, color = colors.textMuted)
+                                            Text("Active Streak", fontSize = 10.sp, color = colors.textMuted)
                                             Text(
-                                                text = "🔥 ${currentUser.activeStreakDays} Gün",
+                                                text = "🔥 ${currentUser.activeStreakDays} Days",
                                                 fontSize = 12.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = colors.amber
@@ -330,7 +330,7 @@ fun EntryMenuDialog(
                                             .padding(horizontal = 10.dp, vertical = 6.dp)
                                     ) {
                                         Text(
-                                            text = "🎯 Hedef: ${currentUser.primaryLongevityGoal}",
+                                            text = "🎯 Goal: ${currentUser.primaryLongevityGoal}",
                                             fontSize = 11.sp,
                                             color = colors.textSecondary,
                                             lineHeight = 15.sp
@@ -353,16 +353,16 @@ fun EntryMenuDialog(
                                     ) {
                                         Icon(imageVector = Icons.Default.Person, contentDescription = null, modifier = Modifier.size(16.dp))
                                         Spacer(modifier = Modifier.width(6.dp))
-                                        Text("Kullanıcı Profilini Aç & Düzenle", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                        Text("Open & Edit User Profile", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                     }
                                 }
                             }
                         }
 
-                        // TAB 2: HESAPLAR & PROFİL DEĞİŞTİR
+                        // TAB 2: ACCOUNTS & SWITCH PROFILE
                         "SWITCH" -> {
                             Text(
-                                text = "Kayıtlı Profiller (${allUsers.size})",
+                                text = "Saved Profiles (${allUsers.size})",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.textMuted
@@ -409,7 +409,7 @@ fun EntryMenuDialog(
                                                 color = colors.textPrimary
                                             )
                                             Text(
-                                                text = "${user.avatarBadgeTitle} • ${user.chronologicalAge.toInt()} Yaş",
+                                                text = "${user.avatarBadgeTitle} • ${user.chronologicalAge.toInt()} y/o",
                                                 fontSize = 10.5.sp,
                                                 color = colors.textSecondary
                                             )
@@ -423,7 +423,7 @@ fun EntryMenuDialog(
                                                 .background(colors.primary)
                                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                                         ) {
-                                            Text("Aktif", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = colors.onPrimary)
+                                            Text("Active", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = colors.onPrimary)
                                         }
                                     } else {
                                         OutlinedButton(
@@ -432,7 +432,7 @@ fun EntryMenuDialog(
                                             contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp),
                                             modifier = Modifier.height(30.dp)
                                         ) {
-                                            Text("Seç", fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = colors.primary)
+                                            Text("Select", fontSize = 10.5.sp, fontWeight = FontWeight.Bold, color = colors.primary)
                                         }
                                     }
                                 }
@@ -449,7 +449,7 @@ fun EntryMenuDialog(
                                 ) {
                                     Icon(imageVector = Icons.Default.PersonAdd, contentDescription = null, tint = colors.primary, modifier = Modifier.size(16.dp))
                                     Spacer(modifier = Modifier.width(6.dp))
-                                    Text("+ Yeni Profil Ekle", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = colors.primary)
+                                    Text("+ Add New Profile", fontSize = 11.5.sp, fontWeight = FontWeight.Bold, color = colors.primary)
                                 }
                             } else {
                                 Card(
@@ -464,12 +464,12 @@ fun EntryMenuDialog(
                                         modifier = Modifier.padding(12.dp),
                                         verticalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
-                                        Text("Yeni Profil Bilgileri", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = colors.primary)
+                                        Text("New Profile Details", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = colors.primary)
 
                                         OutlinedTextField(
                                             value = newUserName,
                                             onValueChange = { newUserName = it },
-                                            label = { Text("Ad Soyad", fontSize = 11.sp) },
+                                            label = { Text("Full Name", fontSize = 11.sp) },
                                             singleLine = true,
                                             modifier = Modifier.fillMaxWidth()
                                         )
@@ -481,14 +481,14 @@ fun EntryMenuDialog(
                                             OutlinedTextField(
                                                 value = newUserAge,
                                                 onValueChange = { newUserAge = it },
-                                                label = { Text("Yaş", fontSize = 11.sp) },
+                                                label = { Text("Age", fontSize = 11.sp) },
                                                 singleLine = true,
                                                 modifier = Modifier.weight(1f)
                                             )
                                             OutlinedTextField(
                                                 value = newUserSex,
                                                 onValueChange = { newUserSex = it },
-                                                label = { Text("Cinsiyet", fontSize = 11.sp) },
+                                                label = { Text("Sex", fontSize = 11.sp) },
                                                 singleLine = true,
                                                 modifier = Modifier.weight(1f)
                                             )
@@ -503,7 +503,7 @@ fun EntryMenuDialog(
                                                 modifier = Modifier.weight(1f),
                                                 shape = RoundedCornerShape(8.dp)
                                             ) {
-                                                Text("İptal", fontSize = 11.sp)
+                                                Text("Cancel", fontSize = 11.sp)
                                             }
 
                                             Button(
@@ -516,10 +516,10 @@ fun EntryMenuDialog(
                                                             title = "Longevity Pioneer",
                                                             email = "${newUserName.lowercase().replace(" ", "")}@lifemap.ai",
                                                             avatarEmoji = selectedNewAvatar,
-                                                            avatarBadgeTitle = "Dijital İkiz",
+                                                            avatarBadgeTitle = "Digital Twin",
                                                             chronologicalAge = ageDouble,
                                                             biologicalSex = newUserSex,
-                                                            primaryLongevityGoal = newUserGoal.ifBlank { "Biyolojik Yaşımı Gençleştirmek" },
+                                                            primaryLongevityGoal = newUserGoal.ifBlank { "Reverse My Biological Age" },
                                                             activeStreakDays = 1,
                                                             unlockedBadges = listOf("🧬", "⏳", selectedNewAvatar)
                                                         )
@@ -534,7 +534,7 @@ fun EntryMenuDialog(
                                                     contentColor = colors.onPrimary
                                                 )
                                             ) {
-                                                Text("Kaydet", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                                Text("Save", fontSize = 11.sp, fontWeight = FontWeight.Bold)
                                             }
                                         }
                                     }
@@ -575,13 +575,13 @@ fun EntryMenuDialog(
                                     }
                                     Column {
                                         Text(
-                                            text = if (isDarkMode) "Karanlık Tema (OLED)" else "Aydınlık Tema",
+                                            text = if (isDarkMode) "Dark Theme (OLED)" else "Light Theme",
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = colors.textPrimary
                                         )
                                         Text(
-                                            text = if (isDarkMode) "Yüksek kontrastlı uzay modu aktif" else "Gündüz modu aktif",
+                                            text = if (isDarkMode) "High-contrast space mode active" else "Daylight mode active",
                                             fontSize = 10.5.sp,
                                             color = colors.textMuted
                                         )
@@ -627,13 +627,13 @@ fun EntryMenuDialog(
                                 }
                                 Column {
                                     Text(
-                                        text = "Health Connect Biyometri",
+                                        text = "Health Connect Biometrics",
                                         fontSize = 13.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = colors.textPrimary
                                     )
                                     Text(
-                                        text = "Nabız, Adım ve Kalori otomatik eşitlenir",
+                                        text = "Heart rate, steps and calories sync automatically",
                                         fontSize = 10.5.sp,
                                         color = colors.textMuted
                                     )

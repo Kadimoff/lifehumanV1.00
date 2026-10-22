@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.AiMorningBriefingWidget
-import com.example.ui.components.DigitalTwin3DVisualizer
+import com.example.ui.components.HologramTwinView
 import com.example.ui.components.DominantAgingPhenotypeCard
 import com.example.ui.components.HealthConnectSyncCard
 import com.example.ui.components.HeroAgeCard
@@ -130,7 +130,7 @@ fun DashboardScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Icon(Icons.Default.Shield, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(12.dp))
-                            Text("LRS SKORU", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                            Text("LRS SCORE", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
                         }
                         Text("${twinResult.longevityReserveScore.toInt()}/100", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Black)
                     }
@@ -148,7 +148,7 @@ fun DashboardScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Icon(Icons.Default.Favorite, contentDescription = null, tint = SleekRose, modifier = Modifier.size(12.dp))
-                            Text("DİNLENİK NABIZ", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                            Text("RESTING HR", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
                         }
                         Text("${profile.restingPulseBpm.toInt()} bpm", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Black)
                     }
@@ -166,7 +166,7 @@ fun DashboardScreen(
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                             Icon(Icons.Default.DirectionsWalk, contentDescription = null, tint = SleekGreen, modifier = Modifier.size(12.dp))
-                            Text("GÜNLÜK ADIM", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
+                            Text("DAILY STEPS", color = TextMuted, fontSize = 9.sp, fontWeight = FontWeight.Bold)
                         }
                         Text("${profile.dailySteps}", color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Black)
                     }
@@ -178,7 +178,7 @@ fun DashboardScreen(
         item {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
-                    text = "BİYOLOJİK SENARYOLAR",
+                    text = "BIOLOGICAL SCENARIOS",
                     color = TextMuted,
                     fontSize = 10.5.sp,
                     fontWeight = FontWeight.Bold,
@@ -217,7 +217,7 @@ fun DashboardScreen(
             }
         }
 
-        // 4. SEGMENTED HUB BAR (3D Dijital İkiz | AI Brifing | Biyolojik Matris)
+        // 4. SEGMENTED HUB BAR (3D Digital Twin | AI Briefing | Biological Matrix)
         item {
             Row(
                 modifier = Modifier
@@ -229,9 +229,9 @@ fun DashboardScreen(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 val tabs = listOf(
-                    Triple("3D", "3D İkiz", Icons.Default.ViewInAr),
-                    Triple("AI_BRIEF", "AI Brifing", Icons.Default.Lightbulb),
-                    Triple("MATRIX", "Biyo-Matris", Icons.Default.AutoAwesome)
+                    Triple("3D", "3D Twin", Icons.Default.ViewInAr),
+                    Triple("AI_BRIEF", "AI Briefing", Icons.Default.Lightbulb),
+                    Triple("MATRIX", "Bio-Matrix", Icons.Default.AutoAwesome)
                 )
 
                 tabs.forEach { (mode, label, icon) ->
@@ -271,7 +271,7 @@ fun DashboardScreen(
         when (dashboardTab) {
             "3D" -> {
                 item {
-                    DigitalTwin3DVisualizer(
+                    HologramTwinView(
                         profile = profile,
                         twinResult = twinResult
                     )
@@ -305,14 +305,14 @@ fun DashboardScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = "BİYOLOJİK REZERV HARİTASI",
+                                    text = "BIOLOGICAL RESERVE MAP",
                                     color = SleekSecondary,
                                     fontSize = 11.sp,
                                     fontWeight = FontWeight.Bold,
                                     letterSpacing = 0.8.sp
                                 )
                                 Text(
-                                    text = "8-Eksenli İkiz Matrisi",
+                                    text = "8-Axis Twin Matrix",
                                     color = SleekPrimary,
                                     fontSize = 10.5.sp,
                                     fontWeight = FontWeight.Medium
@@ -351,7 +351,7 @@ fun DashboardScreen(
         item {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
-                    text = "HIZLI EYLEMLER & MODÜLLER",
+                    text = "QUICK ACTIONS & MODULES",
                     color = TextMuted,
                     fontSize = 10.5.sp,
                     fontWeight = FontWeight.Bold,
@@ -383,8 +383,8 @@ fun DashboardScreen(
                             ) {
                                 Icon(Icons.Default.DocumentScanner, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(16.dp))
                             }
-                            Text("AI Tahlil OCR", color = TextPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
-                            Text("Laboratuvar raporunu tara ve dijitalleştir", color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
+                            Text("AI Lab OCR", color = TextPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+                            Text("Scan and digitize your lab report", color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
                         }
                     }
 
@@ -410,7 +410,7 @@ fun DashboardScreen(
                                 Icon(Icons.Default.Description, contentDescription = null, tint = SleekAmber, modifier = Modifier.size(16.dp))
                             }
                             Text("Whitepaper 2026", color = TextPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
-                            Text("Levine PhenoAge ve 8 klinik model", color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
+                            Text("Levine PhenoAge and 8 clinical models", color = TextSecondary, fontSize = 10.sp, lineHeight = 13.sp)
                         }
                     }
                 }
@@ -430,7 +430,7 @@ fun DashboardScreen(
                     ) {
                         Icon(Icons.Default.Science, contentDescription = null, modifier = Modifier.size(15.dp), tint = SleekPrimary)
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Biyobelirteçler", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text("Biomarkers", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
 
                     Button(
@@ -444,7 +444,7 @@ fun DashboardScreen(
                     ) {
                         Icon(Icons.Default.FitnessCenter, contentDescription = null, modifier = Modifier.size(15.dp), tint = SleekGreen)
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Canlı Testler", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text("Live Tests", fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }

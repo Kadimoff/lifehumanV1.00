@@ -186,7 +186,7 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
     private val _currentUserProfile = MutableStateFlow(LongevityEmojiCatalog.sampleUsers.first())
     val currentUserProfile: StateFlow<UserProfile> = _currentUserProfile.asStateFlow()
 
-    // Giriş Menüsü (Entry / Welcome / Login Menu) State
+    // Entry / Welcome / Login Menu State
     private val _isEntryMenuOpen = MutableStateFlow(false)
     val isEntryMenuOpen: StateFlow<Boolean> = _isEntryMenuOpen.asStateFlow()
 

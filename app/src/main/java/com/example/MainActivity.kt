@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
                     LongevityScreen.PROFILE
                 )
 
-                // Entry / Login Menu Dialog (Giriş Menüsü)
+                // Entry / Login Menu Dialog
                 if (isEntryMenuOpen) {
                     EntryMenuDialog(
                         currentUser = currentUser,
@@ -170,7 +170,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         } else {
-                            // Persistent Top App Header with Theme Mode Switch & Giriş Menüsü Profile Trigger
+                            // Persistent Top App Header with Theme Mode Switch & Entry Menu Profile Trigger
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -221,7 +221,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
 
-                                // Quick Controls: Light/Dark Mode Toggle + Giriş Menüsü Avatar
+                                // Quick Controls: Light/Dark Mode Toggle + Entry Menu Avatar
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -236,13 +236,13 @@ class MainActivity : ComponentActivity() {
                                     ) {
                                         Icon(
                                             imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                                            contentDescription = if (isDarkMode) "Aydınlık Moda Geç" else "Karanlık Moda Geç",
+                                            contentDescription = if (isDarkMode) "Switch to Light Mode" else "Switch to Dark Mode",
                                             tint = if (isDarkMode) colors.primary else Color(0xFFD97706),
                                             modifier = Modifier.size(17.dp)
                                         )
                                     }
 
-                                    // Giriş Menüsü Avatar / Account Trigger
+                                    // Entry Menu Avatar / Account Trigger
                                     Row(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(20.dp))
@@ -257,7 +257,7 @@ class MainActivity : ComponentActivity() {
                                             fontSize = 16.sp
                                         )
                                         Text(
-                                            text = currentUser.name.split(" ").firstOrNull() ?: "Profil",
+                                            text = currentUser.name.split(" ").firstOrNull() ?: "Profile",
                                             fontSize = 11.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = colors.textPrimary

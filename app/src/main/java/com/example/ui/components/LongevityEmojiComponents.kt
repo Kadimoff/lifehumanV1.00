@@ -220,7 +220,7 @@ fun LongevityEmojiCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = item.titleTr,
+                text = item.title,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = colors.textPrimary,
@@ -229,7 +229,7 @@ fun LongevityEmojiCard(
             )
 
             Text(
-                text = item.categoryTr,
+                text = item.category,
                 fontSize = 10.sp,
                 color = colors.primary,
                 fontWeight = FontWeight.SemiBold,
@@ -239,7 +239,7 @@ fun LongevityEmojiCard(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = item.meaningTr,
+                text = item.meaning,
                 fontSize = 9.5.sp,
                 color = colors.textMuted,
                 textAlign = TextAlign.Center,
@@ -260,7 +260,7 @@ fun LongevityEmojiCard(
                         modifier = Modifier.size(14.dp)
                     )
                     Text(
-                        text = "Seçildi",
+                        text = "Selected",
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.primary
@@ -282,12 +282,12 @@ fun LongevityEmojiPickerDialog(
     onDismiss: () -> Unit
 ) {
     val colors = AppTheme.colors
-    var selectedCategory by remember { mutableStateOf("Tümü") }
-    val categories = listOf("Tümü", "Hücresel", "Kardiyovasküler", "Metabolizma", "Bilişsel", "Bağışıklık", "Fiziksel", "Başarı")
+    var selectedCategory by remember { mutableStateOf("All") }
+    val categories = listOf("All", "Cellular", "Cardio", "Metabolism", "Cognitive", "Immune", "Physical", "Milestone")
 
     val filteredEmojis = remember(selectedCategory) {
-        if (selectedCategory == "Tümü") LongevityEmojiCatalog.allEmojis
-        else LongevityEmojiCatalog.allEmojis.filter { it.categoryTr.equals(selectedCategory, ignoreCase = true) }
+        if (selectedCategory == "All") LongevityEmojiCatalog.allEmojis
+        else LongevityEmojiCatalog.allEmojis.filter { it.category.equals(selectedCategory, ignoreCase = true) }
     }
 
     Dialog(onDismissRequest = onDismiss) {
@@ -320,13 +320,13 @@ fun LongevityEmojiPickerDialog(
                         Text(text = "🧬", fontSize = 22.sp)
                         Column {
                             Text(
-                                text = "Longevity Avatar & Emojileri",
+                                text = "Longevity Avatars & Emojis",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.textPrimary
                             )
                             Text(
-                                text = "Biyolojik dijital ikiz avatarınızı seçin",
+                                text = "Choose your biological digital twin avatar",
                                 fontSize = 11.sp,
                                 color = colors.textMuted
                             )
@@ -336,7 +336,7 @@ fun LongevityEmojiPickerDialog(
                     IconButton(onClick = onDismiss) {
                         Icon(
                             imageVector = Icons.Default.Close,
-                            contentDescription = "Kapat",
+                            contentDescription = "Close",
                             tint = colors.textSecondary
                         )
                     }
@@ -450,7 +450,7 @@ fun LongevityBadgeCard(
                 } else {
                     Icon(
                         imageVector = Icons.Default.Lock,
-                        contentDescription = "Kilitli",
+                        contentDescription = "Locked",
                         tint = colors.textMuted,
                         modifier = Modifier.size(18.dp)
                     )
@@ -463,7 +463,7 @@ fun LongevityBadgeCard(
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     Text(
-                        text = badge.titleTr,
+                        text = badge.title,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         color = if (badge.isUnlocked) colors.textPrimary else colors.textMuted
@@ -471,7 +471,7 @@ fun LongevityBadgeCard(
                     if (badge.isUnlocked) {
                         Icon(
                             imageVector = Icons.Default.AutoAwesome,
-                            contentDescription = "Açıldı",
+                            contentDescription = "Unlocked",
                             tint = colors.amber,
                             modifier = Modifier.size(14.dp)
                         )
@@ -481,7 +481,7 @@ fun LongevityBadgeCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = badge.descriptionTr,
+                    text = badge.description,
                     fontSize = 11.sp,
                     color = colors.textSecondary,
                     lineHeight = 14.sp
@@ -490,7 +490,7 @@ fun LongevityBadgeCard(
                 Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
-                    text = "Gereksinim: ${badge.requirement}",
+                    text = "Requirement: ${badge.requirement}",
                     fontSize = 9.5.sp,
                     color = if (badge.isUnlocked) colors.green else colors.textMuted,
                     fontWeight = FontWeight.SemiBold
