@@ -2,9 +2,12 @@ package com.example.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,10 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.BiologicalTwinResult
 import com.example.data.model.ReserveScoreItem
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
@@ -49,9 +49,6 @@ import com.example.ui.theme.SleekOnPrimary
 import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRose
 import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import kotlin.math.abs
 
 @Composable
@@ -61,18 +58,19 @@ fun HeroAgeCard(
 ) {
     val isYounger = result.ageDifference <= 0
     val diffYears = abs(result.ageDifference)
-    val diffTag = if (isYounger) "▼ ${String.format("%.1f", diffYears)} Years Younger" else "▲ ${String.format("%.1f", diffYears)} Years Older"
+    val diffTag = if (isYounger) "▼ ${String.format("%.1f", diffYears)} Yıl Daha Genç" else "▲ ${String.format("%.1f", diffYears)} Yıl İleri"
 
+    // High-Fidelity Glassmorphism Cyan Hero Card
     Card(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
-        shape = RoundedCornerShape(22.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        shape = RoundedCornerShape(26.dp),
         border = androidx.compose.foundation.BorderStroke(
-            1.2.dp,
+            1.5.dp,
             androidx.compose.ui.graphics.Brush.horizontalGradient(
                 listOf(
-                    if (isYounger) SleekGreen else SleekCoral,
-                    SleekPrimary.copy(alpha = 0.5f)
+                    Color(0xFF99F6FF),
+                    Color(0xFF00E5FF).copy(alpha = 0.6f)
                 )
             )
         )
@@ -80,6 +78,15 @@ fun HeroAgeCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(
+                    androidx.compose.ui.graphics.Brush.linearGradient(
+                        listOf(
+                            Color(0xFF00E5FF),
+                            Color(0xFF00B4D8),
+                            Color(0xFF0284C7)
+                        )
+                    )
+                )
                 .padding(20.dp)
         ) {
             Column(
@@ -100,23 +107,23 @@ fun HeroAgeCard(
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(if (isYounger) SleekGreen else SleekCoral)
+                                .background(Color(0xFF00FF88))
                         )
                         Text(
-                            text = "BIOLOGICAL AGE (PHENOAGE)",
-                            color = SleekPrimary,
-                            fontSize = 11.sp,
+                            text = "BİYOLOJİK YAŞ (PHENOAGE)",
+                            color = Color.White,
+                            fontSize = 11.5.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 1.sp
+                            letterSpacing = 0.8.sp
                         )
                     }
 
                     Text(
-                        text = "CHRONOLOGICAL: ${String.format("%.1f", result.chronologicalAge)} YRS",
-                        color = TextSecondary,
-                        fontSize = 10.5.sp,
+                        text = "KRONOLOJİK: ${String.format("%.1f", result.chronologicalAge)} YAŞ",
+                        color = Color.White.copy(alpha = 0.9f),
+                        fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 0.6.sp
+                        letterSpacing = 0.5.sp
                     )
                 }
 
@@ -126,79 +133,102 @@ fun HeroAgeCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Biological Age
-                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    // Left Column: Large Biological Age & Delta Badge with Heartbeat Wave
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
                                 text = "${result.phenoAge}",
-                                color = TextPrimary,
-                                fontSize = 44.sp,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = (-1).sp
+                                color = Color(0xFF0A192F),
+                                fontSize = 48.sp,
+                                fontWeight = FontWeight.Black,
+                                letterSpacing = (-1.5).sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "years",
-                                color = TextSecondary,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
+                                text = "yaş",
+                                color = Color(0xFF0A192F),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(bottom = 6.dp)
                             )
                         }
 
-                        // Delta Badge Pill
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(if (isYounger) SleekGreen.copy(alpha = 0.18f) else SleekCoral.copy(alpha = 0.18f))
-                                .border(1.dp, if (isYounger) SleekGreen else SleekCoral, RoundedCornerShape(8.dp))
-                                .padding(horizontal = 10.dp, vertical = 4.dp)
+                        // Mint pill badge with ECG heartbeat pulse wave
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text(
-                                text = diffTag,
-                                color = if (isYounger) SleekGreen else SleekCoral,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 0.3.sp
-                            )
-                        }
-                    }
-
-                    // Chronological Age Value & Pace
-                    Column(
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(DarkSurfaceVariant)
-                                .border(1.dp, CardBorder, RoundedCornerShape(10.dp))
-                                .padding(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            Column(horizontalAlignment = Alignment.End) {
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(Color(0xDDF0FDF4))
+                                    .border(1.2.dp, Color(0xFF10B981), RoundedCornerShape(12.dp))
+                                    .padding(horizontal = 10.dp, vertical = 5.dp)
+                            ) {
                                 Text(
-                                    text = "PACE OF AGING",
-                                    color = TextMuted,
-                                    fontSize = 9.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    letterSpacing = 0.5.sp
+                                    text = diffTag,
+                                    color = Color(0xFF065F46),
+                                    fontSize = 11.5.sp,
+                                    fontWeight = FontWeight.Black,
+                                    letterSpacing = 0.2.sp
                                 )
-                                Text(
-                                    text = "${result.paceOfAging}x",
-                                    color = if (result.paceOfAging <= 1.0) SleekGreen else SleekCoral,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.ExtraBold
+                            }
+
+                            // ECG pulse wave Canvas
+                            Canvas(modifier = Modifier.size(width = 46.dp, height = 22.dp)) {
+                                val w = size.width
+                                val h = size.height
+                                val path = Path().apply {
+                                    moveTo(0f, h * 0.5f)
+                                    lineTo(w * 0.22f, h * 0.5f)
+                                    lineTo(w * 0.32f, h * 0.2f)
+                                    lineTo(w * 0.44f, h * 0.9f)
+                                    lineTo(w * 0.56f, h * 0.1f)
+                                    lineTo(w * 0.68f, h * 0.65f)
+                                    lineTo(w * 0.78f, h * 0.5f)
+                                    lineTo(w, h * 0.5f)
+                                }
+                                drawPath(
+                                    path = path,
+                                    color = Color(0xFF065F46),
+                                    style = Stroke(width = 2.dp.toPx())
                                 )
                             }
                         }
+                    }
 
-                        Text(
-                            text = if (result.paceOfAging <= 1.0) "Biological Rejuvenation" else "Accelerated Wear",
-                            color = if (result.paceOfAging <= 1.0) SleekGreen else SleekCoral,
-                            fontSize = 10.5.sp,
-                            fontWeight = FontWeight.Medium
-                        )
+                    // Right Column: Inset Frosted Card for Aging Pace
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White.copy(alpha = 0.38f))
+                            .border(1.2.dp, Color.White.copy(alpha = 0.75f), RoundedCornerShape(16.dp))
+                            .padding(horizontal = 14.dp, vertical = 9.dp)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(1.dp)
+                        ) {
+                            Text(
+                                text = "YAŞLANMA HIZI",
+                                color = Color(0xFF334155),
+                                fontSize = 9.5.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.5.sp
+                            )
+                            Text(
+                                text = "${result.paceOfAging}x",
+                                color = if (result.paceOfAging <= 1.0) Color(0xFF059669) else Color(0xFFFF4848),
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Black
+                            )
+                            Text(
+                                text = if (result.paceOfAging <= 1.0) "Biyolojik Kazanç" else "Hızlanmış Yıpranma",
+                                color = if (result.paceOfAging <= 1.0) Color(0xFF059669) else Color(0xFFDC2626),
+                                fontSize = 10.5.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }
@@ -211,11 +241,12 @@ fun DominantAgingPhenotypeCard(
     result: BiologicalTwinResult,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurfaceVariant),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -229,7 +260,7 @@ fun DominantAgingPhenotypeCard(
             ) {
                 Text(
                     text = "PRIMARY AGING PHENOTYPE",
-                    color = TextPrimary.copy(alpha = 0.65f),
+                    color = colors.textPrimary.copy(alpha = 0.65f),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
@@ -238,12 +269,12 @@ fun DominantAgingPhenotypeCard(
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(SleekOnPrimary)
+                        .background(colors.primary.copy(alpha = 0.16f))
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
                         text = "OPTIMAL",
-                        color = SleekPrimary,
+                        color = colors.primary,
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -252,14 +283,14 @@ fun DominantAgingPhenotypeCard(
 
             Text(
                 text = result.dominantAgingPhenotype,
-                color = TextPrimary,
+                color = colors.textPrimary,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold
             )
 
             Text(
                 text = result.dominantPhenotypeDescription,
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 lineHeight = 17.sp
             )
@@ -269,21 +300,21 @@ fun DominantAgingPhenotypeCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(DarkSurface)
-                    .border(1.dp, BorderSubtle, RoundedCornerShape(14.dp))
+                    .background(colors.surface)
+                    .border(1.dp, colors.borderSubtle, RoundedCornerShape(14.dp))
                     .padding(12.dp)
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(
                         text = "LEVERAGE ACTION",
-                        color = SleekPrimary,
+                        color = colors.primary,
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
                     Text(
                         text = result.primaryRecommendation,
-                        color = TextPrimary,
+                        color = colors.textPrimary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal
                     )
@@ -299,13 +330,14 @@ fun ProjectedIndependenceCard(
     chronoAge: Double,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     val healthySpanAhead = (projectedYears - chronoAge).coerceAtLeast(0.0)
 
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Row(
@@ -318,7 +350,7 @@ fun ProjectedIndependenceCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "PROJECTED HEALTHSPAN",
-                    color = SleekSecondary,
+                    color = colors.secondary,
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
@@ -326,13 +358,13 @@ fun ProjectedIndependenceCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${projectedYears.toInt()} Years Independence",
-                    color = TextPrimary,
+                    color = colors.textPrimary,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "+${healthySpanAhead.toInt()} disability-free active years",
-                    color = TextMuted,
+                    color = colors.textMuted,
                     fontSize = 11.5.sp
                 )
             }
@@ -341,13 +373,13 @@ fun ProjectedIndependenceCard(
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .background(SleekOnPrimary)
-                    .border(1.dp, SleekPrimary.copy(alpha = 0.6f), CircleShape),
+                    .background(colors.primary.copy(alpha = 0.14f))
+                    .border(1.dp, colors.primary.copy(alpha = 0.6f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "${projectedYears.toInt()}",
-                    color = SleekPrimary,
+                    color = colors.primary,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -361,11 +393,12 @@ fun ReserveItemCard(
     reserve: ReserveScoreItem,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     var expanded by remember { mutableStateOf(false) }
 
     val scoreColor = when {
         reserve.score >= 80 -> SleekGreen
-        reserve.score >= 60 -> SleekPrimary
+        reserve.score >= 60 -> colors.primary
         else -> SleekRose
     }
 
@@ -373,9 +406,9 @@ fun ReserveItemCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(16.dp))
             .clickable { expanded = !expanded },
-        colors = CardDefaults.cardColors(containerColor = DarkSurface)
+        colors = CardDefaults.cardColors(containerColor = colors.surface)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(
@@ -386,7 +419,7 @@ fun ReserveItemCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = reserve.name,
-                        color = TextPrimary,
+                        color = colors.textPrimary,
                         fontSize = 13.5.sp,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -401,13 +434,13 @@ fun ReserveItemCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "${reserve.score.toInt()}",
-                        color = TextPrimary,
+                        color = colors.textPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
                         text = "/100",
-                        color = TextMuted,
+                        color = colors.textMuted,
                         fontSize = 10.sp,
                         modifier = Modifier.padding(start = 2.dp)
                     )
@@ -415,7 +448,7 @@ fun ReserveItemCard(
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
                         contentDescription = null,
-                        tint = TextMuted,
+                        tint = colors.textMuted,
                         modifier = Modifier.size(16.dp)
                     )
                 }
@@ -429,7 +462,7 @@ fun ReserveItemCard(
                     .fillMaxWidth()
                     .height(4.dp)
                     .clip(CircleShape)
-                    .background(BorderSubtle)
+                    .background(colors.borderSubtle)
             ) {
                 Box(
                     modifier = Modifier
@@ -449,12 +482,12 @@ fun ReserveItemCard(
                 ) {
                     Text(
                         text = "Biomarkers: ${reserve.metricSummary}",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 11.5.sp
                     )
                     Text(
                         text = reserve.clinicalInsight,
-                        color = TextMuted,
+                        color = colors.textMuted,
                         fontSize = 11.5.sp,
                         lineHeight = 16.sp
                     )
@@ -462,13 +495,13 @@ fun ReserveItemCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(10.dp))
-                            .background(DarkSurfaceVariant)
-                            .border(1.dp, BorderSubtle, RoundedCornerShape(10.dp))
+                            .background(colors.surfaceVariant)
+                            .border(1.dp, colors.borderSubtle, RoundedCornerShape(10.dp))
                             .padding(10.dp)
                     ) {
                         Text(
                             text = "💡 Action: ${reserve.dominantLeverageAction}",
-                            color = SleekPrimary,
+                            color = colors.primary,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Medium
                         )

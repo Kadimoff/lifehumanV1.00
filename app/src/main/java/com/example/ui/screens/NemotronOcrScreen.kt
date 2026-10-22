@@ -61,20 +61,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
 import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -112,6 +104,7 @@ fun NemotronOcrScreen(
     onNavigateToDashboard: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     val coroutineScope = rememberCoroutineScope()
     val currentProfile by viewModel.biomarkerProfile.collectAsStateWithLifecycle()
 
@@ -223,7 +216,7 @@ fun NemotronOcrScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(colors.background)
             .testTag("nemotron_ocr_screen"),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -238,14 +231,14 @@ fun NemotronOcrScreen(
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(
                         text = "NVIDIA NEMOTRON™ OCR",
-                        color = SleekPrimary,
+                        color = colors.primary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = 1.sp
                     )
                     Text(
                         text = "Multimodal Lab Extraction & LOINC Standardization",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 12.sp
                     )
                 }
@@ -271,8 +264,8 @@ fun NemotronOcrScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(18.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(18.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(18.dp)
             ) {
                 Row(
@@ -290,13 +283,13 @@ fun NemotronOcrScreen(
                             modifier = Modifier
                                 .size(36.dp)
                                 .clip(CircleShape)
-                                .background(SleekPrimary.copy(alpha = 0.2f)),
+                                .background(colors.primary.copy(alpha = 0.2f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Psychology,
                                 contentDescription = null,
-                                tint = SleekPrimary,
+                                tint = colors.primary,
                                 modifier = Modifier.size(20.dp)
                             )
                         }
@@ -304,13 +297,13 @@ fun NemotronOcrScreen(
                         Column {
                             Text(
                                 text = "NVIDIA Nemotron™ 70B Vision",
-                                color = TextPrimary,
+                                color = colors.textPrimary,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = "vLLM / TensorRT-LLM • Zero-Retention HIPPA Compliant",
-                                color = TextMuted,
+                                color = colors.textMuted,
                                 fontSize = 10.5.sp
                             )
                         }
@@ -339,7 +332,7 @@ fun NemotronOcrScreen(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
                     text = "SELECT MEDICAL LAB DOCUMENT",
-                    color = TextMuted,
+                    color = colors.textMuted,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
@@ -355,8 +348,8 @@ fun NemotronOcrScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .clip(RoundedCornerShape(14.dp))
-                                .background(if (isSelected) SleekOnPrimary else DarkSurface)
-                                .border(1.dp, if (isSelected) SleekPrimary else BorderSubtle, RoundedCornerShape(14.dp))
+                                .background(if (isSelected) colors.primary.copy(alpha = 0.16f) else colors.surface)
+                                .border(1.dp, if (isSelected) colors.primary else colors.borderSubtle, RoundedCornerShape(14.dp))
                                 .clickable {
                                     selectedSampleIdx = index
                                     pipelineStage = OcrPipelineStage.IDLE
@@ -368,13 +361,13 @@ fun NemotronOcrScreen(
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text(
                                     text = "Panel ${index + 1}",
-                                    color = if (isSelected) SleekPrimary else TextMuted,
+                                    color = if (isSelected) colors.primary else colors.textMuted,
                                     fontSize = 10.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
                                     text = doc.title,
-                                    color = if (isSelected) TextPrimary else TextSecondary,
+                                    color = if (isSelected) colors.textPrimary else colors.textSecondary,
                                     fontSize = 11.5.sp,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                                     maxLines = 2
@@ -391,8 +384,8 @@ fun NemotronOcrScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Column(
@@ -408,12 +401,12 @@ fun NemotronOcrScreen(
                             Icon(
                                 imageVector = Icons.Default.DocumentScanner,
                                 contentDescription = null,
-                                tint = SleekPrimary,
+                                tint = colors.primary,
                                 modifier = Modifier.size(18.dp)
                             )
                             Text(
                                 text = currentDoc.title,
-                                color = TextPrimary,
+                                color = colors.textPrimary,
                                 fontSize = 13.5.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -421,14 +414,14 @@ fun NemotronOcrScreen(
 
                         Text(
                             text = currentDoc.date,
-                            color = TextMuted,
+                            color = colors.textMuted,
                             fontSize = 11.sp
                         )
                     }
 
                     Text(
                         text = currentDoc.description,
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 11.5.sp
                     )
 
@@ -442,13 +435,13 @@ fun NemotronOcrScreen(
                             ) {
                                 Text(
                                     text = pipelineStage.title,
-                                    color = SleekPrimary,
+                                    color = colors.primary,
                                     fontSize = 11.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
                                     text = "${(pipelineProgress * 100).toInt()}%",
-                                    color = TextMuted,
+                                    color = colors.textMuted,
                                     fontSize = 11.sp
                                 )
                             }
@@ -459,13 +452,13 @@ fun NemotronOcrScreen(
                                     .fillMaxWidth()
                                     .height(6.dp)
                                     .clip(RoundedCornerShape(3.dp)),
-                                color = SleekPrimary,
-                                trackColor = DarkSurfaceVariant
+                                color = colors.primary,
+                                trackColor = colors.surfaceVariant
                             )
 
                             Text(
                                 text = pipelineStage.description,
-                                color = TextMuted,
+                                color = colors.textMuted,
                                 fontSize = 10.5.sp
                             )
                         }
@@ -481,8 +474,8 @@ fun NemotronOcrScreen(
                             modifier = Modifier.weight(1f),
                             enabled = pipelineStage == OcrPipelineStage.IDLE || pipelineStage == OcrPipelineStage.REVIEW,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = SleekPrimary,
-                                contentColor = SleekOnPrimary
+                                containerColor = colors.primary,
+                                contentColor = colors.onPrimary
                             ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
@@ -502,8 +495,8 @@ fun NemotronOcrScreen(
                         Button(
                             onClick = { showJsonModal = !showJsonModal },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = DarkSurfaceVariant,
-                                contentColor = TextSecondary
+                                containerColor = colors.surfaceVariant,
+                                contentColor = colors.textSecondary
                             ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
@@ -526,7 +519,7 @@ fun NemotronOcrScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(1.dp, SleekPrimary.copy(alpha = 0.4f), RoundedCornerShape(16.dp)),
+                        .border(1.dp, colors.primary.copy(alpha = 0.4f), RoundedCornerShape(16.dp)),
                     colors = CardDefaults.cardColors(containerColor = Color(0xFF0A0B0E)),
                     shape = RoundedCornerShape(16.dp)
                 ) {
@@ -567,7 +560,7 @@ fun NemotronOcrScreen(
             ) {
                 Text(
                     text = "EXTRACTED BIOMARKERS (${currentDoc.biomarkers.size})",
-                    color = TextMuted,
+                    color = colors.textMuted,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
@@ -588,8 +581,8 @@ fun NemotronOcrScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(14.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(14.dp)
             ) {
                 Row(
@@ -605,20 +598,20 @@ fun NemotronOcrScreen(
                     ) {
                         Text(
                             text = bm.name,
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(
                                 text = bm.loincCode,
-                                color = TextMuted,
+                                color = colors.textMuted,
                                 fontSize = 10.sp,
                                 fontFamily = FontFamily.Monospace
                             )
                             Text(
                                 text = "Confidence: ${(bm.confidence * 100).toInt()}%",
-                                color = SleekPrimary,
+                                color = colors.primary,
                                 fontSize = 10.sp
                             )
                         }
@@ -663,8 +656,8 @@ fun NemotronOcrScreen(
                         .fillMaxWidth()
                         .height(48.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = SleekPrimary,
-                        contentColor = SleekOnPrimary
+                        containerColor = colors.primary,
+                        contentColor = colors.onPrimary
                     ),
                     shape = RoundedCornerShape(14.dp)
                 ) {
@@ -686,7 +679,7 @@ fun NemotronOcrScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .border(1.dp, SleekGreen.copy(alpha = 0.4f), RoundedCornerShape(12.dp)),
-                        colors = CardDefaults.cardColors(containerColor = DarkSurfaceVariant),
+                        colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Row(

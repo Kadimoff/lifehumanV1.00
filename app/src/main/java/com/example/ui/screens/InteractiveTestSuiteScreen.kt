@@ -48,21 +48,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRose
-import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 
 @Composable
@@ -70,6 +60,7 @@ fun InteractiveTestSuiteScreen(
     viewModel: LongevityViewModel,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     var activeTestTab by remember { mutableIntStateOf(0) }
 
     val tabs = listOf(
@@ -81,7 +72,7 @@ fun InteractiveTestSuiteScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(colors.background)
     ) {
         // Top Header
         Column(
@@ -91,14 +82,14 @@ fun InteractiveTestSuiteScreen(
         ) {
             Text(
                 text = "INTERACTIVE TEST SUITE",
-                color = SleekPrimary,
+                color = colors.primary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.ExtraBold,
                 letterSpacing = 1.sp
             )
             Text(
                 text = "Direct on-device physiological & cognitive assessment",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp
             )
         }
@@ -106,12 +97,12 @@ fun InteractiveTestSuiteScreen(
         // Test Category Tabs
         ScrollableTabRow(
             selectedTabIndex = activeTestTab,
-            containerColor = DarkSurface,
-            contentColor = SleekPrimary,
+            containerColor = colors.surface,
+            contentColor = colors.primary,
             indicator = { tabPositions ->
                 TabRowDefaults.SecondaryIndicator(
                     Modifier.tabIndicatorOffset(tabPositions[activeTestTab]),
-                    color = SleekPrimary
+                    color = colors.primary
                 )
             },
             edgePadding = 16.dp
@@ -126,14 +117,14 @@ fun InteractiveTestSuiteScreen(
                                 imageVector = icon,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
-                                tint = if (activeTestTab == index) SleekPrimary else TextMuted
+                                tint = if (activeTestTab == index) colors.primary else colors.textMuted
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = title,
                                 fontSize = 12.sp,
                                 fontWeight = if (activeTestTab == index) FontWeight.Bold else FontWeight.Normal,
-                                color = if (activeTestTab == index) SleekPrimary else TextMuted
+                                color = if (activeTestTab == index) colors.primary else colors.textMuted
                             )
                         }
                     }
@@ -177,6 +168,7 @@ fun InteractiveTestSuiteScreen(
 
 @Composable
 fun StroopTestComponent(viewModel: LongevityViewModel) {
+    val themeColors = AppTheme.colors
     val isRunning by viewModel.stroopActive.collectAsStateWithLifecycle()
     val isFinished by viewModel.stroopFinished.collectAsStateWithLifecycle()
     val currentIdx by viewModel.stroopCurrentIndex.collectAsStateWithLifecycle()
@@ -187,16 +179,16 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
     val colors = listOf(
         Pair("RED", Color(0xFFFF5252)),
         Pair("BLUE", Color(0xFF448AFF)),
-        Pair("GREEN", Color(0xFF69F0AE)),
-        Pair("YELLOW", Color(0xFFFFD740)),
-        Pair("PURPLE", Color(0xFFE040FB))
+        Pair("GREEN", Color(0xFF10B981)),
+        Pair("YELLOW", Color(0xFFF59E0B)),
+        Pair("PURPLE", Color(0xFFA855F7))
     )
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, themeColors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = themeColors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -206,7 +198,7 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
         ) {
             Text(
                 text = "STROOP COLOR & EXECUTIVE INHIBITION TEST",
-                color = SleekSecondary,
+                color = themeColors.secondary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp
@@ -214,7 +206,7 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
 
             Text(
                 text = "Tap the button matching the INK COLOR of the word, NOT the written text itself. Measures reaction latency in milliseconds.",
-                color = TextSecondary,
+                color = themeColors.textSecondary,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
@@ -226,25 +218,25 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
                         .fillMaxWidth()
                         .height(140.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(DarkSurfaceVariant)
-                        .border(1.dp, CardBorder, RoundedCornerShape(16.dp)),
+                        .background(themeColors.surfaceVariant)
+                        .border(1.dp, themeColors.cardBorder, RoundedCornerShape(16.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = "Current Baseline Latency",
-                            color = TextMuted,
+                            color = themeColors.textMuted,
                             fontSize = 12.sp
                         )
                         Text(
                             text = "${profile.stroopMeanLatencyMs.toInt()} ms",
-                            color = SleekPrimary,
+                            color = themeColors.primary,
                             fontSize = 32.sp,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "Accuracy: ${profile.stroopAccuracyPercent.toInt()}%",
-                            color = TextSecondary,
+                            color = themeColors.textSecondary,
                             fontSize = 11.sp
                         )
                     }
@@ -253,7 +245,7 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
                 Button(
                     onClick = { viewModel.startStroopTest() },
                     modifier = Modifier.fillMaxWidth().height(48.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SleekPrimary, contentColor = SleekOnPrimary),
+                    colors = ButtonDefaults.buttonColors(containerColor = themeColors.primary, contentColor = themeColors.onPrimary),
                     shape = RoundedCornerShape(14.dp)
                 ) {
                     Text("START 12-TRIAL TEST", fontSize = 13.sp, fontWeight = FontWeight.Bold)
@@ -264,8 +256,8 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Trial ${currentIdx + 1}/12", color = TextSecondary, fontSize = 12.sp)
-                    Text("Accuracy: ${results.count { it.isCorrect }}/${results.size}", color = SleekPrimary, fontSize = 12.sp)
+                    Text("Trial ${currentIdx + 1}/12", color = themeColors.textSecondary, fontSize = 12.sp)
+                    Text("Accuracy: ${results.count { it.isCorrect }}/${results.size}", color = themeColors.primary, fontSize = 12.sp)
                 }
 
                 // Word Stimulus Display
@@ -275,7 +267,7 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
                         .height(140.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(Color(0xFF0F1014))
-                        .border(1.5.dp, SleekPrimary.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
+                        .border(1.5.dp, themeColors.primary.copy(alpha = 0.5f), RoundedCornerShape(16.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     stimulus?.let { st ->
@@ -334,21 +326,21 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(themeColors.surfaceVariant)
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = SleekGreen, modifier = Modifier.size(32.dp))
-                    Text("Test Complete! Cognitive Twin Updated", color = TextPrimary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                    Text("Mean Reaction Latency: ${meanLatency.toInt()} ms", color = SleekPrimary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text("Accuracy: ${accuracy.toInt()}% ($correctCount/12 trials)", color = TextSecondary, fontSize = 12.sp)
+                    Text("Test Complete! Cognitive Twin Updated", color = themeColors.textPrimary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text("Mean Reaction Latency: ${meanLatency.toInt()} ms", color = themeColors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text("Accuracy: ${accuracy.toInt()}% ($correctCount/12 trials)", color = themeColors.textSecondary, fontSize = 12.sp)
                 }
 
                 Button(
                     onClick = { viewModel.startStroopTest() },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = DarkSurfaceVariant, contentColor = TextPrimary),
+                    colors = ButtonDefaults.buttonColors(containerColor = themeColors.surfaceVariant, contentColor = themeColors.textPrimary),
                     shape = RoundedCornerShape(14.dp)
                 ) {
                     Icon(imageVector = Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -362,6 +354,7 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
 
 @Composable
 fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
+    val colors = AppTheme.colors
     val isRunning by viewModel.chairTimerActive.collectAsStateWithLifecycle()
     val secondsLeft by viewModel.chairSecondsLeft.collectAsStateWithLifecycle()
     val repCount by viewModel.chairRepCount.collectAsStateWithLifecycle()
@@ -371,8 +364,8 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -382,7 +375,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
         ) {
             Text(
                 text = "30-SECOND CHAIR STAND TEST",
-                color = SleekSecondary,
+                color = colors.secondary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp
@@ -390,7 +383,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
 
             Text(
                 text = "Cross arms across chest. On START, sit and fully stand as many times as possible in 30 seconds. Tap the button on each stand.",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
@@ -400,10 +393,10 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                 modifier = Modifier
                     .size(170.dp)
                     .clip(CircleShape)
-                    .background(DarkSurfaceVariant)
+                    .background(colors.surfaceVariant)
                     .border(
                         3.dp,
-                        Brush.sweepGradient(listOf(SleekPrimary, SleekSecondary, SleekAmber, SleekPrimary)),
+                        Brush.sweepGradient(listOf(colors.primary, colors.secondary, SleekAmber, colors.primary)),
                         CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -411,13 +404,13 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = if (isRunning) "$secondsLeft s" else "$repCount Reps",
-                        color = if (isRunning) SleekAmber else SleekPrimary,
+                        color = if (isRunning) SleekAmber else colors.primary,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
                     Text(
                         text = if (isRunning) "Reps: $repCount" else if (isFinished) "Finished!" else "Baseline: ${profile.chairStand30sReps} reps",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 12.sp
                     )
                 }
@@ -427,7 +420,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                 Button(
                     onClick = { viewModel.startChairStandTest() },
                     modifier = Modifier.fillMaxWidth().height(48.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SleekPrimary, contentColor = SleekOnPrimary),
+                    colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary),
                     shape = RoundedCornerShape(14.dp)
                 ) {
                     Text("START 30s COUNTDOWN", fontSize = 13.sp, fontWeight = FontWeight.Bold)
@@ -439,7 +432,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(64.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SleekPrimary, contentColor = SleekOnPrimary),
+                    colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary),
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Text("TAP ON FULL STAND (+1)", fontSize = 16.sp, fontWeight = FontWeight.ExtraBold)
@@ -456,12 +449,12 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(14.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text("Total: $repCount Reps in 30 seconds", color = SleekPrimary, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                    Text("Total: $repCount Reps in 30 seconds", color = colors.primary, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                     Text(rating, color = if (repCount >= 14) SleekGreen else SleekRose, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                 }
 
@@ -472,7 +465,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                     Button(
                         onClick = { viewModel.resetChairTest() },
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = DarkSurfaceVariant, contentColor = TextPrimary),
+                        colors = ButtonDefaults.buttonColors(containerColor = colors.surfaceVariant, contentColor = colors.textPrimary),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Reset")
@@ -480,7 +473,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                     Button(
                         onClick = { viewModel.startChairStandTest() },
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = SleekPrimary, contentColor = SleekOnPrimary),
+                        colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary),
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text("Retake")
@@ -493,13 +486,14 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
 
 @Composable
 fun PsychologicalSurveyComponent(viewModel: LongevityViewModel) {
+    val colors = AppTheme.colors
     val profile by viewModel.biomarkerProfile.collectAsStateWithLifecycle()
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -508,7 +502,7 @@ fun PsychologicalSurveyComponent(viewModel: LongevityViewModel) {
         ) {
             Text(
                 text = "NEURO-PSYCHOLOGICAL & SLEEP METRICS",
-                color = SleekSecondary,
+                color = colors.secondary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp
@@ -556,15 +550,16 @@ fun SurveyScoreSelector(
     options: List<Pair<String, Int>>,
     onSelect: (Int) -> Unit
 ) {
+    val colors = AppTheme.colors
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(title, color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-            Text("$currentValue/$maxValue", color = SleekPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(title, color = colors.textPrimary, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            Text("$currentValue/$maxValue", color = colors.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
         }
-        Text(description, color = TextSecondary, fontSize = 11.sp)
+        Text(description, color = colors.textSecondary, fontSize = 11.sp)
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -576,15 +571,15 @@ fun SurveyScoreSelector(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(if (isSelected) SleekOnPrimary else DarkSurfaceVariant)
-                        .border(1.dp, if (isSelected) SleekPrimary else BorderSubtle, RoundedCornerShape(10.dp))
+                        .background(if (isSelected) colors.primary.copy(alpha = 0.16f) else colors.surfaceVariant)
+                        .border(1.dp, if (isSelected) colors.primary else colors.borderSubtle, RoundedCornerShape(10.dp))
                         .clickable { onSelect(value) }
                         .padding(vertical = 8.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = label,
-                        color = if (isSelected) SleekPrimary else TextSecondary,
+                        color = if (isSelected) colors.primary else colors.textSecondary,
                         fontSize = 10.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         textAlign = TextAlign.Center

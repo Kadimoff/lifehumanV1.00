@@ -49,23 +49,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekGreen
 import com.example.ui.theme.SleekPrimary
-import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 
 @Composable
 fun WhitepaperArchitectureScreen(
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     var selectedSectionTab by remember { mutableIntStateOf(0) }
 
     val sectionTabs = listOf(
@@ -81,7 +74,7 @@ fun WhitepaperArchitectureScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(colors.background)
             .testTag("whitepaper_screen"),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -91,8 +84,8 @@ fun WhitepaperArchitectureScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, SleekPrimary.copy(alpha = 0.35f), RoundedCornerShape(20.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.primary.copy(alpha = 0.35f), RoundedCornerShape(20.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Column(
@@ -107,12 +100,12 @@ fun WhitepaperArchitectureScreen(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(SleekPrimary.copy(alpha = 0.15f))
+                                .background(colors.primary.copy(alpha = 0.15f))
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
                                 text = "TECHNICAL WHITEPAPER • 2026 EDITION",
-                                color = SleekPrimary,
+                                color = colors.primary,
                                 fontSize = 10.5.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 letterSpacing = 0.8.sp
@@ -122,8 +115,8 @@ fun WhitepaperArchitectureScreen(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(DarkSurfaceVariant)
-                                .border(1.dp, BorderSubtle, RoundedCornerShape(8.dp))
+                                .background(colors.surfaceVariant)
+                                .border(1.dp, colors.borderSubtle, RoundedCornerShape(8.dp))
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
                         ) {
                             Text(
@@ -137,13 +130,13 @@ fun WhitepaperArchitectureScreen(
 
                     Text(
                         text = "LIFEMAP HUMAN™: Multi-System Digital Twin of Longevity",
-                        color = TextPrimary,
+                        color = colors.textPrimary,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Comprehensive Architectural Blueprint, Gompertz PhenoAge Modeling, and Local Intelligence Infrastructure.",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 12.sp,
                         lineHeight = 17.sp
                     )
@@ -155,12 +148,12 @@ fun WhitepaperArchitectureScreen(
         item {
             ScrollableTabRow(
                 selectedTabIndex = selectedSectionTab,
-                containerColor = DarkSurface,
-                contentColor = SleekPrimary,
+                containerColor = colors.surface,
+                contentColor = colors.primary,
                 indicator = { tabPositions ->
                     TabRowDefaults.SecondaryIndicator(
                         Modifier.tabIndicatorOffset(tabPositions[selectedSectionTab]),
-                        color = SleekPrimary
+                        color = colors.primary
                     )
                 },
                 edgePadding = 8.dp
@@ -175,13 +168,13 @@ fun WhitepaperArchitectureScreen(
                                     imageVector = icon,
                                     contentDescription = null,
                                     modifier = Modifier.size(15.dp),
-                                    tint = if (selectedSectionTab == index) SleekPrimary else TextMuted
+                                    tint = if (selectedSectionTab == index) colors.primary else colors.textMuted
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
                                     text = title,
                                     fontWeight = if (selectedSectionTab == index) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (selectedSectionTab == index) SleekPrimary else TextMuted,
+                                    color = if (selectedSectionTab == index) colors.primary else colors.textMuted,
                                     fontSize = 11.5.sp
                                 )
                             }
@@ -206,11 +199,12 @@ fun WhitepaperArchitectureScreen(
 
 @Composable
 fun SectionExecutiveSummary() {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -219,14 +213,14 @@ fun SectionExecutiveSummary() {
         ) {
             Text(
                 text = "1. EXECUTIVE SUMMARY & CONCEPTUAL FOUNDATION",
-                color = SleekPrimary,
+                color = colors.primary,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Traditional medicine operates on a reactive paradigm: interventions occur only after clinical symptoms manifest. LIFEMAP HUMAN™ fundamentally transforms this framework into an offline-first, mathematically rigorous biological digital twin that computes individual organ reserves and forecasts multi-decade healthspan directly on-device.",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 lineHeight = 18.sp
             )
@@ -255,11 +249,12 @@ fun SectionExecutiveSummary() {
 
 @Composable
 fun KeyConceptRow(title: String, desc: String) {
+    val colors = AppTheme.colors
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(DarkSurfaceVariant)
+            .background(colors.surfaceVariant)
             .padding(12.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -267,23 +262,24 @@ fun KeyConceptRow(title: String, desc: String) {
             modifier = Modifier
                 .size(8.dp)
                 .clip(CircleShape)
-                .background(SleekPrimary)
+                .background(colors.primary)
                 .padding(top = 4.dp)
         )
         Column {
-            Text(title, color = TextPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
-            Text(desc, color = TextSecondary, fontSize = 11.sp, lineHeight = 15.sp)
+            Text(title, color = colors.textPrimary, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+            Text(desc, color = colors.textSecondary, fontSize = 11.sp, lineHeight = 15.sp)
         }
     }
 }
 
 @Composable
 fun Section8ReserveModels() {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -292,7 +288,7 @@ fun Section8ReserveModels() {
         ) {
             Text(
                 text = "2. EIGHT MATHEMATICAL & CLINICAL RESERVE MODELS",
-                color = SleekSecondary,
+                color = colors.secondary,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -301,7 +297,7 @@ fun Section8ReserveModels() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, SleekPrimary.copy(alpha = 0.4f), RoundedCornerShape(14.dp)),
+                    .border(1.dp, colors.primary.copy(alpha = 0.4f), RoundedCornerShape(14.dp)),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF0A0B0E)),
                 shape = RoundedCornerShape(14.dp)
             ) {
@@ -345,12 +341,12 @@ fun Section8ReserveModels() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(name, color = SleekPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Text(math, color = TextSecondary, fontSize = 10.5.sp, lineHeight = 15.sp)
+                    Text(name, color = colors.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(math, color = colors.textSecondary, fontSize = 10.5.sp, lineHeight = 15.sp)
                 }
             }
         }
@@ -359,11 +355,12 @@ fun Section8ReserveModels() {
 
 @Composable
 fun SectionNemotronPipelineDoc() {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -372,14 +369,14 @@ fun SectionNemotronPipelineDoc() {
         ) {
             Text(
                 text = "3. NVIDIA NEMOTRON™ MULTIMODAL OCR PIPELINE",
-                color = SleekPrimary,
+                color = colors.primary,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "Clinical paper reports and lab PDFs vary widely in formatting. LIFEMAP HUMAN™ integrates an intelligent multimodal extraction engine adhering to medical LOINC standards.",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 lineHeight = 17.sp
             )
@@ -396,22 +393,22 @@ fun SectionNemotronPipelineDoc() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(title, color = TextPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                        Text(desc, color = TextSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
+                        Text(title, color = colors.textPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text(desc, color = colors.textSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
                     }
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(6.dp))
-                            .background(SleekPrimary.copy(alpha = 0.15f))
+                            .background(colors.primary.copy(alpha = 0.15f))
                             .padding(horizontal = 6.dp, vertical = 3.dp)
                     ) {
-                        Text(metric, color = SleekPrimary, fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
+                        Text(metric, color = colors.primary, fontSize = 9.5.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -421,11 +418,12 @@ fun SectionNemotronPipelineDoc() {
 
 @Composable
 fun SectionTrajectoriesDoc() {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -434,14 +432,14 @@ fun SectionTrajectoriesDoc() {
         ) {
             Text(
                 text = "4. 5-20 YEAR MULTI-SCENARIO TRAJECTORIES",
-                color = SleekSecondary,
+                color = colors.secondary,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = "The scenario engine uses dynamic Gompertz rate equations to compare standard biological degradation against targeted clinical protocols.",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 lineHeight = 17.sp
             )
@@ -459,12 +457,12 @@ fun SectionTrajectoriesDoc() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(name, color = SleekAmber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Text(detail, color = TextSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
+                    Text(detail, color = colors.textSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
                 }
             }
         }
@@ -473,11 +471,12 @@ fun SectionTrajectoriesDoc() {
 
 @Composable
 fun SectionSystemArchitecture() {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -486,7 +485,7 @@ fun SectionSystemArchitecture() {
         ) {
             Text(
                 text = "5. EDGE SYSTEM ARCHITECTURE & DATA INTEGRITY",
-                color = SleekPrimary,
+                color = colors.primary,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -503,12 +502,12 @@ fun SectionSystemArchitecture() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(3.dp)
                 ) {
-                    Text(layer, color = SleekPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Text(description, color = TextSecondary, fontSize = 11.sp, lineHeight = 15.sp)
+                    Text(layer, color = colors.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(description, color = colors.textSecondary, fontSize = 11.sp, lineHeight = 15.sp)
                 }
             }
         }
@@ -517,11 +516,12 @@ fun SectionSystemArchitecture() {
 
 @Composable
 fun SectionFinancialEvaluation() {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -537,7 +537,7 @@ fun SectionFinancialEvaluation() {
 
             Text(
                 text = "Due to the 100% on-device architecture, operational infrastructure costs scale asymptotically near zero per additional user ($0.00 server cost per assessment).",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 lineHeight = 17.sp
             )
@@ -554,12 +554,12 @@ fun SectionFinancialEvaluation() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(item, color = TextPrimary, fontSize = 11.5.sp, fontWeight = FontWeight.Medium)
+                    Text(item, color = colors.textPrimary, fontSize = 11.5.sp, fontWeight = FontWeight.Medium)
                     Text(value, color = SleekGreen, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                 }
             }
@@ -569,13 +569,14 @@ fun SectionFinancialEvaluation() {
 
 @Composable
 fun SectionFlutterRadarWidget() {
+    val colors = AppTheme.colors
     var selectedFlutterSnippet by remember { mutableIntStateOf(0) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, SleekPrimary.copy(alpha = 0.5f), RoundedCornerShape(20.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.primary.copy(alpha = 0.5f), RoundedCornerShape(20.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(20.dp)
     ) {
         Column(
@@ -589,19 +590,19 @@ fun SectionFlutterRadarWidget() {
             ) {
                 Text(
                     text = "7. CROSS-PLATFORM FLUTTER & JETPACK CODE",
-                    color = SleekPrimary,
+                    color = colors.primary,
                     fontSize = 13.5.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(SleekPrimary.copy(alpha = 0.15f))
+                        .background(colors.primary.copy(alpha = 0.15f))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = if (selectedFlutterSnippet == 0) "Pure Dart 3D (0-deps)" else "fl_chart: ^0.68.0",
-                        color = SleekPrimary,
+                        color = colors.primary,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -621,15 +622,15 @@ fun SectionFlutterRadarWidget() {
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(if (isSel) SleekPrimary.copy(alpha = 0.25f) else DarkSurfaceVariant)
-                            .border(1.dp, if (isSel) SleekPrimary else BorderSubtle, RoundedCornerShape(10.dp))
+                            .background(if (isSel) colors.primary.copy(alpha = 0.25f) else colors.surfaceVariant)
+                            .border(1.dp, if (isSel) colors.primary else colors.borderSubtle, RoundedCornerShape(10.dp))
                             .clickable { selectedFlutterSnippet = idx }
                             .padding(vertical = 8.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = label,
-                            color = if (isSel) SleekPrimary else TextSecondary,
+                            color = if (isSel) colors.primary else colors.textSecondary,
                             fontSize = 11.sp,
                             fontWeight = if (isSel) FontWeight.Bold else FontWeight.Medium
                         )
@@ -643,7 +644,7 @@ fun SectionFlutterRadarWidget() {
                 } else {
                     "Complete production-grade Flutter `LongevityRadarChart` widget utilizing `fl_chart` for real-time 8-axis Reserve Score rendering:"
                 },
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp,
                 lineHeight = 17.sp
             )
@@ -652,7 +653,7 @@ fun SectionFlutterRadarWidget() {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(14.dp)),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp)),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF0A0B0E)),
                 shape = RoundedCornerShape(14.dp)
             ) {

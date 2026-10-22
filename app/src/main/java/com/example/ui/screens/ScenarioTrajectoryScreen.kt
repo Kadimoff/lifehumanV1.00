@@ -41,21 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.ui.components.TrajectoryChart
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRose
 import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 import kotlin.math.roundToInt
 
@@ -64,6 +55,7 @@ fun ScenarioTrajectoryScreen(
     viewModel: LongevityViewModel,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     val forecast by viewModel.trajectoryForecast.collectAsStateWithLifecycle()
     val selectedYear by viewModel.selectedScrubYear.collectAsStateWithLifecycle()
 
@@ -72,7 +64,7 @@ fun ScenarioTrajectoryScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkBackground),
+            .background(colors.background),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -81,14 +73,14 @@ fun ScenarioTrajectoryScreen(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = "5-TRAJECTORY SCENARIOS",
-                    color = SleekPrimary,
+                    color = colors.primary,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.sp
                 )
                 Text(
                     text = "Gompertz-Levine longevity projections over 5, 10, and 20 years",
-                    color = TextSecondary,
+                    color = colors.textSecondary,
                     fontSize = 12.sp
                 )
             }
@@ -99,8 +91,8 @@ fun ScenarioTrajectoryScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(22.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(22.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(
@@ -114,14 +106,14 @@ fun ScenarioTrajectoryScreen(
                     ) {
                         Text(
                             text = "PROJECTED BIOLOGICAL AGE CURVES",
-                            color = SleekSecondary,
+                            color = colors.secondary,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.8.sp
                         )
                         Text(
                             text = "Baseline: ${forecast.baseBioAge} yrs",
-                            color = TextMuted,
+                            color = colors.textMuted,
                             fontSize = 10.5.sp
                         )
                     }
@@ -140,8 +132,8 @@ fun ScenarioTrajectoryScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(18.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(18.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(18.dp)
             ) {
                 Column(
@@ -155,14 +147,14 @@ fun ScenarioTrajectoryScreen(
                     ) {
                         Text(
                             text = "TIME HORIZON SCRUBBER",
-                            color = SleekPrimary,
+                            color = colors.primary,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Bold,
                             letterSpacing = 0.8.sp
                         )
                         Text(
                             text = if (selectedYear == 0) "Year 0 (Current Baseline)" else "+$selectedYear Years Horizon",
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -187,9 +179,9 @@ fun ScenarioTrajectoryScreen(
                         valueRange = 0f..3f,
                         steps = 2,
                         colors = SliderDefaults.colors(
-                            thumbColor = SleekPrimary,
-                            activeTrackColor = SleekPrimary,
-                            inactiveTrackColor = BorderSubtle
+                            thumbColor = colors.primary,
+                            activeTrackColor = colors.primary,
+                            inactiveTrackColor = colors.borderSubtle
                         )
                     )
 
@@ -197,10 +189,10 @@ fun ScenarioTrajectoryScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Present", color = TextMuted, fontSize = 10.sp)
-                        Text("Year 5", color = TextMuted, fontSize = 10.sp)
-                        Text("Year 10", color = TextMuted, fontSize = 10.sp)
-                        Text("Year 20", color = TextMuted, fontSize = 10.sp)
+                        Text("Present", color = colors.textMuted, fontSize = 10.sp)
+                        Text("Year 5", color = colors.textMuted, fontSize = 10.sp)
+                        Text("Year 10", color = colors.textMuted, fontSize = 10.sp)
+                        Text("Year 20", color = colors.textMuted, fontSize = 10.sp)
                     }
                 }
             }
@@ -210,7 +202,7 @@ fun ScenarioTrajectoryScreen(
         item {
             Text(
                 text = "PROJECTED OUTCOMES AT YEAR $selectedYear",
-                color = TextMuted,
+                color = colors.textMuted,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp
@@ -293,11 +285,12 @@ fun ScenarioOutcomeCard(
     baseBio: Double,
     gainDescription: String
 ) {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
@@ -321,13 +314,13 @@ fun ScenarioOutcomeCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = name,
-                    color = TextPrimary,
+                    color = colors.textPrimary,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = subtitle,
-                    color = TextSecondary,
+                    color = colors.textSecondary,
                     fontSize = 11.sp
                 )
                 Text(
@@ -347,7 +340,7 @@ fun ScenarioOutcomeCard(
                 )
                 Text(
                     text = "Projected",
-                    color = TextMuted,
+                    color = colors.textMuted,
                     fontSize = 10.sp
                 )
             }

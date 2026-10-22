@@ -166,7 +166,7 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // Theme State (Dark / Light mode)
-    private val _isDarkMode = MutableStateFlow(true)
+    private val _isDarkMode = MutableStateFlow(false)
     val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
     fun toggleDarkMode() {
@@ -395,20 +395,35 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
 
     init {
         checkHealthPermissions()
-        refreshMorningBriefing(forceAi = false)
+        // Immediate deterministic briefing for 0ms UI startup, followed by background Gemini API pre-fetch
+        _morningBriefing.value = geminiService.generateDeterministicClinicalBriefing(
+            _biomarkerProfile.value,
+            _twinResult.value,
+            _healthConnectData.value
+        )
+        refreshMorningBriefing(forceAi = true)
     }
 
-    // 4. Update Profile Logic
+    // 4. Update Profile Logic (Synchronous fast update + Async background trajectory & Gemini API refresh)
     fun updateProfile(newProfile: BiomarkerProfile) {
         _biomarkerProfile.value = newProfile
         val newTwin = LongevityCalculatorService.computeDigitalTwin(newProfile)
         _twinResult.value = newTwin
         _trajectoryForecast.value = LongevityCalculatorService.forecastTrajectories(newProfile, newTwin)
-        refreshMorningBriefing(forceAi = false)
+        // Update deterministic briefing immediately for zero UI lag, then refresh via Gemini API in background
+        _morningBriefing.value = geminiService.generateDeterministicClinicalBriefing(
+            newProfile,
+            newTwin,
+            _healthConnectData.value
+        )
+        refreshMorningBriefing(forceAi = true)
     }
 
+    private var briefingJob: Job? = null
+
     fun refreshMorningBriefing(forceAi: Boolean = true) {
-        viewModelScope.launch {
+        briefingJob?.cancel()
+        briefingJob = viewModelScope.launch {
             _isGeneratingBriefing.value = true
             try {
                 if (forceAi) {

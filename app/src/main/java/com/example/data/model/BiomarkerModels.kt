@@ -59,8 +59,15 @@ data class BiomarkerProfile(
     val activeCaloriesKcal: Double = 350.0,    // kcal/day
     val exerciseMinutesToday: Int = 30,        // minutes of active exercise
     val isHealthConnectSynced: Boolean = false,
-    val healthConnectSyncTimestamp: Long? = null
+    val healthConnectSyncTimestamp: Long? = null,
+
+    // Additional Clinical Indicators
+    val hba1cPercent: Double = 5.2,            // % (<5.4 optimal)
+    val gripStrengthKg: Double = 46.0          // kg (>45 optimal)
 ) {
+    val whiteBloodCellCount: Double
+        get() = wbc103Ul
+
     val bmi: Double
         get() {
             val hM = heightCm / 100.0

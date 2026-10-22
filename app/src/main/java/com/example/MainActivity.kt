@@ -12,6 +12,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,16 +32,13 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.MultilineChart
 import androidx.compose.material.icons.filled.Biotech
 import androidx.compose.material.icons.filled.DarkMode
-import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Login
+import androidx.compose.material.icons.filled.OpenInFull
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ViewInAr
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -76,7 +75,7 @@ import com.example.ui.viewmodel.LongevityViewModel
 enum class LongevityScreen(val title: String, val icon: ImageVector, val isPrimaryTab: Boolean) {
     DASHBOARD("Twin 3D", Icons.Default.ViewInAr, true),
     BIOMARKERS("Biomarkers", Icons.Default.Biotech, true),
-    TESTS("Live Tests", Icons.Default.FitnessCenter, true),
+    TESTS("Live Tests", Icons.Default.OpenInFull, true),
     FORECAST_REPORT("Forecast", Icons.AutoMirrored.Filled.MultilineChart, true),
     PROFILE("Profile", Icons.Default.Person, true),
     OCR("AI Vision OCR", Icons.Default.Biotech, false),
@@ -108,7 +107,7 @@ class MainActivity : ComponentActivity() {
                     LongevityScreen.PROFILE
                 )
 
-                // Entry / Login Menu Dialog
+                // Entry / Login Menu Dialog (Giriş Menüsü)
                 if (isEntryMenuOpen) {
                     EntryMenuDialog(
                         currentUser = currentUser,
@@ -134,7 +133,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    containerColor = colors.background,
+                    containerColor = if (isDarkMode) colors.background else Color(0xFFD4E5ED),
                     topBar = {
                         if (!currentScreen.isPrimaryTab) {
                             // Top navigation bar for sub-screens (OCR & Whitepaper)
@@ -170,97 +169,90 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         } else {
-                            // Persistent Top App Header with Theme Mode Switch & Entry Menu Profile Trigger
+                            // High-Fidelity Glassmorphism Top Header
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(colors.surface)
-                                    .drawBehind {
-                                        drawLine(
-                                            color = colors.cardBorder,
-                                            start = Offset(0f, size.height),
-                                            end = Offset(size.width, size.height),
-                                            strokeWidth = 1.dp.toPx()
-                                        )
-                                    }
-                                    .padding(horizontal = 16.dp, vertical = 10.dp),
+                                    .background(Color.Transparent)
+                                    .padding(horizontal = 16.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                // App Branding with Emoji
+                                // App Branding with Colorful DNA Badge
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp),
                                     modifier = Modifier.clickable {
                                         longevityViewModel.openEntryMenu()
                                     }
                                 ) {
                                     Box(
                                         modifier = Modifier
-                                            .size(32.dp)
+                                            .size(38.dp)
                                             .clip(CircleShape)
-                                            .background(colors.primaryContainer),
+                                            .background(if (isDarkMode) Color(0xD9171E2D) else Color.White.copy(alpha = 0.88f))
+                                            .border(1.2.dp, if (isDarkMode) Color(0x33FFFFFF) else Color.White.copy(alpha = 0.9f), CircleShape),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text(text = "🧬", fontSize = 16.sp)
+                                        Text(text = "🧬", fontSize = 18.sp)
                                     }
                                     Column {
                                         Text(
                                             text = "LIFEMAP HUMAN™",
-                                            fontSize = 14.5.sp,
+                                            fontSize = 15.5.sp,
                                             fontWeight = FontWeight.Black,
-                                            color = colors.textPrimary,
+                                            color = if (isDarkMode) Color.White else Color(0xFF0F172A),
                                             letterSpacing = 0.5.sp
                                         )
                                         Text(
                                             text = "Digital Twin Engine",
-                                            fontSize = 9.5.sp,
-                                            color = colors.primary,
-                                            fontWeight = FontWeight.SemiBold
+                                            fontSize = 10.5.sp,
+                                            color = if (isDarkMode) Color(0xFF00E5FF) else Color(0xFF0284C7),
+                                            fontWeight = FontWeight.Bold
                                         )
                                     }
                                 }
 
-                                // Quick Controls: Light/Dark Mode Toggle + Entry Menu Avatar
+                                // Quick Controls: Light/Dark Sun Switcher + Doctor Pill Badge
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    // Light/Dark Theme Switcher Button
+                                    // Circular Sun / Moon Theme Switcher
                                     IconButton(
                                         onClick = { longevityViewModel.toggleDarkMode() },
                                         modifier = Modifier
-                                            .size(34.dp)
+                                            .size(38.dp)
                                             .clip(CircleShape)
-                                            .background(colors.surfaceVariant)
+                                            .background(if (isDarkMode) Color(0xD9171E2D) else Color.White.copy(alpha = 0.88f))
+                                            .border(1.2.dp, if (isDarkMode) Color(0x33FFFFFF) else Color.White.copy(alpha = 0.9f), CircleShape)
                                     ) {
-                                        Icon(
-                                            imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                                            contentDescription = if (isDarkMode) "Switch to Light Mode" else "Switch to Dark Mode",
-                                            tint = if (isDarkMode) colors.primary else Color(0xFFD97706),
-                                            modifier = Modifier.size(17.dp)
+                                        Text(
+                                            text = if (isDarkMode) "🌙" else "☀️",
+                                            fontSize = 17.sp
                                         )
                                     }
 
-                                    // Entry Menu Avatar / Account Trigger
+                                    // Frosted Doctor / Account Pill Badge
                                     Row(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(20.dp))
-                                            .background(colors.surfaceVariant)
+                                            .background(if (isDarkMode) Color(0xD9171E2D) else Color.White.copy(alpha = 0.88f))
+                                            .border(1.2.dp, if (isDarkMode) Color(0x33FFFFFF) else Color.White.copy(alpha = 0.9f), RoundedCornerShape(20.dp))
                                             .clickable { longevityViewModel.openEntryMenu() }
-                                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                                            .padding(horizontal = 10.dp, vertical = 6.dp),
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                                     ) {
                                         Text(
-                                            text = currentUser.avatarEmoji,
-                                            fontSize = 16.sp
+                                            text = "🧬",
+                                            fontSize = 15.sp
                                         )
                                         Text(
-                                            text = currentUser.name.split(" ").firstOrNull() ?: "Profile",
-                                            fontSize = 11.sp,
+                                            text = "Dr.",
+                                            fontSize = 12.sp,
                                             fontWeight = FontWeight.Bold,
-                                            color = colors.textPrimary
+                                            color = if (isDarkMode) Color.White else Color(0xFF0F172A)
                                         )
                                     }
                                 }
@@ -268,58 +260,109 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     bottomBar = {
-                        // 5-Tab Dynamic Navigation Bar
-                        NavigationBar(
-                            modifier = Modifier.drawBehind {
-                                drawLine(
-                                    color = colors.cardBorder,
-                                    start = Offset(0f, 0f),
-                                    end = Offset(size.width, 0f),
-                                    strokeWidth = 1.dp.toPx()
-                                )
-                            },
-                            containerColor = colors.surface,
-                            contentColor = colors.textPrimary,
-                            tonalElevation = 0.dp
+                        // High-Fidelity 5-Tab Glassmorphic Dock with Floating Neon Accent Bars
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                                .background(if (isDarkMode) Color(0xF2101726) else Color.White.copy(alpha = 0.92f))
+                                .border(1.2.dp, Color.White.copy(alpha = 0.85f), RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                                .padding(horizontal = 6.dp, vertical = 8.dp)
                         ) {
-                            primaryTabs.forEach { screen ->
-                                val isSelected = currentScreen == screen
-                                NavigationBarItem(
-                                    selected = isSelected,
-                                    onClick = {
-                                        previousScreen = currentScreen
-                                        currentScreen = screen
-                                    },
-                                    icon = {
-                                        if (screen == LongevityScreen.PROFILE) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceAround,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                val indicatorGradients = listOf(
+                                    listOf(Color(0xFF00E5FF), Color(0xFFD946EF)), // Twin 3D
+                                    listOf(Color(0xFF00E5FF), Color(0xFF2563EB)), // Biomarkers
+                                    listOf(Color(0xFF10B981), Color(0xFF06B6D4)), // Live Tests
+                                    listOf(Color(0xFFF97316), Color(0xFFFACC15)), // Forecast
+                                    listOf(Color(0xFFEC4899), Color(0xFF8B5CF6))  // Profile
+                                )
+
+                                primaryTabs.forEachIndexed { index, screen ->
+                                    val isSelected = currentScreen == screen
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                                        modifier = Modifier
+                                            .clickable {
+                                                previousScreen = currentScreen
+                                                currentScreen = screen
+                                            }
+                                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                                    ) {
+                                        // Top glowing gradient accent pill
+                                        Box(
+                                            modifier = Modifier
+                                                .width(36.dp)
+                                                .height(4.dp)
+                                                .clip(RoundedCornerShape(2.dp))
+                                                .background(
+                                                    if (isSelected) {
+                                                        Brush.horizontalGradient(indicatorGradients[index % indicatorGradients.size])
+                                                    } else {
+                                                        Brush.horizontalGradient(indicatorGradients[index % indicatorGradients.size].map { it.copy(alpha = 0.35f) })
+                                                    }
+                                                )
+                                        )
+
+                                        Spacer(modifier = Modifier.height(2.dp))
+
+                                        // Active pill container or icon
+                                        if (isSelected) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(44.dp)
+                                                    .clip(CircleShape)
+                                                    .background((if (isDarkMode) Color(0xFF00E5FF) else Color(0xFF0284C7)).copy(alpha = 0.22f))
+                                                    .border(1.4.dp, if (isDarkMode) Color(0xFF00E5FF) else Color(0xFF0284C7), CircleShape),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                if (screen == LongevityScreen.PROFILE) {
+                                                    Text(text = "🧬", fontSize = 20.sp)
+                                                } else {
+                                                    Icon(
+                                                        imageVector = screen.icon,
+                                                        contentDescription = screen.title,
+                                                        tint = if (isDarkMode) Color(0xFF00E5FF) else Color(0xFF0284C7),
+                                                        modifier = Modifier.size(22.dp)
+                                                    )
+                                                }
+                                            }
                                             Text(
-                                                text = currentUser.avatarEmoji,
-                                                fontSize = 18.sp
+                                                text = screen.title,
+                                                fontSize = 11.sp,
+                                                fontWeight = FontWeight.Black,
+                                                color = if (isDarkMode) Color(0xFF00E5FF) else Color(0xFF0284C7)
                                             )
                                         } else {
-                                            Icon(
-                                                imageVector = screen.icon,
-                                                contentDescription = screen.title,
-                                                modifier = Modifier.size(20.dp)
+                                            Box(
+                                                modifier = Modifier.size(44.dp),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                if (screen == LongevityScreen.PROFILE) {
+                                                    Text(text = "🧬", fontSize = 20.sp)
+                                                } else {
+                                                    Icon(
+                                                        imageVector = screen.icon,
+                                                        contentDescription = screen.title,
+                                                        tint = if (isDarkMode) Color(0xFF94A3B8) else Color(0xFF64748B),
+                                                        modifier = Modifier.size(22.dp)
+                                                    )
+                                                }
+                                            }
+                                            Text(
+                                                text = screen.title,
+                                                fontSize = 10.5.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = if (isDarkMode) Color(0xFF94A3B8) else Color(0xFF64748B)
                                             )
                                         }
-                                    },
-                                    label = {
-                                        Text(
-                                            text = screen.title,
-                                            fontSize = 10.sp,
-                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                            maxLines = 1
-                                        )
-                                    },
-                                    colors = NavigationBarItemDefaults.colors(
-                                        selectedIconColor = colors.primary,
-                                        selectedTextColor = colors.primary,
-                                        indicatorColor = colors.primaryContainer,
-                                        unselectedIconColor = colors.textMuted,
-                                        unselectedTextColor = colors.textMuted
-                                    )
-                                )
+                                    }
+                                }
                             }
                         }
                     }

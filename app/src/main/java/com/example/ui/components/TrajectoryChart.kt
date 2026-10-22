@@ -32,20 +32,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.TrajectoryForecast
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRose
 import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 
 @Composable
 fun TrajectoryChart(
@@ -56,6 +48,7 @@ fun TrajectoryChart(
         .fillMaxWidth()
         .height(260.dp)
 ) {
+    val colors = AppTheme.colors
     val animProgress = remember { Animatable(0f) }
     LaunchedEffect(forecast) {
         animProgress.snapTo(0f)
@@ -97,7 +90,7 @@ fun TrajectoryChart(
                 val gridSteps = 4
                 val bioStep = (maxBio - minBio) / gridSteps
                 val gridPaint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.parseColor("#938F99")
+                    color = if (colors.isDark) android.graphics.Color.parseColor("#94A3B8") else android.graphics.Color.parseColor("#475569")
                     textSize = 20f
                     isAntiAlias = true
                 }
@@ -107,7 +100,7 @@ fun TrajectoryChart(
                     val y = topPad + plotH - (i.toFloat() / gridSteps.toFloat()) * plotH
 
                     drawLine(
-                        color = CardBorder.copy(alpha = 0.5f),
+                        color = colors.cardBorder,
                         start = Offset(leftPad, y),
                         end = Offset(w - rightPad, y),
                         strokeWidth = 1f
@@ -140,7 +133,7 @@ fun TrajectoryChart(
                 years.forEach { yr ->
                     val x = xForYear(yr)
                     drawLine(
-                        color = if (yr == selectedYear) SleekPrimary.copy(alpha = 0.45f) else CardBorder.copy(alpha = 0.35f),
+                        color = if (yr == selectedYear) colors.primary.copy(alpha = 0.65f) else colors.cardBorder,
                         start = Offset(x, topPad),
                         end = Offset(x, topPad + plotH),
                         strokeWidth = if (yr == selectedYear) 2f else 1f
@@ -207,10 +200,10 @@ fun TrajectoryChart(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(if (isSelected) SleekOnPrimary else DarkSurfaceVariant)
+                        .background(if (isSelected) colors.primary.copy(alpha = 0.16f) else colors.surfaceVariant)
                         .border(
                             1.dp,
-                            if (isSelected) SleekPrimary else BorderSubtle,
+                            if (isSelected) colors.primary else colors.borderSubtle,
                             RoundedCornerShape(12.dp)
                         )
                         .clickable { onSelectYear(yr) }
@@ -218,7 +211,7 @@ fun TrajectoryChart(
                 ) {
                     Text(
                         text = if (yr == 0) "Present" else "+$yr Yrs",
-                        color = if (isSelected) SleekPrimary else TextSecondary,
+                        color = if (isSelected) colors.primary else colors.textSecondary,
                         fontSize = 12.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                     )

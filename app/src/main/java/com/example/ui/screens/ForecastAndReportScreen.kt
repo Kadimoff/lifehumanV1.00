@@ -36,13 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.AppTheme
 import com.example.ui.viewmodel.LongevityViewModel
 
 @Composable
@@ -50,6 +44,7 @@ fun ForecastAndReportScreen(
     viewModel: LongevityViewModel,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     var selectedTab by remember { mutableIntStateOf(0) }
 
     val tabs = listOf(
@@ -61,17 +56,17 @@ fun ForecastAndReportScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(colors.background)
     ) {
         // Top Tab Selector Bar
         ScrollableTabRow(
             selectedTabIndex = selectedTab,
-            containerColor = DarkSurface,
-            contentColor = SleekPrimary,
+            containerColor = colors.surface,
+            contentColor = colors.primary,
             indicator = { tabPositions ->
                 TabRowDefaults.SecondaryIndicator(
                     Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                    color = SleekPrimary
+                    color = colors.primary
                 )
             },
             edgePadding = 16.dp
@@ -86,14 +81,14 @@ fun ForecastAndReportScreen(
                                 imageVector = icon,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
-                                tint = if (selectedTab == index) SleekPrimary else TextMuted
+                                tint = if (selectedTab == index) colors.primary else colors.textMuted
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = title,
                                 fontSize = 12.sp,
                                 fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                                color = if (selectedTab == index) SleekPrimary else TextMuted
+                                color = if (selectedTab == index) colors.primary else colors.textMuted
                             )
                         }
                     }

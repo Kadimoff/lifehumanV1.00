@@ -45,21 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.service.PdfReportService
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
-import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
-import com.example.ui.theme.SleekRose
-import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -70,6 +58,7 @@ fun MedicalReportScreen(
     viewModel: LongevityViewModel,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     val context = LocalContext.current
     val twinResult by viewModel.twinResult.collectAsStateWithLifecycle()
     val profile by viewModel.biomarkerProfile.collectAsStateWithLifecycle()
@@ -80,7 +69,7 @@ fun MedicalReportScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(DarkBackground),
+            .background(colors.background),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -89,14 +78,14 @@ fun MedicalReportScreen(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
                     text = "CLINICAL LONGEVITY REPORT",
-                    color = SleekPrimary,
+                    color = colors.primary,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.sp
                 )
                 Text(
                     text = "Executive multi-system biological twin medical summary & PDF export",
-                    color = TextSecondary,
+                    color = colors.textSecondary,
                     fontSize = 12.sp
                 )
             }
@@ -107,8 +96,8 @@ fun MedicalReportScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, SleekPrimary.copy(alpha = 0.4f), RoundedCornerShape(22.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.primary.copy(alpha = 0.4f), RoundedCornerShape(22.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(22.dp)
             ) {
                 Column(
@@ -120,35 +109,35 @@ fun MedicalReportScreen(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(SleekPrimary.copy(alpha = 0.15f))
-                            .border(1.dp, SleekPrimary, CircleShape),
+                            .background(colors.primary.copy(alpha = 0.15f))
+                            .border(1.dp, colors.primary, CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.PictureAsPdf,
                             contentDescription = null,
-                            tint = SleekPrimary,
+                            tint = colors.primary,
                             modifier = Modifier.size(28.dp)
                         )
                     }
 
                     Text(
                         text = "Standard A4 Medical Longevity Document",
-                        color = TextPrimary,
+                        color = colors.textPrimary,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
                         text = "Includes Levine PhenoAge analysis, 8 functional reserve matrix, dominant aging phenotype diagnosis, and 5-trajectory forecasts.",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 11.5.sp,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
 
                     if (isGeneratingPdf) {
                         CircularProgressIndicator(
-                            color = SleekPrimary,
+                            color = colors.primary,
                             modifier = Modifier.size(32.dp),
                             strokeWidth = 3.dp
                         )
@@ -156,7 +145,7 @@ fun MedicalReportScreen(
                         Button(
                             onClick = { viewModel.generatePdfReport(context) },
                             modifier = Modifier.fillMaxWidth().height(48.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = SleekPrimary, contentColor = SleekOnPrimary),
+                            colors = ButtonDefaults.buttonColors(containerColor = colors.primary, contentColor = colors.onPrimary),
                             shape = RoundedCornerShape(14.dp)
                         ) {
                             Icon(imageVector = Icons.Default.Description, contentDescription = null, modifier = Modifier.size(18.dp))
@@ -170,19 +159,19 @@ fun MedicalReportScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(14.dp))
-                                .background(DarkSurfaceVariant)
-                                .border(1.dp, BorderSubtle, RoundedCornerShape(14.dp))
+                                .background(colors.surfaceVariant)
+                                .border(1.dp, colors.borderSubtle, RoundedCornerShape(14.dp))
                                 .padding(12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text("Report Ready", color = SleekGreen, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                                Text(file.name, color = TextMuted, fontSize = 10.sp)
+                                Text(file.name, color = colors.textMuted, fontSize = 10.sp)
                             }
                             Button(
                                 onClick = { PdfReportService.sharePdf(context, file) },
-                                colors = ButtonDefaults.buttonColors(containerColor = SleekSecondary, contentColor = DarkSurface),
+                                colors = ButtonDefaults.buttonColors(containerColor = colors.secondary, contentColor = colors.onSecondary),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
                                 Icon(imageVector = Icons.Default.Share, contentDescription = "Share", modifier = Modifier.size(14.dp))
@@ -199,7 +188,7 @@ fun MedicalReportScreen(
         item {
             Text(
                 text = "EXECUTIVE SUMMARY PREVIEW",
-                color = TextMuted,
+                color = colors.textMuted,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp
@@ -210,8 +199,8 @@ fun MedicalReportScreen(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .border(1.dp, CardBorder, RoundedCornerShape(18.dp)),
-                colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                    .border(1.dp, colors.cardBorder, RoundedCornerShape(18.dp)),
+                colors = CardDefaults.cardColors(containerColor = colors.surface),
                 shape = RoundedCornerShape(18.dp)
             ) {
                 Column(
@@ -226,13 +215,13 @@ fun MedicalReportScreen(
                     ) {
                         Text(
                             text = "LIFEMAP CLINICAL DOSSIER",
-                            color = SleekPrimary,
+                            color = colors.primary,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             text = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date()),
-                            color = TextMuted,
+                            color = colors.textMuted,
                             fontSize = 11.sp
                         )
                     }
@@ -243,12 +232,12 @@ fun MedicalReportScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            Text("Chrono Age", color = TextSecondary, fontSize = 11.sp)
-                            Text("${profile.chronologicalAge.toInt()} yrs", color = TextPrimary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text("Chrono Age", color = colors.textSecondary, fontSize = 11.sp)
+                            Text("${profile.chronologicalAge.toInt()} yrs", color = colors.textPrimary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         }
                         Column {
-                            Text("PhenoAge", color = SleekPrimary, fontSize = 11.sp)
-                            Text("${twinResult.phenoAge} yrs", color = SleekPrimary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text("PhenoAge", color = colors.primary, fontSize = 11.sp)
+                            Text("${twinResult.phenoAge} yrs", color = colors.primary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         }
                         Column {
                             Text("LRS Reserve", color = SleekAmber, fontSize = 11.sp)
@@ -261,7 +250,7 @@ fun MedicalReportScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
-                            .background(DarkSurfaceVariant)
+                            .background(colors.surfaceVariant)
                             .padding(10.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
@@ -270,10 +259,10 @@ fun MedicalReportScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(res.name, color = TextPrimary, fontSize = 11.5.sp)
+                                Text(res.name, color = colors.textPrimary, fontSize = 11.5.sp)
                                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text(res.statusLabel, color = TextSecondary, fontSize = 11.sp)
-                                    Text("${res.score.toInt()}", color = SleekSecondary, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                                    Text(res.statusLabel, color = colors.textSecondary, fontSize = 11.sp)
+                                    Text("${res.score.toInt()}", color = colors.secondary, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
@@ -282,7 +271,7 @@ fun MedicalReportScreen(
                     // Diagnosis & Action
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("Phenotype Focus: ${twinResult.dominantAgingPhenotype}", color = SleekAmber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                        Text("Primary Action: ${twinResult.primaryRecommendation}", color = TextSecondary, fontSize = 11.5.sp)
+                        Text("Primary Action: ${twinResult.primaryRecommendation}", color = colors.textSecondary, fontSize = 11.5.sp)
                     }
                 }
             }
@@ -297,7 +286,7 @@ fun MedicalReportScreen(
             ) {
                 Text(
                     text = "HISTORICAL ASSESSMENTS (${historyRecords.size})",
-                    color = TextMuted,
+                    color = colors.textMuted,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 0.8.sp
@@ -311,14 +300,14 @@ fun MedicalReportScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
-                        .background(DarkSurface)
-                        .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                        .background(colors.surface)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
                         .padding(20.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "No saved snapshots yet. Tap 'Save Snapshot' on the Dashboard to track longitudinal progression.",
-                        color = TextMuted,
+                        color = colors.textMuted,
                         fontSize = 12.sp,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
@@ -329,8 +318,8 @@ fun MedicalReportScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(1.dp, CardBorder, RoundedCornerShape(14.dp)),
-                    colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp)),
+                    colors = CardDefaults.cardColors(containerColor = colors.surface),
                     shape = RoundedCornerShape(14.dp)
                 ) {
                     Row(
@@ -343,24 +332,24 @@ fun MedicalReportScreen(
                         Column {
                             Text(
                                 text = SimpleDateFormat("MMM dd, yyyy • HH:mm", Locale.getDefault()).format(Date(record.timestamp)),
-                                color = TextPrimary,
+                                color = colors.textPrimary,
                                 fontSize = 12.5.sp,
                                 fontWeight = FontWeight.SemiBold
                             )
                             Text(
                                 text = "BioAge: ${record.phenoAge} yrs • LRS: ${record.longevityReserveScore.toInt()}/100",
-                                color = SleekPrimary,
+                                color = colors.primary,
                                 fontSize = 11.5.sp
                             )
                             Text(
                                 text = record.dominantAgingPhenotype,
-                                color = TextSecondary,
+                                color = colors.textSecondary,
                                 fontSize = 10.5.sp
                             )
                         }
 
                         IconButton(onClick = { viewModel.deleteRecord(record.id) }) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = TextMuted, modifier = Modifier.size(18.dp))
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = colors.textMuted, modifier = Modifier.size(18.dp))
                         }
                     }
                 }

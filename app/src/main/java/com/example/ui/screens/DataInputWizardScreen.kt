@@ -53,21 +53,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.model.BiomarkerProfile
 import com.example.ui.components.HealthConnectSyncCard
 import com.example.ui.theme.AppTheme
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCoral
 import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRose
-import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 
 @Composable
@@ -105,7 +94,7 @@ fun DataInputWizardScreen(
             ) {
                 Text(
                     text = "BIOMARKER WIZARD",
-                    color = SleekPrimary,
+                    color = colors.primary,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.sp
@@ -115,8 +104,8 @@ fun DataInputWizardScreen(
                     Button(
                         onClick = onNavigateToOcr,
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SleekOnPrimary,
-                            contentColor = SleekPrimary
+                            containerColor = colors.primary,
+                            contentColor = colors.onPrimary
                         ),
                         shape = RoundedCornerShape(12.dp),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
@@ -127,8 +116,8 @@ fun DataInputWizardScreen(
                     Button(
                         onClick = { viewModel.updateProfile(BiomarkerProfile()) },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = DarkSurfaceVariant,
-                            contentColor = SleekPrimary
+                            containerColor = colors.surfaceVariant,
+                            contentColor = colors.primary
                         ),
                         shape = RoundedCornerShape(12.dp),
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp)
@@ -141,7 +130,7 @@ fun DataInputWizardScreen(
             }
             Text(
                 text = "Live validation with clinical reference intervals",
-                color = TextSecondary,
+                color = colors.textSecondary,
                 fontSize = 12.sp
             )
         }
@@ -149,12 +138,12 @@ fun DataInputWizardScreen(
         // Tab Navigation
         ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = DarkSurface,
-            contentColor = SleekPrimary,
+            containerColor = colors.surface,
+            contentColor = colors.primary,
             indicator = { tabPositions ->
                 TabRowDefaults.SecondaryIndicator(
                     Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                    color = SleekPrimary
+                    color = colors.primary
                 )
             },
             edgePadding = 16.dp
@@ -169,14 +158,14 @@ fun DataInputWizardScreen(
                                 imageVector = icon,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
-                                tint = if (selectedTabIndex == index) SleekPrimary else TextMuted
+                                tint = if (selectedTabIndex == index) colors.primary else colors.textMuted
                             )
                             Spacer(modifier = Modifier.width(6.dp))
                             Text(
                                 text = title,
                                 fontSize = 12.sp,
                                 fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                                color = if (selectedTabIndex == index) SleekPrimary else TextMuted
+                                color = if (selectedTabIndex == index) colors.primary else colors.textMuted
                             )
                         }
                     }
@@ -517,17 +506,18 @@ fun DataInputWizardScreen(
 
 @Composable
 fun SectionHeader(title: String, subtitle: String) {
+    val colors = AppTheme.colors
     Column(modifier = Modifier.padding(vertical = 4.dp)) {
         Text(
             text = title,
-            color = SleekSecondary,
+            color = colors.secondary,
             fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.8.sp
         )
         Text(
             text = subtitle,
-            color = TextSecondary,
+            color = colors.textSecondary,
             fontSize = 11.5.sp
         )
     }
@@ -542,11 +532,12 @@ fun BiomarkerInputField(
     isOptimal: Boolean,
     onValueChange: (String) -> Unit
 ) {
+    val colors = AppTheme.colors
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(16.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -557,7 +548,7 @@ fun BiomarkerInputField(
             ) {
                 Text(
                     text = label,
-                    color = TextPrimary,
+                    color = colors.textPrimary,
                     fontSize = 13.5.sp,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -591,19 +582,19 @@ fun BiomarkerInputField(
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = DarkSurfaceVariant,
-                        unfocusedContainerColor = DarkSurfaceVariant,
-                        focusedBorderColor = SleekPrimary,
-                        unfocusedBorderColor = BorderSubtle,
-                        focusedTextColor = TextPrimary,
-                        unfocusedTextColor = TextPrimary
+                        focusedContainerColor = colors.surfaceVariant,
+                        unfocusedContainerColor = colors.surfaceVariant,
+                        focusedBorderColor = colors.primary,
+                        unfocusedBorderColor = colors.borderSubtle,
+                        focusedTextColor = colors.textPrimary,
+                        unfocusedTextColor = colors.textPrimary
                     ),
                     singleLine = true
                 )
 
                 Text(
                     text = unit,
-                    color = SleekSecondary,
+                    color = colors.secondary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.width(60.dp)
@@ -613,7 +604,7 @@ fun BiomarkerInputField(
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Target: $optimalRange",
-                color = TextMuted,
+                color = colors.textMuted,
                 fontSize = 10.5.sp
             )
         }

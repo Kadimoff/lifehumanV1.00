@@ -31,16 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.ReserveScoreItem
-import com.example.ui.theme.BorderSubtle
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.SleekGreen
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
-import com.example.ui.theme.SleekRose
-import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.AppTheme
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -53,6 +44,7 @@ fun RadarChart(
         .fillMaxWidth()
         .height(290.dp)
 ) {
+    val colors = AppTheme.colors
     // 8-Axis dynamic list
     val axisNames = listOf(
         "Vascular",
@@ -95,7 +87,7 @@ fun RadarChart(
 
             rings.forEach { factor ->
                 drawCircle(
-                    color = CardBorder,
+                    color = colors.cardBorder,
                     radius = radius * factor,
                     center = center,
                     style = Stroke(width = 1f, pathEffect = dashEffect)
@@ -104,7 +96,7 @@ fun RadarChart(
 
             // 2. Axis Lines and Text Labels
             val textPaint = android.graphics.Paint().apply {
-                color = android.graphics.Color.parseColor("#CCC2DC")
+                color = if (colors.isDark) android.graphics.Color.parseColor("#CBD5E1") else android.graphics.Color.parseColor("#334155")
                 textSize = 24f
                 isAntiAlias = true
                 textAlign = android.graphics.Paint.Align.CENTER
@@ -117,7 +109,7 @@ fun RadarChart(
 
                 // Axis Spoke
                 drawLine(
-                    color = CardBorder,
+                    color = colors.cardBorder,
                     start = center,
                     end = Offset(endX, endY),
                     strokeWidth = 1f
@@ -153,29 +145,29 @@ fun RadarChart(
             }
             dataPath.close()
 
-            // Translucent Sleek Lilac Fill
+            // Translucent Fill
             drawPath(
                 path = dataPath,
-                color = SleekPrimary.copy(alpha = 0.22f),
+                color = colors.primary.copy(alpha = 0.22f),
                 style = Fill
             )
 
-            // Sleek Lilac Outline
+            // Primary Outline
             drawPath(
                 path = dataPath,
-                color = SleekPrimary,
+                color = colors.primary,
                 style = Stroke(width = 2.2f, cap = StrokeCap.Round)
             )
 
             // Small Glowing Nodes
             animatedScorePoints.forEach { pt ->
                 drawCircle(
-                    color = SleekOnPrimary,
+                    color = colors.surface,
                     radius = 4f,
                     center = pt
                 )
                 drawCircle(
-                    color = SleekPrimary,
+                    color = colors.primary,
                     radius = 2.5f,
                     center = pt
                 )
@@ -187,19 +179,19 @@ fun RadarChart(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .clip(CircleShape)
-                .background(DarkSurface.copy(alpha = 0.85f))
-                .border(1.dp, CardBorder.copy(alpha = 0.6f), CircleShape)
+                .background(colors.surface.copy(alpha = 0.9f))
+                .border(1.dp, colors.cardBorder, CircleShape)
                 .padding(horizontal = 10.dp, vertical = 6.dp)
         ) {
             Text(
                 text = "LRS",
-                color = TextPrimary.copy(alpha = 0.7f),
+                color = colors.textSecondary,
                 fontSize = 9.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = "${longevityReserveScore.toInt()}",
-                color = SleekPrimary,
+                color = colors.primary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )

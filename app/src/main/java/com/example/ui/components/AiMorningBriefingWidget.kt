@@ -64,21 +64,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.model.BiologicalTwinResult
 import com.example.data.model.BiomarkerProfile
 import com.example.data.model.MorningLongevityBriefing
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekCyan
 import com.example.ui.theme.SleekGreen
 import com.example.ui.theme.SleekIndigo
-import com.example.ui.theme.SleekOnPrimary
-import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRed
-import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -93,6 +84,7 @@ fun AiMorningBriefingWidget(
     result: BiologicalTwinResult,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     val context = LocalContext.current
     val briefing by viewModel.morningBriefing.collectAsStateWithLifecycle()
     val isGenerating by viewModel.isGeneratingBriefing.collectAsStateWithLifecycle()
@@ -102,7 +94,7 @@ fun AiMorningBriefingWidget(
         SimpleDateFormat("EEEE, MMMM d", Locale.getDefault()).format(Date())
     }
 
-    val bioAgeDiff = (result.phenoAge - profile.chronologicalAge * 10.0).roundToInt() / 10.0
+    val bioAgeDiff = ((result.phenoAge - profile.chronologicalAge) * 10.0).roundToInt() / 10.0
     val isYounger = bioAgeDiff <= 0.0
 
     Card(
@@ -114,13 +106,13 @@ fun AiMorningBriefingWidget(
                 Brush.horizontalGradient(
                     listOf(
                         SleekCyan.copy(alpha = 0.6f),
-                        SleekPrimary.copy(alpha = 0.4f),
+                        colors.primary.copy(alpha = 0.4f),
                         SleekIndigo.copy(alpha = 0.6f)
                     )
                 ),
                 RoundedCornerShape(24.dp)
             ),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(24.dp)
     ) {
         Column(
@@ -143,7 +135,7 @@ fun AiMorningBriefingWidget(
                             .clip(CircleShape)
                             .background(
                                 Brush.linearGradient(
-                                    listOf(SleekCyan.copy(alpha = 0.3f), SleekPrimary.copy(alpha = 0.3f))
+                                    listOf(SleekCyan.copy(alpha = 0.3f), colors.primary.copy(alpha = 0.3f))
                                 )
                             ),
                         contentAlignment = Alignment.Center
@@ -151,7 +143,7 @@ fun AiMorningBriefingWidget(
                         Icon(
                             imageVector = Icons.Default.AutoAwesome,
                             contentDescription = "AI Intelligence",
-                            tint = SleekCyan,
+                            tint = colors.primary,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -163,7 +155,7 @@ fun AiMorningBriefingWidget(
                         ) {
                             Text(
                                 text = "MORNING LONGEVITY BRIEFING",
-                                color = SleekCyan,
+                                color = colors.primary,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 letterSpacing = 0.8.sp
@@ -172,14 +164,14 @@ fun AiMorningBriefingWidget(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(6.dp))
                                     .background(
-                                        if (briefing?.isAiGenerated == true) SleekPrimary.copy(alpha = 0.2f)
+                                        if (briefing?.isAiGenerated == true) colors.primary.copy(alpha = 0.2f)
                                         else SleekIndigo.copy(alpha = 0.2f)
                                     )
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text(
                                     text = if (briefing?.isAiGenerated == true) "GEMINI 3.5 AI" else "CLINICAL TWIN ENGINE",
-                                    color = if (briefing?.isAiGenerated == true) SleekPrimary else SleekIndigo,
+                                    color = if (briefing?.isAiGenerated == true) colors.primary else SleekIndigo,
                                     fontSize = 8.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -187,7 +179,7 @@ fun AiMorningBriefingWidget(
                         }
                         Text(
                             text = todayDateFormatted,
-                            color = TextSecondary,
+                            color = colors.textSecondary,
                             fontSize = 11.sp
                         )
                     }
@@ -229,7 +221,7 @@ fun AiMorningBriefingWidget(
                             Icon(
                                 imageVector = Icons.Default.ContentCopy,
                                 contentDescription = "Copy Briefing",
-                                tint = TextMuted,
+                                tint = colors.textMuted,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -239,7 +231,7 @@ fun AiMorningBriefingWidget(
                         modifier = Modifier
                             .size(34.dp)
                             .clip(CircleShape)
-                            .background(DarkSurfaceVariant)
+                            .background(colors.surfaceVariant)
                             .clickable(enabled = !isGenerating) {
                                 viewModel.refreshMorningBriefing(forceAi = true)
                             },
@@ -248,14 +240,14 @@ fun AiMorningBriefingWidget(
                         if (isGenerating) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(16.dp),
-                                color = SleekCyan,
+                                color = colors.primary,
                                 strokeWidth = 2.dp
                             )
                         } else {
                             Icon(
                                 imageVector = Icons.Default.Refresh,
                                 contentDescription = "Regenerate AI Analysis",
-                                tint = SleekCyan,
+                                tint = colors.primary,
                                 modifier = Modifier.size(18.dp)
                             )
                         }
@@ -268,7 +260,7 @@ fun AiMorningBriefingWidget(
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
                         text = b.headline,
-                        color = TextPrimary,
+                        color = colors.textPrimary,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold,
                         lineHeight = 22.sp
@@ -284,14 +276,14 @@ fun AiMorningBriefingWidget(
                             modifier = Modifier
                                 .weight(1.2f)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(DarkSurfaceVariant)
-                                .border(1.dp, CardBorder, RoundedCornerShape(12.dp))
+                                .background(colors.surfaceVariant)
+                                .border(1.dp, colors.cardBorder, RoundedCornerShape(12.dp))
                                 .padding(horizontal = 10.dp, vertical = 8.dp)
                         ) {
                             Column {
                                 Text(
                                     text = "BIOLOGICAL AGE",
-                                    color = TextMuted,
+                                    color = colors.textMuted,
                                     fontSize = 8.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -301,7 +293,7 @@ fun AiMorningBriefingWidget(
                                 ) {
                                     Text(
                                         text = "${result.phenoAge} yrs",
-                                        color = TextPrimary,
+                                        color = colors.textPrimary,
                                         fontSize = 16.sp,
                                         fontWeight = FontWeight.ExtraBold
                                     )
@@ -329,20 +321,20 @@ fun AiMorningBriefingWidget(
                             modifier = Modifier
                                 .weight(1.3f)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(DarkSurfaceVariant)
-                                .border(1.dp, CardBorder, RoundedCornerShape(12.dp))
+                                .background(colors.surfaceVariant)
+                                .border(1.dp, colors.cardBorder, RoundedCornerShape(12.dp))
                                 .padding(horizontal = 10.dp, vertical = 8.dp)
                         ) {
                             Column {
                                 Text(
                                     text = "RATE OF AGING PACE",
-                                    color = TextMuted,
+                                    color = colors.textMuted,
                                     fontSize = 8.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Text(
                                     text = b.rateOfAgingSummary,
-                                    color = if (isYounger) SleekGreen else SleekCyan,
+                                    color = if (isYounger) SleekGreen else colors.primary,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1
@@ -354,7 +346,7 @@ fun AiMorningBriefingWidget(
                     // Biological Age Analysis Narrative
                     Text(
                         text = b.biologicalAgeAnalysis,
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 12.sp,
                         lineHeight = 17.sp
                     )
@@ -368,7 +360,7 @@ fun AiMorningBriefingWidget(
                         .background(
                             Brush.linearGradient(
                                 listOf(
-                                    SleekPrimary.copy(alpha = 0.12f),
+                                    colors.primary.copy(alpha = 0.12f),
                                     SleekCyan.copy(alpha = 0.08f)
                                 )
                             )
@@ -376,7 +368,7 @@ fun AiMorningBriefingWidget(
                         .border(
                             1.dp,
                             Brush.linearGradient(
-                                listOf(SleekPrimary.copy(alpha = 0.4f), SleekCyan.copy(alpha = 0.3f))
+                                listOf(colors.primary.copy(alpha = 0.4f), SleekCyan.copy(alpha = 0.3f))
                             ),
                             RoundedCornerShape(16.dp)
                         )
@@ -395,12 +387,12 @@ fun AiMorningBriefingWidget(
                                 Icon(
                                     imageVector = Icons.Default.Flag,
                                     contentDescription = null,
-                                    tint = SleekPrimary,
+                                    tint = colors.primary,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Text(
                                     text = "TODAY'S #1 HEALTH PRIORITY",
-                                    color = SleekPrimary,
+                                    color = colors.primary,
                                     fontSize = 10.5.sp,
                                     fontWeight = FontWeight.ExtraBold,
                                     letterSpacing = 0.5.sp
@@ -410,12 +402,12 @@ fun AiMorningBriefingWidget(
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(6.dp))
-                                    .background(DarkSurfaceVariant)
+                                    .background(colors.surfaceVariant)
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text(
                                     text = "Target: ${b.keyBiomarkerToTarget}",
-                                    color = SleekCyan,
+                                    color = colors.primary,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -424,14 +416,14 @@ fun AiMorningBriefingWidget(
 
                         Text(
                             text = b.topHealthPriority,
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 14.5.sp,
                             fontWeight = FontWeight.Bold
                         )
 
                         Text(
                             text = b.priorityRationale,
-                            color = TextSecondary,
+                            color = colors.textSecondary,
                             fontSize = 11.5.sp,
                             lineHeight = 16.sp
                         )
@@ -441,8 +433,8 @@ fun AiMorningBriefingWidget(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(DarkBackground.copy(alpha = 0.6f))
-                                .border(1.dp, CardBorder, RoundedCornerShape(10.dp))
+                                .background(colors.surfaceVariant.copy(alpha = 0.7f))
+                                .border(1.dp, colors.cardBorder, RoundedCornerShape(10.dp))
                                 .padding(10.dp)
                         ) {
                             Row(
@@ -464,7 +456,7 @@ fun AiMorningBriefingWidget(
                                     )
                                     Text(
                                         text = b.actionProtocol,
-                                        color = TextPrimary,
+                                        color = colors.textPrimary,
                                         fontSize = 11.5.sp,
                                         lineHeight = 16.sp,
                                         fontWeight = FontWeight.Medium
@@ -480,8 +472,8 @@ fun AiMorningBriefingWidget(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(14.dp))
-                        .background(DarkSurfaceVariant)
-                        .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                        .background(colors.surfaceVariant)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
                         .padding(12.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -492,12 +484,12 @@ fun AiMorningBriefingWidget(
                             Icon(
                                 imageVector = Icons.Default.Tune,
                                 contentDescription = null,
-                                tint = SleekSecondary,
+                                tint = colors.secondary,
                                 modifier = Modifier.size(14.dp)
                             )
                             Text(
                                 text = "YESTERDAY'S WEARABLE MODULATION",
-                                color = SleekSecondary,
+                                color = colors.secondary,
                                 fontSize = 9.5.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -512,28 +504,28 @@ fun AiMorningBriefingWidget(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
-                                Icon(imageVector = Icons.Default.DirectionsWalk, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(12.dp))
-                                Text("${profile.dailySteps} steps", color = TextPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                                Icon(imageVector = Icons.Default.DirectionsWalk, contentDescription = null, tint = colors.primary, modifier = Modifier.size(12.dp))
+                                Text("${profile.dailySteps} steps", color = colors.textPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 Icon(imageVector = Icons.Default.Favorite, contentDescription = null, tint = SleekRed, modifier = Modifier.size(12.dp))
-                                Text("${profile.restingPulseBpm.toInt()} bpm pulse", color = TextPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                                Text("${profile.restingPulseBpm.toInt()} bpm pulse", color = colors.textPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 Icon(imageVector = Icons.Default.LocalFireDepartment, contentDescription = null, tint = SleekAmber, modifier = Modifier.size(12.dp))
-                                Text("${profile.activeCaloriesKcal.toInt()} kcal", color = TextPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                                Text("${profile.activeCaloriesKcal.toInt()} kcal", color = colors.textPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                             }
                         }
 
                         Text(
                             text = b.wearableTelemetryImpact,
-                            color = TextSecondary,
+                            color = colors.textSecondary,
                             fontSize = 11.sp,
                             lineHeight = 15.sp
                         )

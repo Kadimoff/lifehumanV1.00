@@ -31,6 +31,24 @@ val TextMuted = Color(0xFF64748B)               // Balanced Muted Context Text
 val GlowPurple = Color(0x33818CF8)
 val GlowTeal = Color(0x3300F2FE)
 
+// ======================= GLASSMORPHISM & HOLOGRAPHIC STYLES =======================
+val GlassBackground = Color(0xFFD4E5ED)          // Luminous frosty glass background as seen in design
+val GlassSurface = Color(0xE6FFFFFF)             // Frosted translucent white glass
+val GlassSurfaceSubtle = Color(0xB3FFFFFF)       // Higher transparency frosted glass
+val GlassSurfaceDark = Color(0xD9101726)         // Dark frosted slate/obsidian glass
+val GlassCardBorder = Color(0x99FFFFFF)          // Crisp frosted glass edge
+val GlassCardBorderCyan = Color(0xFF00E5FF)      // Holographic cyan edge glow
+val GlassCardBorderCoral = Color(0xFFFF6B6B)     // Warning coral edge glow
+val GlassCardBorderGreen = Color(0xFF10B981)     // Positive biomarker green edge glow
+
+val HeroCyanStart = Color(0xFF00E5FF)
+val HeroCyanMid = Color(0xFF00B4D8)
+val HeroCyanEnd = Color(0xFF0077B6)
+
+val PillMintBackground = Color(0xCCDCFCE7)
+val PillMintBorder = Color(0xFF10B981)
+val PillMintText = Color(0xFF065F46)
+
 // ======================= CRISP CLEAN LIGHT PALETTE =======================
 val LightBackground = Color(0xFFF1F5F9)
 val LightSurface = Color(0xFFFFFFFF)

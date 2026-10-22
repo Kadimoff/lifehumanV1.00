@@ -19,17 +19,23 @@ import kotlin.math.roundToInt
 
 class GeminiLongevityService {
 
+    companion object {
+        const val GEMINI_TEXT_MODEL = "gemini-3.5-flash"
+        const val NANO_BANANA_IMAGE_MODEL = "gemini-2.5-flash-image"
+    }
+
     private val tag = "GeminiLongevityService"
     private val client = OkHttpClient.Builder()
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(20, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
     private val jsonMediaType = "application/json; charset=utf-8".toMediaType()
 
     /**
      * Generates an AI-driven morning briefing synthesizing Biological Age (PhenoAge) and Health Connect telemetry
+     * in the background using Gemini 3.5 Flash & Nano Banana visual telemetry descriptors.
      */
     suspend fun generateMorningBriefing(
         profile: BiomarkerProfile,
@@ -65,15 +71,15 @@ class GeminiLongevityService {
         result: BiologicalTwinResult,
         hc: HealthConnectData
     ): MorningLongevityBriefing? {
-        val modelName = "gemini-3.8-flash"
+        val modelName = GEMINI_TEXT_MODEL
         val url = "https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey"
 
-        val bioAgeDiff = (result.phenoAge - profile.chronologicalAge * 10.0).roundToInt() / 10.0
+        val bioAgeDiff = ((result.phenoAge - profile.chronologicalAge) * 10.0).roundToInt() / 10.0
         val lowestReserve = result.reserves.minByOrNull { it.score }
         val highestReserve = result.reserves.maxByOrNull { it.score }
 
         val prompt = """
-You are an expert Clinical Gerontologist and Longevity Specialist analyzing a patient's morning Digital Twin telemetry in LIFEMAP HUMAN™.
+You are an expert Clinical Gerontologist and Longevity Specialist analyzing a patient's morning Digital Twin telemetry in LIFEMAP HUMAN™ (powered by Gemini & Nano Banana visual synthesis).
 Generate a concise, motivating, actionable morning longevity dashboard briefing based on yesterday's wearable telemetry and Levine PhenoAge biomarkers.
 
 Patient Data:
@@ -183,7 +189,7 @@ Output MUST be a single raw valid JSON object with EXACTLY these string keys (no
         result: BiologicalTwinResult,
         hc: HealthConnectData
     ): MorningLongevityBriefing {
-        val diff = (result.phenoAge - profile.chronologicalAge * 10.0).roundToInt() / 10.0
+        val diff = ((result.phenoAge - profile.chronologicalAge) * 10.0).roundToInt() / 10.0
         val isYouthful = diff <= 0.0
         val absDiff = abs(diff)
         val agingSpeed = if (isYouthful) {

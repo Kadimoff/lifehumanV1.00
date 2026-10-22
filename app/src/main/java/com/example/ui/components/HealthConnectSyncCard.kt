@@ -55,19 +55,13 @@ import androidx.compose.ui.unit.sp
 import androidx.health.connect.client.PermissionController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.service.HealthConnectStatus
-import com.example.ui.theme.CardBorder
-import com.example.ui.theme.DarkBackground
-import com.example.ui.theme.DarkSurface
-import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.SleekAmber
 import com.example.ui.theme.SleekGreen
 import com.example.ui.theme.SleekOnPrimary
 import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRed
 import com.example.ui.theme.SleekSecondary
-import com.example.ui.theme.TextMuted
-import com.example.ui.theme.TextPrimary
-import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.LongevityViewModel
 import kotlinx.coroutines.launch
 
@@ -76,6 +70,7 @@ fun HealthConnectSyncCard(
     viewModel: LongevityViewModel,
     modifier: Modifier = Modifier
 ) {
+    val colors = AppTheme.colors
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val hcStatus by viewModel.healthConnectStatus.collectAsStateWithLifecycle()
@@ -101,8 +96,8 @@ fun HealthConnectSyncCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, CardBorder, RoundedCornerShape(22.dp)),
-        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+            .border(1.dp, colors.cardBorder, RoundedCornerShape(22.dp)),
+        colors = CardDefaults.cardColors(containerColor = colors.surface),
         shape = RoundedCornerShape(22.dp)
     ) {
         Column(
@@ -125,7 +120,7 @@ fun HealthConnectSyncCard(
                             .clip(CircleShape)
                             .background(
                                 Brush.linearGradient(
-                                    listOf(SleekPrimary.copy(alpha = 0.25f), SleekGreen.copy(alpha = 0.25f))
+                                    listOf(colors.primary.copy(alpha = 0.25f), SleekGreen.copy(alpha = 0.25f))
                                 )
                             ),
                         contentAlignment = Alignment.Center
@@ -145,7 +140,7 @@ fun HealthConnectSyncCard(
                         ) {
                             Text(
                                 text = "HEALTH CONNECT™ SYNC",
-                                color = SleekPrimary,
+                                color = colors.primary,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 letterSpacing = 0.8.sp
@@ -168,7 +163,7 @@ fun HealthConnectSyncCard(
                         }
                         Text(
                             text = "Auto-updates Cardiovascular & Metabolic Reserves",
-                            color = TextSecondary,
+                            color = colors.textSecondary,
                             fontSize = 11.sp
                         )
                     }
@@ -179,7 +174,7 @@ fun HealthConnectSyncCard(
                     modifier = Modifier
                         .size(36.dp)
                         .clip(CircleShape)
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .clickable(enabled = !isSyncing) {
                             if (permissionsGranted) {
                                 viewModel.syncHealthConnectData()
@@ -192,14 +187,14 @@ fun HealthConnectSyncCard(
                     if (isSyncing) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            color = SleekPrimary,
+                            color = colors.primary,
                             strokeWidth = 2.dp
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Default.Sync,
                             contentDescription = "Sync Health Connect",
-                            tint = SleekPrimary,
+                            tint = colors.primary,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -216,8 +211,8 @@ fun HealthConnectSyncCard(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(14.dp))
-                        .background(DarkSurfaceVariant)
-                        .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                        .background(colors.surfaceVariant)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
                         .padding(10.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -233,14 +228,14 @@ fun HealthConnectSyncCard(
                             )
                             Text(
                                 text = "RESTING HR",
-                                color = TextMuted,
+                                color = colors.textMuted,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Text(
                             text = "${profile.restingPulseBpm.toInt()} bpm",
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
@@ -258,8 +253,8 @@ fun HealthConnectSyncCard(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(14.dp))
-                        .background(DarkSurfaceVariant)
-                        .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                        .background(colors.surfaceVariant)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
                         .padding(10.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -270,25 +265,25 @@ fun HealthConnectSyncCard(
                             Icon(
                                 imageVector = Icons.Default.DirectionsWalk,
                                 contentDescription = null,
-                                tint = SleekPrimary,
+                                tint = colors.primary,
                                 modifier = Modifier.size(13.dp)
                             )
                             Text(
                                 text = "DAILY STEPS",
-                                color = TextMuted,
+                                color = colors.textMuted,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Text(
                             text = "${profile.dailySteps}",
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
                         Text(
                             text = "GLUT4 Booster",
-                            color = SleekPrimary,
+                            color = colors.primary,
                             fontSize = 9.5.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -300,8 +295,8 @@ fun HealthConnectSyncCard(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(14.dp))
-                        .background(DarkSurfaceVariant)
-                        .border(1.dp, CardBorder, RoundedCornerShape(14.dp))
+                        .background(colors.surfaceVariant)
+                        .border(1.dp, colors.cardBorder, RoundedCornerShape(14.dp))
                         .padding(10.dp)
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -317,14 +312,14 @@ fun HealthConnectSyncCard(
                             )
                             Text(
                                 text = "ACTIVE KCAL",
-                                color = TextMuted,
+                                color = colors.textMuted,
                                 fontSize = 9.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
                         Text(
                             text = "${profile.activeCaloriesKcal.toInt()} kcal",
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
@@ -349,13 +344,13 @@ fun HealthConnectSyncCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(10.dp))
-                            .background(SleekOnPrimary.copy(alpha = 0.4f))
-                            .border(1.dp, SleekPrimary.copy(alpha = 0.4f), RoundedCornerShape(10.dp))
+                            .background(colors.primary.copy(alpha = 0.14f))
+                            .border(1.dp, colors.primary.copy(alpha = 0.4f), RoundedCornerShape(10.dp))
                             .padding(horizontal = 12.dp, vertical = 8.dp)
                     ) {
                         Text(
                             text = msg,
-                            color = SleekPrimary,
+                            color = colors.primary,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.Medium,
                             lineHeight = 15.sp
@@ -381,8 +376,8 @@ fun HealthConnectSyncCard(
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SleekPrimary,
-                            contentColor = SleekOnPrimary
+                            containerColor = colors.primary,
+                            contentColor = colors.onPrimary
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -395,8 +390,8 @@ fun HealthConnectSyncCard(
                         onClick = { viewModel.syncHealthConnectData() },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SleekOnPrimary,
-                            contentColor = SleekPrimary
+                            containerColor = colors.primary.copy(alpha = 0.18f),
+                            contentColor = colors.primary
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -418,10 +413,10 @@ fun HealthConnectSyncCard(
                     },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = SleekSecondary
+                        contentColor = colors.secondary
                     ),
                     border = ButtonDefaults.outlinedButtonBorder.copy(
-                        brush = Brush.linearGradient(listOf(CardBorder, SleekPrimary.copy(alpha = 0.5f)))
+                        brush = Brush.linearGradient(listOf(colors.cardBorder, colors.primary.copy(alpha = 0.5f)))
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -436,7 +431,7 @@ fun HealthConnectSyncCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
-                    .background(DarkBackground.copy(alpha = 0.5f))
+                    .background(colors.surfaceVariant.copy(alpha = 0.7f))
                     .clickable { showDetails = !showDetails }
                     .padding(horizontal = 10.dp, vertical = 6.dp)
             ) {
@@ -447,7 +442,7 @@ fun HealthConnectSyncCard(
                 ) {
                     Text(
                         text = if (showDetails) "Hide Biological Mechanics ▲" else "How Live Data Modulates Reserve Scores ▼",
-                        color = SleekSecondary,
+                        color = colors.secondary,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -459,7 +454,7 @@ fun HealthConnectSyncCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(12.dp))
-                        .background(DarkSurfaceVariant)
+                        .background(colors.surfaceVariant)
                         .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -467,14 +462,14 @@ fun HealthConnectSyncCard(
                         Icon(imageVector = Icons.Default.Favorite, contentDescription = null, tint = SleekRed, modifier = Modifier.size(14.dp))
                         Text(
                             text = "Cardiovascular Reserve Engine:",
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
                     Text(
                         text = "Resting heart rate (${profile.restingPulseBpm.toInt()} bpm) reflects parasympathetic vagal tone and left-ventricular stroke volume. Aerobic volume (daily steps & workouts) delivers laminar shear stress that stimulates endothelial nitric oxide synthase (eNOS), increasing arterial elasticity.",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 10.sp,
                         lineHeight = 14.sp
                     )
@@ -482,17 +477,17 @@ fun HealthConnectSyncCard(
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Icon(imageVector = Icons.Default.DirectionsWalk, contentDescription = null, tint = SleekPrimary, modifier = Modifier.size(14.dp))
+                        Icon(imageVector = Icons.Default.DirectionsWalk, contentDescription = null, tint = colors.primary, modifier = Modifier.size(14.dp))
                         Text(
                             text = "Metabolic Reserve Engine:",
-                            color = TextPrimary,
+                            color = colors.textPrimary,
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
                     Text(
                         text = "Achieving ${profile.dailySteps} steps and ${profile.activeCaloriesKcal.toInt()} active kcal activates AMPK and drives non-insulin-mediated GLUT4 glucose translocation into skeletal muscles, directly mitigating insulin resistance and improving your Metabolic Reserve Score.",
-                        color = TextSecondary,
+                        color = colors.textSecondary,
                         fontSize = 10.sp,
                         lineHeight = 14.sp
                     )
