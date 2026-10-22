@@ -61,7 +61,7 @@ fun HeroAgeCard(
 ) {
     val isYounger = result.ageDifference <= 0
     val diffYears = abs(result.ageDifference)
-    val diffTag = if (isYounger) "▼ ${String.format("%.1f", diffYears)} Yıl Daha Genç" else "▲ ${String.format("%.1f", diffYears)} Yıl İleri"
+    val diffTag = if (isYounger) "▼ ${String.format("%.1f", diffYears)} Years Younger" else "▲ ${String.format("%.1f", diffYears)} Years Older"
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -103,7 +103,7 @@ fun HeroAgeCard(
                                 .background(if (isYounger) SleekGreen else SleekCoral)
                         )
                         Text(
-                            text = "BİYOLOJİK YAŞ (PHENOAGE)",
+                            text = "BIOLOGICAL AGE (PHENOAGE)",
                             color = SleekPrimary,
                             fontSize = 11.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -112,7 +112,7 @@ fun HeroAgeCard(
                     }
 
                     Text(
-                        text = "KRONOLOJİK: ${String.format("%.1f", result.chronologicalAge)} YAŞ",
+                        text = "CHRONOLOGICAL: ${String.format("%.1f", result.chronologicalAge)} YRS",
                         color = TextSecondary,
                         fontSize = 10.5.sp,
                         fontWeight = FontWeight.Bold,
@@ -138,7 +138,7 @@ fun HeroAgeCard(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "yaş",
+                                text = "years",
                                 color = TextSecondary,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Medium,
@@ -178,7 +178,7 @@ fun HeroAgeCard(
                         ) {
                             Column(horizontalAlignment = Alignment.End) {
                                 Text(
-                                    text = "YAŞLANMA HIZI",
+                                    text = "PACE OF AGING",
                                     color = TextMuted,
                                     fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold,
@@ -194,7 +194,7 @@ fun HeroAgeCard(
                         }
 
                         Text(
-                            text = if (result.paceOfAging <= 1.0) "Biyolojik Gençleşme" else "Hızlanmış Yıpranma",
+                            text = if (result.paceOfAging <= 1.0) "Biological Rejuvenation" else "Accelerated Wear",
                             color = if (result.paceOfAging <= 1.0) SleekGreen else SleekCoral,
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Medium

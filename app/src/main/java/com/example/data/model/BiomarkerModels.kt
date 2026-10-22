@@ -178,11 +178,8 @@ data class LongevityEmojiItem(
     val id: String,
     val emoji: String,
     val title: String,
-    val titleTr: String,
     val category: String,
-    val categoryTr: String,
     val meaning: String,
-    val meaningTr: String,
     val isUnlocked: Boolean = true
 )
 
@@ -190,9 +187,7 @@ data class LongevityBadge(
     val id: String,
     val emoji: String,
     val title: String,
-    val titleTr: String,
     val description: String,
-    val descriptionTr: String,
     val requirement: String,
     val isUnlocked: Boolean = true
 )

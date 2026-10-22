@@ -399,132 +399,132 @@ fun DigitalTwin3DVisualizer(
         listOf(
             DigitalTwinNode(
                 id = "cognitive",
-                title = "Beyin & Bilişsel",
-                systemName = "Merkezi Sinir Sistemi & Nöroplastisite",
+                title = "Brain & Cognition",
+                systemName = "Central Nervous System & Neuroplasticity",
                 position = Vector3D(0f, -125f, 0f),
                 color = SleekCyan,
                 icon = Icons.Default.Psychology,
                 scoreExtractor = { res -> res.reserves.find { it.key == "cognitive" }?.score ?: 85.0 },
-                ageExtractor = { _, p -> "${p.stroopMeanLatencyMs.toInt()} ms reaksiyon hızı" },
-                statusExtractor = { score -> if (score >= 80) "Optimal Nöro-Rezerv" else "Reaksiyon Gecikmesi" },
-                clinicalSummary = "Yürütücü işlevler, nöral senkronizasyon ve sinaptik elastikiyet skoru.",
-                biologicalMechanism = "Prefrontal korteks yürütücü kontrolü ve dorsolateral yolların uyarılma hızını ölçer. Yüksek rezerv, nörofibriler tau agregasyonuna direnç ve sağlam nörovasküler eşleşmeyi gösterir.",
+                ageExtractor = { _, p -> "${p.stroopMeanLatencyMs.toInt()} ms reaction time" },
+                statusExtractor = { score -> if (score >= 80) "Optimal Neuro-Reserve" else "Delayed Reaction" },
+                clinicalSummary = "Executive function, neural synchronization and synaptic plasticity score.",
+                biologicalMechanism = "Measures prefrontal executive control and dorsolateral pathway activation speed. A high reserve indicates resistance to neurofibrillary tau aggregation and robust neurovascular coupling.",
                 metrics = listOf(
-                    BiomarkerMetricDetail("Stroop Hızı", "${profile.stroopMeanLatencyMs.toInt()} ms", "< 650 ms", profile.stroopMeanLatencyMs < 650),
-                    BiomarkerMetricDetail("Doğruluk", "%${profile.stroopAccuracyPercent.toInt()}", "> %92", profile.stroopAccuracyPercent >= 92),
-                    BiomarkerMetricDetail("Bilişsel Esneklik", "${(profile.stroopAccuracyPercent * 0.9).toInt()}/100", "> 80", profile.stroopAccuracyPercent >= 88)
+                    BiomarkerMetricDetail("Stroop Speed", "${profile.stroopMeanLatencyMs.toInt()} ms", "< 650 ms", profile.stroopMeanLatencyMs < 650),
+                    BiomarkerMetricDetail("Accuracy", "${profile.stroopAccuracyPercent.toInt()}%", "> 92%", profile.stroopAccuracyPercent >= 92),
+                    BiomarkerMetricDetail("Cognitive Flexibility", "${(profile.stroopAccuracyPercent * 0.9).toInt()}/100", "> 80", profile.stroopAccuracyPercent >= 88)
                 ),
                 interventions = listOf(
-                    LongevityIntervention("Dual N-Back & Zihinsel Egzersiz", "+1.2 Yıl", "Haftada 3 gün sinaptik elastikiyeti korumak için nöromusküler ve stratejik bulmacalar."),
-                    LongevityIntervention("Aerobik BDNF Protokolü", "+0.8 Yıl", "Beyin türevli nörotrofik faktörü (BDNF) artırmak için 30 dk Zone 2 yürüyüş.")
+                    LongevityIntervention("Dual N-Back & Mental Training", "+1.2 yrs", "Neuromuscular and strategy puzzles 3 days a week to preserve synaptic plasticity."),
+                    LongevityIntervention("Aerobic BDNF Protocol", "+0.8 yrs", "30-min Zone 2 walk to boost brain-derived neurotrophic factor (BDNF).")
                 )
             ),
             DigitalTwinNode(
                 id = "vascular",
-                title = "Kalp & Damar",
-                systemName = "Kardiyovasküler & Endotel Esnekliği",
+                title = "Heart & Vessels",
+                systemName = "Cardiovascular & Endothelial Elasticity",
                 position = Vector3D(-8f, -62f, 10f),
                 color = SleekRose,
                 icon = Icons.Default.Favorite,
                 scoreExtractor = { res -> res.reserves.find { it.key == "vascular" }?.score ?: 82.0 },
-                ageExtractor = { res, p -> "Damar Yaşı: ${res.reserves.find { it.key == "vascular" }?.ageEstimate?.toInt() ?: p.chronologicalAge.toInt()} yaş" },
-                statusExtractor = { score -> if (score >= 80) "Optimal Elastisite" else "Hafif Arteriyel Sertlik" },
-                clinicalSummary = "SCORE2 arteriyel elastisite, nabız dalgası ve lipid fraksiyon dengesi.",
-                biologicalMechanism = "Arteriyel uyum, sol ventrikül sonrası yükü ve mikrovasküler perfüzyonu belirler. Sistolik/diyastolik oran ve nabız dalga hızı aterosklerotik yükü gösterir.",
+                ageExtractor = { res, p -> "Vascular Age: ${res.reserves.find { it.key == "vascular" }?.ageEstimate?.toInt() ?: p.chronologicalAge.toInt()} yrs" },
+                statusExtractor = { score -> if (score >= 80) "Optimal Elasticity" else "Mild Arterial Stiffness" },
+                clinicalSummary = "SCORE2 arterial elasticity, pulse wave and lipid fraction balance.",
+                biologicalMechanism = "Arterial compliance determines left ventricular afterload and microvascular perfusion. The systolic/diastolic ratio and pulse wave velocity reflect atherosclerotic burden.",
                 metrics = listOf(
-                    BiomarkerMetricDetail("Tansiyon", "${profile.sbpMmHg.toInt()}/${profile.dbpMmHg.toInt()} mmHg", "< 120/80", profile.sbpMmHg <= 120 && profile.dbpMmHg <= 80),
-                    BiomarkerMetricDetail("Dinlenik Nabız", "${profile.restingPulseBpm.toInt()} bpm", "50-68 bpm", profile.restingPulseBpm in 50.0..70.0),
-                    BiomarkerMetricDetail("Kolesterol", "${profile.totalCholesterolMgDl.toInt()} mg/dL", "< 190", profile.totalCholesterolMgDl < 190),
-                    BiomarkerMetricDetail("HDL Koruyucu", "${profile.hdlMgDl.toInt()} mg/dL", "> 50", profile.hdlMgDl >= 50)
+                    BiomarkerMetricDetail("Blood Pressure", "${profile.sbpMmHg.toInt()}/${profile.dbpMmHg.toInt()} mmHg", "< 120/80", profile.sbpMmHg <= 120 && profile.dbpMmHg <= 80),
+                    BiomarkerMetricDetail("Resting Heart Rate", "${profile.restingPulseBpm.toInt()} bpm", "50-68 bpm", profile.restingPulseBpm in 50.0..70.0),
+                    BiomarkerMetricDetail("Cholesterol", "${profile.totalCholesterolMgDl.toInt()} mg/dL", "< 190", profile.totalCholesterolMgDl < 190),
+                    BiomarkerMetricDetail("Protective HDL", "${profile.hdlMgDl.toInt()} mg/dL", "> 50", profile.hdlMgDl >= 50)
                 ),
                 interventions = listOf(
-                    LongevityIntervention("Zone 2 Kardiyo Antrenmanı", "+2.8 Yıl", "Haftada 150 dk mitokondriyal yoğunluğu ve nitrik oksit sentezini artıran hafif tempo kardiyo."),
-                    LongevityIntervention("Omega-3 & Polifenol Desteği", "+1.9 Yıl", "Endotel koruması için yüksek EPA/DHA ve zeytinyağı polifenolleri.")
+                    LongevityIntervention("Zone 2 Cardio Training", "+2.8 yrs", "150 min/week of easy-pace cardio to increase mitochondrial density and nitric oxide synthesis."),
+                    LongevityIntervention("Omega-3 & Polyphenol Support", "+1.9 yrs", "High EPA/DHA and olive oil polyphenols for endothelial protection.")
                 )
             ),
             DigitalTwinNode(
                 id = "metabolic",
-                title = "Metabolizma",
-                systemName = "Hepatik & İnsülin Duyarlılığı Ekseni",
+                title = "Metabolism",
+                systemName = "Hepatic & Insulin Sensitivity Axis",
                 position = Vector3D(10f, -22f, 8f),
                 color = SleekAmber,
                 icon = Icons.Default.LocalFireDepartment,
                 scoreExtractor = { res -> res.reserves.find { it.key == "metabolic" }?.score ?: 78.0 },
                 ageExtractor = { _, p -> "HOMA-IR: ${String.format("%.2f", (p.glucoseMgDl * p.insulinUuMl) / 405.0)}" },
-                statusExtractor = { score -> if (score >= 80) "Yüksek İnsülin Duyarlılığı" else "Hafif Glikasyon Yükü" },
-                clinicalSummary = "HOMA-IR insülin direnci ve glukoz metabolizması kinetiği.",
-                biologicalMechanism = "Glukoz ve açlık insülini çarpımı ile hesaplanan HOMA-IR, karaciğer ve kas dokusundaki glikojen depolama etkinliğini temsil eder.",
+                statusExtractor = { score -> if (score >= 80) "High Insulin Sensitivity" else "Mild Glycation Load" },
+                clinicalSummary = "HOMA-IR insulin resistance and glucose metabolism kinetics.",
+                biologicalMechanism = "HOMA-IR, calculated from the product of fasting glucose and insulin, represents glycogen storage efficiency in liver and muscle tissue.",
                 metrics = listOf(
-                    BiomarkerMetricDetail("Açlık Glukozu", "${profile.glucoseMgDl.toInt()} mg/dL", "70-90", profile.glucoseMgDl in 70.0..95.0),
-                    BiomarkerMetricDetail("Açlık İnsülini", "${profile.insulinUuMl.toInt()} μU/mL", "< 6.0", profile.insulinUuMl <= 6.0),
-                    BiomarkerMetricDetail("HbA1c", "%${profile.hba1cPercent}", "< %5.4", profile.hba1cPercent < 5.5)
+                    BiomarkerMetricDetail("Fasting Glucose", "${profile.glucoseMgDl.toInt()} mg/dL", "70-90", profile.glucoseMgDl in 70.0..95.0),
+                    BiomarkerMetricDetail("Fasting Insulin", "${profile.insulinUuMl.toInt()} μU/mL", "< 6.0", profile.insulinUuMl <= 6.0),
+                    BiomarkerMetricDetail("HbA1c", "${profile.hba1cPercent}%", "< 5.4%", profile.hba1cPercent < 5.5)
                 ),
                 interventions = listOf(
-                    LongevityIntervention("Yemek Sonrası 10 Dk Yürüyüş", "+1.5 Yıl", "Postprandiyal glukoz tepe noktasını %30 düşürür."),
-                    LongevityIntervention("Aralıklı Oruç & Sirkadiyen Beslenme", "+1.8 Yıl", "14/10 beslenme penceresi ile otofaji aktivasyonu.")
+                    LongevityIntervention("10-Min Post-Meal Walk", "+1.5 yrs", "Lowers the postprandial glucose peak by 30%."),
+                    LongevityIntervention("Intermittent Fasting & Circadian Eating", "+1.8 yrs", "Autophagy activation with a 14/10 eating window.")
                 )
             ),
             DigitalTwinNode(
                 id = "immune",
-                title = "Bağışıklık",
-                systemName = "İnflamasyon & Sistemik Biyolojik Direnç",
+                title = "Immunity",
+                systemName = "Inflammation & Systemic Biological Resilience",
                 position = Vector3D(0f, -44f, 6f),
                 color = SleekCoral,
                 icon = Icons.Default.Security,
                 scoreExtractor = { res -> res.reserves.find { it.key == "immune" }?.score ?: 76.0 },
                 ageExtractor = { _, p -> "hs-CRP: ${p.hsCrpMgL} mg/L" },
-                statusExtractor = { score -> if (score >= 80) "Düşük İnflamasyon" else "Sistemik İnflamasyon Riski" },
-                clinicalSummary = "hs-CRP, lökosit fraksiyonu ve sistemik immünosenesans.",
-                biologicalMechanism = "Hassas C-reaktif protein (hs-CRP), damar duvarı ve organlardaki düşük dereceli kronik mikroyangıyı (inflammaging) yansıtır.",
+                statusExtractor = { score -> if (score >= 80) "Low Inflammation" else "Systemic Inflammation Risk" },
+                clinicalSummary = "hs-CRP, leukocyte fractions and systemic immunosenescence.",
+                biologicalMechanism = "High-sensitivity C-reactive protein (hs-CRP) reflects low-grade chronic micro-inflammation (inflammaging) in vessel walls and organs.",
                 metrics = listOf(
                     BiomarkerMetricDetail("hs-CRP", "${profile.hsCrpMgL} mg/L", "< 0.8", profile.hsCrpMgL < 0.8),
-                    BiomarkerMetricDetail("Beyaz Küre (WBC)", "${String.format("%.1f", profile.whiteBloodCellCount)} k/μL", "4.0-6.5", profile.whiteBloodCellCount in 4.0..7.0)
+                    BiomarkerMetricDetail("White Blood Cells (WBC)", "${String.format("%.1f", profile.whiteBloodCellCount)} k/μL", "4.0-6.5", profile.whiteBloodCellCount in 4.0..7.0)
                 ),
                 interventions = listOf(
-                    LongevityIntervention("Anti-İnflamatuar Fitonütrientler", "+1.6 Yıl", "Kurkumin, kuersetin ve sülforafan ile sitokin supresyonu."),
-                    LongevityIntervention("Soğuk/Sıcak Termal Maruziyet", "+1.1 Yıl", "Haftada 2-3 sauna seansı ile ısı şoku proteinleri (HSP70) uyarımı.")
+                    LongevityIntervention("Anti-Inflammatory Phytonutrients", "+1.6 yrs", "Cytokine suppression with curcumin, quercetin and sulforaphane."),
+                    LongevityIntervention("Hot/Cold Thermal Exposure", "+1.1 yrs", "Heat shock protein (HSP70) activation with 2-3 sauna sessions per week.")
                 )
             ),
             DigitalTwinNode(
                 id = "musculoskeletal",
-                title = "Kas & İskelet",
-                systemName = "Sarkopeni Direnci & Kemik Mineral Dengesi",
+                title = "Muscle & Skeleton",
+                systemName = "Sarcopenia Resistance & Bone Mineral Balance",
                 position = Vector3D(-16f, 64f, 2f),
                 color = SleekGreen,
                 icon = Icons.Default.FitnessCenter,
                 scoreExtractor = { res -> res.reserves.find { it.key == "musculoskeletal" }?.score ?: 88.0 },
-                ageExtractor = { _, p -> "Kavrama Gücü: ${p.gripStrengthKg.toInt()} kg" },
-                statusExtractor = { score -> if (score >= 80) "Güçlü Kas Kütlesi" else "Kas Kaybı (Sarkopeni) Riski" },
-                clinicalSummary = "Kavrama kuvveti ve fonksiyonel fiziksel bağımsızlık kapasitesi.",
-                biologicalMechanism = "Kavrama kuvveti tüm nedenlere bağlı mortalite riskinin en güçlü bağımsız fiziksel belirtecidir.",
+                ageExtractor = { _, p -> "Grip Strength: ${p.gripStrengthKg.toInt()} kg" },
+                statusExtractor = { score -> if (score >= 80) "Strong Muscle Mass" else "Muscle Loss (Sarcopenia) Risk" },
+                clinicalSummary = "Grip strength and functional physical independence capacity.",
+                biologicalMechanism = "Grip strength is the strongest independent physical predictor of all-cause mortality risk.",
                 metrics = listOf(
-                    BiomarkerMetricDetail("Kavrama Gücü", "${profile.gripStrengthKg.toInt()} kg", "> 45 kg", profile.gripStrengthKg >= 45),
-                    BiomarkerMetricDetail("Günlük Adım", "${profile.dailySteps} adım", "> 8,000", profile.dailySteps >= 8000)
+                    BiomarkerMetricDetail("Grip Strength", "${profile.gripStrengthKg.toInt()} kg", "> 45 kg", profile.gripStrengthKg >= 45),
+                    BiomarkerMetricDetail("Daily Steps", "${profile.dailySteps} steps", "> 8,000", profile.dailySteps >= 8000)
                 ),
                 interventions = listOf(
-                    LongevityIntervention("Progresif Direnç Antrenmanı", "+3.2 Yıl", "Büyük kas grupları için haftada 3 seans ağırlık egzersizi."),
-                    LongevityIntervention("Lösin Zengini Protein (1.6g/kg)", "+1.4 Yıl", "Kas protein sentezi (mTOR) optimizasyonu.")
+                    LongevityIntervention("Progressive Resistance Training", "+3.2 yrs", "3 weekly weight-training sessions targeting major muscle groups."),
+                    LongevityIntervention("Leucine-Rich Protein (1.6g/kg)", "+1.4 yrs", "Optimizes muscle protein synthesis (mTOR).")
                 )
             ),
             DigitalTwinNode(
                 id = "circadian",
-                title = "Uyku & Ritüel",
-                systemName = "Glimfatik Sistem & Derin Rejenerasyon",
+                title = "Sleep & Rhythm",
+                systemName = "Glymphatic System & Deep Regeneration",
                 position = Vector3D(0f, -14f, -8f),
                 color = SleekIndigo,
                 icon = Icons.Default.NightlightRound,
                 scoreExtractor = { res -> res.reserves.find { it.key == "circadian" }?.score ?: 84.0 },
-                ageExtractor = { _, p -> "Uyku İndeksi: ${p.psqiSleepScore}/21" },
-                statusExtractor = { score -> if (score >= 80) "Optimal Glimfatik Temizlik" else "Yetersiz Derin Uyku" },
-                clinicalSummary = "PSQI skoru, sirkadiyen ritim senkronizasyonu ve REM verimliliği.",
-                biologicalMechanism = "Derin yavaş dalga uykusu sırasında glimfatik sistem genişleyerek beyindeki amiloid-beta ve hücresel atıkları temizler.",
+                ageExtractor = { _, p -> "Sleep Index: ${p.psqiSleepScore}/21" },
+                statusExtractor = { score -> if (score >= 80) "Optimal Glymphatic Clearance" else "Insufficient Deep Sleep" },
+                clinicalSummary = "PSQI score, circadian rhythm synchronization and REM efficiency.",
+                biologicalMechanism = "During deep slow-wave sleep the glymphatic system expands to clear amyloid-beta and cellular waste from the brain.",
                 metrics = listOf(
-                    BiomarkerMetricDetail("PSQI İndeksi", "${profile.psqiSleepScore}/21", "< 5", profile.psqiSleepScore <= 5),
-                    BiomarkerMetricDetail("Anksiyete (GAD-7)", "${profile.gad7Score}/21", "< 4", profile.gad7Score <= 4)
+                    BiomarkerMetricDetail("PSQI Index", "${profile.psqiSleepScore}/21", "< 5", profile.psqiSleepScore <= 5),
+                    BiomarkerMetricDetail("Anxiety (GAD-7)", "${profile.gad7Score}/21", "< 4", profile.gad7Score <= 4)
                 ),
                 interventions = listOf(
-                    LongevityIntervention("Karanlık ve Soğuk Oda (18°C)", "+2.2 Yıl", "Yatmadan 90 dk önce mavi ışık engeli ve tam karanlık."),
-                    LongevityIntervention("Rezonans Nefes Egzersizi", "+1.2 Yıl", "HRV artışı için dakikada 5.5 nefes kutu solunumu.")
+                    LongevityIntervention("Dark & Cool Bedroom (18°C)", "+2.2 yrs", "Block blue light and keep total darkness 90 min before bed."),
+                    LongevityIntervention("Resonance Breathing Exercise", "+1.2 yrs", "Box breathing at 5.5 breaths per minute to raise HRV.")
                 )
             )
         )
@@ -558,7 +558,7 @@ fun DigitalTwin3DVisualizer(
                             .background(SleekPrimary)
                     )
                     Text(
-                        text = "3D BİYOLOJİK İKİZ",
+                        text = "3D BIOLOGICAL TWIN",
                         color = SleekPrimary,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Black,
@@ -580,7 +580,7 @@ fun DigitalTwin3DVisualizer(
                             .padding(horizontal = 9.dp, vertical = 5.dp)
                     ) {
                         Text(
-                            text = if (isAutoRotating) "Dönüş: AÇIK" else "Dönüş: DURDU",
+                            text = if (isAutoRotating) "Rotation: ON" else "Rotation: PAUSED",
                             color = if (isAutoRotating) SleekPrimary else TextMuted,
                             fontSize = 10.5.sp,
                             fontWeight = FontWeight.Bold
@@ -597,7 +597,7 @@ fun DigitalTwin3DVisualizer(
                     ) {
                         Icon(
                             imageVector = Icons.Default.RestartAlt,
-                            contentDescription = "Sıfırla",
+                            contentDescription = "Reset",
                             tint = TextSecondary,
                             modifier = Modifier.size(16.dp)
                         )
@@ -776,7 +776,7 @@ fun DigitalTwin3DVisualizer(
                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                             Box(modifier = Modifier.size(6.dp).clip(CircleShape).background(SleekPrimary))
                             Text(
-                                text = "LRS: ${twinResult.longevityReserveScore.toInt()}/100 • PhenoAge: ${twinResult.phenoAge} Yaş",
+                                text = "LRS: ${twinResult.longevityReserveScore.toInt()}/100 • PhenoAge: ${twinResult.phenoAge} yrs",
                                 color = SleekPrimary,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.ExtraBold
@@ -785,7 +785,7 @@ fun DigitalTwin3DVisualizer(
                     }
                 }
 
-                // Camera Angle Quick Buttons (Ön, Yan, 3D)
+                // Camera Angle Quick Buttons (Front, Side, 3D)
                 Row(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
@@ -793,8 +793,8 @@ fun DigitalTwin3DVisualizer(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     val angles = listOf(
-                        Triple("ÖN", 0f, 0f),
-                        Triple("YAN", 90f, 0f),
+                        Triple("FRONT", 0f, 0f),
+                        Triple("SIDE", 90f, 0f),
                         Triple("3D", 35f, 15f)
                     )
                     angles.forEach { (label, y, p) ->
@@ -832,14 +832,14 @@ fun DigitalTwin3DVisualizer(
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Text(
-                                    text = "Klinik Raporu İncele",
+                                    text = "View Clinical Report",
                                     color = node.color,
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                                 Icon(
                                     imageVector = Icons.Default.OpenInFull,
-                                    contentDescription = "Genişlet",
+                                    contentDescription = "Expand",
                                     tint = node.color,
                                     modifier = Modifier.size(11.dp)
                                 )
@@ -849,7 +849,7 @@ fun DigitalTwin3DVisualizer(
                 }
             }
 
-            // 3. ORGAN SYSTEM FILTER CHIPS (Tümü, Kalp, Beyin, Metabolizma vs.)
+            // 3. ORGAN SYSTEM FILTER CHIPS (All, Heart, Brain, Metabolism, etc.)
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -950,7 +950,7 @@ fun DigitalTwin3DVisualizer(
                                         onClick = { selectedNode = null },
                                         modifier = Modifier.size(24.dp)
                                     ) {
-                                        Icon(imageVector = Icons.Default.Close, contentDescription = "Kapat", tint = TextMuted, modifier = Modifier.size(16.dp))
+                                        Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = TextMuted, modifier = Modifier.size(16.dp))
                                     }
                                 }
                             }
@@ -1015,7 +1015,7 @@ fun DigitalTwin3DVisualizer(
                                 ),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
-                                Text("Ayrıntılı Klinik Rapor & Müdahaleler", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                                Text("Detailed Clinical Report & Interventions", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -1058,7 +1058,7 @@ fun DigitalTwin3DVisualizer(
                                 Text(node.systemName, color = node.color, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                             }
                             IconButton(onClick = { showFullDeepDiveDialog = false }) {
-                                Icon(Icons.Default.Close, contentDescription = "Kapat", tint = TextMuted)
+                                Icon(Icons.Default.Close, contentDescription = "Close", tint = TextMuted)
                             }
                         }
                     }
@@ -1071,14 +1071,14 @@ fun DigitalTwin3DVisualizer(
                             border = androidx.compose.foundation.BorderStroke(1.dp, CardBorder)
                         ) {
                             Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                Text("BİYOLOJİK MEKANİZMA", color = node.color, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                                Text("BIOLOGICAL MECHANISM", color = node.color, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
                                 Text(node.biologicalMechanism, color = TextSecondary, fontSize = 12.sp, lineHeight = 18.sp)
                             }
                         }
                     }
 
                     item {
-                        Text("KLİNİK BİYOBELİRTEÇLER", color = TextMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                        Text("CLINICAL BIOMARKERS", color = TextMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                     }
 
                     items(node.metrics) { m ->
@@ -1094,7 +1094,7 @@ fun DigitalTwin3DVisualizer(
                         ) {
                             Column {
                                 Text(m.label, color = TextPrimary, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                                Text("Hedef: ${m.optimalRange}", color = TextMuted, fontSize = 10.sp)
+                                Text("Target: ${m.optimalRange}", color = TextMuted, fontSize = 10.sp)
                             }
                             Text(
                                 text = m.value,
@@ -1106,7 +1106,7 @@ fun DigitalTwin3DVisualizer(
                     }
 
                     item {
-                        Text("LONGEVITY MÜDAHALE PROTOKOLLERİ", color = TextMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                        Text("LONGEVITY INTERVENTION PROTOCOLS", color = TextMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                     }
 
                     items(node.interventions) { item ->
@@ -1150,7 +1150,7 @@ fun DigitalTwin3DVisualizer(
                             ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Modele Geri Dön", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                            Text("Back to Model", fontSize = 13.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 }

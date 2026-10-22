@@ -74,7 +74,7 @@ import com.example.ui.theme.AppTheme
 import com.example.ui.viewmodel.LongevityViewModel
 
 /**
- * Kullanıcı Profili ve Longevity Emojileri / Rozetleri Bölümü
+ * User Profile and Longevity Emojis / Badges Section
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -101,7 +101,7 @@ fun UserProfileScreen(
         LongevityEmojiPickerDialog(
             currentEmoji = currentUser.avatarEmoji,
             onEmojiSelected = { emojiItem ->
-                viewModel.selectAvatarEmoji(emojiItem.emoji, emojiItem.titleTr)
+                viewModel.selectAvatarEmoji(emojiItem.emoji, emojiItem.title)
             },
             onDismiss = { showEmojiPickerDialog = false }
         )
@@ -115,7 +115,7 @@ fun UserProfileScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 1. Profile Top Action Bar (Giriş Menüsü & Tema Butonu)
+        // 1. Profile Top Action Bar (Entry Menu & Theme Button)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -123,14 +123,14 @@ fun UserProfileScreen(
         ) {
             Column {
                 Text(
-                    text = "Kullanıcı Profili",
+                    text = "User Profile",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
                     color = colors.textPrimary,
                     letterSpacing = 0.5.sp
                 )
                 Text(
-                    text = "Biyolojik Kimlik & Longevity Emojileri",
+                    text = "Biological Identity & Longevity Emojis",
                     fontSize = 11.5.sp,
                     color = colors.primary,
                     fontWeight = FontWeight.SemiBold
@@ -141,7 +141,7 @@ fun UserProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Giriş Menüsü Butonu
+                // Entry Menu Button
                 Button(
                     onClick = onOpenEntryMenu,
                     colors = ButtonDefaults.buttonColors(
@@ -154,11 +154,11 @@ fun UserProfileScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Login,
-                        contentDescription = "Giriş Menüsü",
+                        contentDescription = "Entry Menu",
                         modifier = Modifier.size(15.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Giriş Menüsü", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text("Entry Menu", fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
 
                 // Dark/Light Mode Switch Icon Button
@@ -171,7 +171,7 @@ fun UserProfileScreen(
                 ) {
                     Icon(
                         imageVector = if (isDarkMode) Icons.Default.DarkMode else Icons.Default.LightMode,
-                        contentDescription = "Tema Değiştir",
+                        contentDescription = "Toggle Theme",
                         tint = if (isDarkMode) colors.primary else Color(0xFFD97706),
                         modifier = Modifier.size(18.dp)
                     )
@@ -218,7 +218,7 @@ fun UserProfileScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = "Emoji Değiştir",
+                                contentDescription = "Change Emoji",
                                 tint = colors.onPrimary,
                                 modifier = Modifier.size(12.dp)
                             )
@@ -252,7 +252,7 @@ fun UserProfileScreen(
                         )
 
                         Text(
-                            text = "${currentUser.chronologicalAge.toInt()} Yaş • ${currentUser.biologicalSex} • ${currentUser.bloodType}",
+                            text = "${currentUser.chronologicalAge.toInt()} y/o • ${currentUser.biologicalSex} • ${currentUser.bloodType}",
                             fontSize = 11.sp,
                             color = colors.textSecondary
                         )
@@ -270,7 +270,7 @@ fun UserProfileScreen(
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text(
-                                    text = "PhenoAge: ${String.format("%.1f", twinResult.phenoAge)} Yıl (${if (twinResult.ageDifference <= 0) "" else "+"}${String.format("%.1f", twinResult.ageDifference)})",
+                                    text = "PhenoAge: ${String.format("%.1f", twinResult.phenoAge)} yrs (${if (twinResult.ageDifference <= 0) "" else "+"}${String.format("%.1f", twinResult.ageDifference)})",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = if (twinResult.ageDifference <= 0) colors.green else colors.coral
@@ -284,7 +284,7 @@ fun UserProfileScreen(
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text(
-                                    text = "🔥 ${currentUser.activeStreakDays} Gün Seri",
+                                    text = "🔥 ${currentUser.activeStreakDays}-Day Streak",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = colors.onPrimaryContainer
@@ -299,7 +299,7 @@ fun UserProfileScreen(
                 // Bio & Goal
                 if (!isEditMode) {
                     Text(
-                        text = "🎯 Ana Hedef: ${currentUser.primaryLongevityGoal}",
+                        text = "🎯 Main Goal: ${currentUser.primaryLongevityGoal}",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = colors.textPrimary
@@ -333,12 +333,12 @@ fun UserProfileScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
-                                contentDescription = "Düzenle",
+                                contentDescription = "Edit",
                                 tint = colors.primary,
                                 modifier = Modifier.size(14.dp)
                             )
                             Spacer(modifier = Modifier.width(6.dp))
-                            Text("Profili Düzenle", fontSize = 11.5.sp, color = colors.primary)
+                            Text("Edit Profile", fontSize = 11.5.sp, color = colors.primary)
                         }
 
                         Button(
@@ -350,7 +350,7 @@ fun UserProfileScreen(
                                 contentColor = colors.onPrimary
                             )
                         ) {
-                            Text("🧬 Avatar Seç", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                            Text("🧬 Choose Avatar", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                         }
                     }
                 } else {
@@ -362,7 +362,7 @@ fun UserProfileScreen(
                         OutlinedTextField(
                             value = editName,
                             onValueChange = { editName = it },
-                            label = { Text("Ad Soyad", fontSize = 11.sp) },
+                            label = { Text("Full Name", fontSize = 11.sp) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -374,7 +374,7 @@ fun UserProfileScreen(
                         OutlinedTextField(
                             value = editAge,
                             onValueChange = { editAge = it },
-                            label = { Text("Takvim Yaşı (Chrono Age)", fontSize = 11.sp) },
+                            label = { Text("Chronological Age", fontSize = 11.sp) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -386,7 +386,7 @@ fun UserProfileScreen(
                         OutlinedTextField(
                             value = editGoal,
                             onValueChange = { editGoal = it },
-                            label = { Text("Longevity Hedefi", fontSize = 11.sp) },
+                            label = { Text("Longevity Goal", fontSize = 11.sp) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -398,7 +398,7 @@ fun UserProfileScreen(
                         OutlinedTextField(
                             value = editBio,
                             onValueChange = { editBio = it },
-                            label = { Text("Hakkımda / Protokol Notları", fontSize = 11.sp) },
+                            label = { Text("About Me / Protocol Notes", fontSize = 11.sp) },
                             maxLines = 3,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -416,7 +416,7 @@ fun UserProfileScreen(
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
-                                Text("Vazgeç", fontSize = 11.sp, color = colors.textSecondary)
+                                Text("Cancel", fontSize = 11.sp, color = colors.textSecondary)
                             }
 
                             Button(
@@ -438,7 +438,7 @@ fun UserProfileScreen(
                                     contentColor = colors.onPrimary
                                 )
                             ) {
-                                Text("Kaydet", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                Text("Save", fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -446,7 +446,7 @@ fun UserProfileScreen(
             }
         }
 
-        // 3. Theme & Preferences Card (Aydınlık & Karanlık Mod)
+        // 3. Theme & Preferences Card (Light & Dark Mode)
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
@@ -468,12 +468,12 @@ fun UserProfileScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Settings,
-                        contentDescription = "Ayarlar",
+                        contentDescription = "Settings",
                         tint = colors.primary,
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        text = "Tema & Uygulama Tercihleri",
+                        text = "Theme & App Preferences",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.textPrimary
@@ -511,13 +511,13 @@ fun UserProfileScreen(
 
                         Column {
                             Text(
-                                text = if (isDarkMode) "Karanlık Mod (Dark Mode)" else "Aydınlık Mod (Light Mode)",
+                                text = if (isDarkMode) "Dark Mode" else "Light Mode",
                                 fontSize = 12.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.textPrimary
                             )
                             Text(
-                                text = if (isDarkMode) "OLED Gece Koruma Teması" else "Parlak Gün Işığı Teması",
+                                text = if (isDarkMode) "OLED Night Protection Theme" else "Bright Daylight Theme",
                                 fontSize = 10.sp,
                                 color = colors.textMuted
                             )
@@ -548,13 +548,13 @@ fun UserProfileScreen(
                 ) {
                     Column {
                         Text(
-                            text = "Ölçü Birimleri",
+                            text = "Units of Measurement",
                             fontSize = 12.5.sp,
                             fontWeight = FontWeight.Bold,
                             color = colors.textPrimary
                         )
                         Text(
-                            text = if (currentUser.isMetricUnits) "Metrik Sistem (kg, cm, mg/dL)" else "Imperial (lbs, in)",
+                            text = if (currentUser.isMetricUnits) "Metric System (kg, cm, mg/dL)" else "Imperial (lbs, in)",
                             fontSize = 10.sp,
                             color = colors.textMuted
                         )
@@ -570,7 +570,7 @@ fun UserProfileScreen(
                             .padding(horizontal = 10.dp, vertical = 6.dp)
                     ) {
                         Text(
-                            text = if (currentUser.isMetricUnits) "METRİK" else "IMPERIAL",
+                            text = if (currentUser.isMetricUnits) "METRIC" else "IMPERIAL",
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Bold,
                             color = colors.onPrimaryContainer
@@ -580,7 +580,7 @@ fun UserProfileScreen(
             }
         }
 
-        // 4. In-App Longevity Emojis Catalog (Uygulama İçi Emojiler Vitrini)
+        // 4. In-App Longevity Emojis Catalog (In-App Emoji Showcase)
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
@@ -608,13 +608,13 @@ fun UserProfileScreen(
                         Text(text = "🧬", fontSize = 18.sp)
                         Column {
                             Text(
-                                text = "Longevity Emojileri Vitrini",
+                                text = "Longevity Emoji Showcase",
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.textPrimary
                             )
                             Text(
-                                text = "Avatarınızı değiştirmek için herhangi bir emojiye dokunun",
+                                text = "Tap any emoji to change your avatar",
                                 fontSize = 10.5.sp,
                                 color = colors.textMuted
                             )
@@ -622,7 +622,7 @@ fun UserProfileScreen(
                     }
 
                     Text(
-                        text = "${LongevityEmojiCatalog.allEmojis.size} Emoji",
+                        text = "${LongevityEmojiCatalog.allEmojis.size} Emojis",
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.primary
@@ -647,7 +647,7 @@ fun UserProfileScreen(
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .clickable {
-                                    viewModel.selectAvatarEmoji(emojiItem.emoji, emojiItem.titleTr)
+                                    viewModel.selectAvatarEmoji(emojiItem.emoji, emojiItem.title)
                                 },
                             contentAlignment = Alignment.Center
                         ) {
@@ -668,7 +668,7 @@ fun UserProfileScreen(
                             item = emojiItem,
                             isSelected = currentUser.avatarEmoji == emojiItem.emoji,
                             onClick = {
-                                viewModel.selectAvatarEmoji(emojiItem.emoji, emojiItem.titleTr)
+                                viewModel.selectAvatarEmoji(emojiItem.emoji, emojiItem.title)
                             },
                             modifier = Modifier.weight(1f)
                         )
@@ -685,7 +685,7 @@ fun UserProfileScreen(
                     )
                 ) {
                     Text(
-                        text = "Tüm ${LongevityEmojiCatalog.allEmojis.size} Longevity Emojisini Gör & Seç",
+                        text = "View & Choose All ${LongevityEmojiCatalog.allEmojis.size} Longevity Emojis",
                         fontSize = 11.5.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -693,7 +693,7 @@ fun UserProfileScreen(
             }
         }
 
-        // 5. Longevity Rozetleri & Başarılar (Milestone Badges)
+        // 5. Longevity Milestone Badges
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
@@ -715,12 +715,12 @@ fun UserProfileScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.EmojiEvents,
-                        contentDescription = "Başarılar",
+                        contentDescription = "Achievements",
                         tint = colors.amber,
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        text = "Longevity Başarı Rozetleri",
+                        text = "Longevity Achievement Badges",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.textPrimary
@@ -733,7 +733,7 @@ fun UserProfileScreen(
             }
         }
 
-        // 6. Hazır Biyo-Profil Şablonları Yükleyici
+        // 6. Preset Bio-Profile Template Loader
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(20.dp),
@@ -755,12 +755,12 @@ fun UserProfileScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.SwapHoriz,
-                        contentDescription = "Hazır Profiller",
+                        contentDescription = "Preset Profiles",
                         tint = colors.primary,
                         modifier = Modifier.size(18.dp)
                     )
                     Text(
-                        text = "Klinik Simülasyon Biyo-Profilleri",
+                        text = "Clinical Simulation Bio-Profiles",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = colors.textPrimary
