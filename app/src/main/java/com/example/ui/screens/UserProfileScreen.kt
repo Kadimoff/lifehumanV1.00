@@ -511,13 +511,13 @@ fun UserProfileScreen(
 
                         Column {
                             Text(
-                                text = if (isDarkMode) "Dark Mode" else "Light Mode",
+                                text = "Dark Mode",
                                 fontSize = 12.5.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colors.textPrimary
                             )
                             Text(
-                                text = if (isDarkMode) "OLED Night Protection Theme" else "Bright Daylight Theme",
+                                text = if (isDarkMode) "On · OLED night theme" else "Off · bright daylight theme",
                                 fontSize = 10.sp,
                                 color = colors.textMuted
                             )

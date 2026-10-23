@@ -2,6 +2,7 @@ package com.example
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedContent
@@ -22,8 +23,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,6 +45,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,6 +98,18 @@ class MainActivity : ComponentActivity() {
             val allUsers by longevityViewModel.allUsers.collectAsState()
             val twinResult by longevityViewModel.twinResult.collectAsState()
 
+            // Status / navigation bar icons follow the in-app theme, not the system one
+            DisposableEffect(isDarkMode) {
+                val transparent = android.graphics.Color.TRANSPARENT
+                val barStyle = if (isDarkMode) {
+                    SystemBarStyle.dark(transparent)
+                } else {
+                    SystemBarStyle.light(transparent, transparent)
+                }
+                enableEdgeToEdge(statusBarStyle = barStyle, navigationBarStyle = barStyle)
+                onDispose { }
+            }
+
             MyApplicationTheme(darkTheme = isDarkMode) {
                 val colors = AppTheme.colors
                 var currentScreen by rememberSaveable { mutableStateOf(LongevityScreen.DASHBOARD) }
@@ -107,7 +123,7 @@ class MainActivity : ComponentActivity() {
                     LongevityScreen.PROFILE
                 )
 
-                // Entry / Login Menu Dialog (Giriş Menüsü)
+                // Entry / Login Menu Dialog
                 if (isEntryMenuOpen) {
                     EntryMenuDialog(
                         currentUser = currentUser,
@@ -141,6 +157,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .background(colors.surface)
+                                    .statusBarsPadding()
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -174,6 +191,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .background(Color.Transparent)
+                                    .statusBarsPadding()
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
@@ -266,7 +284,8 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                                 .background(if (isDarkMode) Color(0xF2101726) else Color.White.copy(alpha = 0.92f))
-                                .border(1.2.dp, Color.White.copy(alpha = 0.85f), RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                                .border(1.2.dp, if (isDarkMode) colors.cardBorder else Color.White.copy(alpha = 0.85f), RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                                .navigationBarsPadding()
                                 .padding(horizontal = 6.dp, vertical = 8.dp)
                         ) {
                             Row(

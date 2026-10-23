@@ -2,6 +2,7 @@ package com.example.ui.viewmodel
 
 import android.app.Application
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -165,17 +166,23 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
     val historyRecords: StateFlow<List<LongevityRecordEntity>> = repository.allRecords
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    // Theme State (Dark / Light mode)
-    private val _isDarkMode = MutableStateFlow(false)
+    // Theme State (Dark / Light mode), persisted; first launch follows the system setting
+    private val uiPrefs = application.getSharedPreferences("lifemap_ui", Context.MODE_PRIVATE)
+    private val _isDarkMode = MutableStateFlow(
+        uiPrefs.getBoolean(
+            KEY_DARK_MODE,
+            (application.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        )
+    )
     val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
     fun toggleDarkMode() {
-        _isDarkMode.value = !_isDarkMode.value
-        triggerHapticFeedback(25)
+        setDarkMode(!_isDarkMode.value)
     }
 
     fun setDarkMode(dark: Boolean) {
         _isDarkMode.value = dark
+        uiPrefs.edit().putBoolean(KEY_DARK_MODE, dark).apply()
         triggerHapticFeedback(20)
     }
 
@@ -265,7 +272,7 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
             id = "super_ager",
             title = "Optimal Super-Ager",
             subtitle = "Low inflammation, high VO2max & insulin sensitivity",
-            tag = "BioAge: -8.4 yrs",
+            tag = "",
             profile = BiomarkerProfile(
                 chronologicalAge = 48.0,
                 glucoseMgDl = 84.0,
@@ -306,14 +313,45 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
             id = "population_median",
             title = "Population Median",
             subtitle = "Average Western clinical reference standard",
-            tag = "BioAge: +0.2 yrs",
-            profile = BiomarkerProfile()
+            tag = "",
+            // Approximate NHANES adult medians, so PhenoAge lands close to chronological age
+            profile = BiomarkerProfile(
+                chronologicalAge = 42.0,
+                glucoseMgDl = 100.0,
+                insulinUuMl = 9.5,
+                hsCrpMgL = 2.2,
+                albuminGDl = 4.2,
+                creatinineUmolL = 85.0,
+                lymphocytePercent = 29.0,
+                mcvFl = 90.5,
+                rdwPercent = 13.4,
+                alpUL = 74.0,
+                wbc103Ul = 7.0,
+                neutrophilsPercent = 60.0,
+                sbpMmHg = 124.0,
+                dbpMmHg = 79.0,
+                restingPulseBpm = 72.0,
+                totalCholesterolMgDl = 195.0,
+                hdlMgDl = 50.0,
+                triglyceridesMgDl = 130.0,
+                weightKg = 82.0,
+                waistCircumferenceCm = 95.0,
+                vitaminDNgMl = 28.0,
+                chairStand30sReps = 14,
+                walkingSpeed4mMps = 1.15,
+                stroopMeanLatencyMs = 620.0,
+                stroopAccuracyPercent = 95.0,
+                psqiSleepScore = 6,
+                dailySteps = 6200,
+                hba1cPercent = 5.5,
+                gripStrengthKg = 40.0
+            )
         ),
         PresetProfile(
             id = "cardiometabolic",
             title = "Cardiometabolic Stress",
             subtitle = "Elevated HOMA-IR, arterial stiffness & low muscle",
-            tag = "BioAge: +6.8 yrs",
+            tag = "",
             profile = BiomarkerProfile(
                 chronologicalAge = 45.0,
                 glucoseMgDl = 112.0,
@@ -354,7 +392,7 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
             id = "inflammaging",
             title = "High Inflammaging Burden",
             subtitle = "Elevated hs-CRP, high SII & immune senescence",
-            tag = "BioAge: +5.4 yrs",
+            tag = "",
             profile = BiomarkerProfile(
                 chronologicalAge = 50.0,
                 glucoseMgDl = 98.0,
@@ -391,7 +429,11 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
                 psqiSleepScore = 6
             )
         )
-    )
+    ).map { preset ->
+        // Tag reflects the real PhenoAge delta so it stays in sync with the calculator.
+        val delta = LongevityCalculatorService.computeDigitalTwin(preset.profile).ageDifference
+        preset.copy(tag = "BioAge: ${if (delta > 0) "+" else ""}$delta yrs")
+    }
 
     init {
         checkHealthPermissions()
@@ -416,14 +458,16 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
             newTwin,
             _healthConnectData.value
         )
-        refreshMorningBriefing(forceAi = true)
+        // Debounced so typing in a biomarker field does not fire one Gemini request per keystroke
+        refreshMorningBriefing(forceAi = true, debounceMs = 1500)
     }
 
     private var briefingJob: Job? = null
 
-    fun refreshMorningBriefing(forceAi: Boolean = true) {
+    fun refreshMorningBriefing(forceAi: Boolean = true, debounceMs: Long = 0) {
         briefingJob?.cancel()
         briefingJob = viewModelScope.launch {
+            if (debounceMs > 0) delay(debounceMs)
             _isGeneratingBriefing.value = true
             try {
                 if (forceAi) {
@@ -665,5 +709,9 @@ class LongevityViewModel(application: Application) : AndroidViewModel(applicatio
                 }
             }
         } catch (_: Exception) {}
+    }
+
+    private companion object {
+        const val KEY_DARK_MODE = "dark_mode"
     }
 }

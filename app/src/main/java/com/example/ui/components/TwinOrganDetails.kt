@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,6 +48,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.data.model.BiologicalTwinResult
 import com.example.data.model.BiomarkerProfile
+import com.example.ui.theme.AppTheme
 import com.example.ui.theme.CardBorder
 import com.example.ui.theme.DarkBackground
 import com.example.ui.theme.DarkSurface
@@ -410,6 +412,11 @@ fun OrganDeepDiveDialog(
     node: DigitalTwinNode,
     onDismiss: () -> Unit
 ) {
+    val colors = AppTheme.colors
+    // Neon organ hues are tuned for dark glass; deepen them so they stay legible on light surfaces
+    val accent = if (colors.isDark) node.color else lerp(node.color, Color.Black, 0.35f)
+    val border = if (colors.isDark) colors.cardBorder else colors.borderSubtle
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -419,8 +426,8 @@ fun OrganDeepDiveDialog(
                 .fillMaxSize()
                 .padding(16.dp),
             shape = RoundedCornerShape(24.dp),
-            color = DarkBackground,
-            border = androidx.compose.foundation.BorderStroke(1.dp, node.color.copy(alpha = 0.5f))
+            color = colors.background,
+            border = androidx.compose.foundation.BorderStroke(1.dp, accent.copy(alpha = 0.5f))
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -435,11 +442,11 @@ fun OrganDeepDiveDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text(node.title, color = TextPrimary, fontSize = 18.sp, fontWeight = FontWeight.Black)
-                            Text(node.systemName, color = node.color, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                            Text(node.title, color = colors.textPrimary, fontSize = 18.sp, fontWeight = FontWeight.Black)
+                            Text(node.systemName, color = accent, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                         }
                         IconButton(onClick = onDismiss) {
-                            Icon(Icons.Default.Close, contentDescription = "Close", tint = TextMuted)
+                            Icon(Icons.Default.Close, contentDescription = "Close", tint = colors.textMuted)
                         }
                     }
                 }
@@ -447,19 +454,19 @@ fun OrganDeepDiveDialog(
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                        colors = CardDefaults.cardColors(containerColor = colors.surface),
                         shape = RoundedCornerShape(16.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, CardBorder)
+                        border = androidx.compose.foundation.BorderStroke(1.dp, border)
                     ) {
                         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text("BIOLOGICAL MECHANISM", color = node.color, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
-                            Text(node.biologicalMechanism, color = TextSecondary, fontSize = 12.sp, lineHeight = 18.sp)
+                            Text("BIOLOGICAL MECHANISM", color = accent, fontSize = 10.sp, fontWeight = FontWeight.ExtraBold)
+                            Text(node.biologicalMechanism, color = colors.textSecondary, fontSize = 12.sp, lineHeight = 18.sp)
                         }
                     }
                 }
 
                 item {
-                    Text("CLINICAL BIOMARKERS", color = TextMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                    Text("CLINICAL BIOMARKERS", color = colors.textMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                 }
 
                 items(node.metrics) { m ->
@@ -467,19 +474,19 @@ fun OrganDeepDiveDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(12.dp))
-                            .background(DarkSurface)
-                            .border(1.dp, CardBorder, RoundedCornerShape(12.dp))
+                            .background(colors.surface)
+                            .border(1.dp, border, RoundedCornerShape(12.dp))
                             .padding(horizontal = 14.dp, vertical = 10.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text(m.label, color = TextPrimary, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                            Text("Target: ${m.optimalRange}", color = TextMuted, fontSize = 10.sp)
+                            Text(m.label, color = colors.textPrimary, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                            Text("Target: ${m.optimalRange}", color = colors.textMuted, fontSize = 10.sp)
                         }
                         Text(
                             text = m.value,
-                            color = if (m.isOptimal) SleekGreen else SleekCoral,
+                            color = if (m.isOptimal) colors.green else colors.coral,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -487,15 +494,15 @@ fun OrganDeepDiveDialog(
                 }
 
                 item {
-                    Text("LONGEVITY INTERVENTION PROTOCOLS", color = TextMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
+                    Text("LONGEVITY INTERVENTION PROTOCOLS", color = colors.textMuted, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                 }
 
                 items(node.interventions) { item ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(1.dp, CardBorder, RoundedCornerShape(14.dp)),
-                        colors = CardDefaults.cardColors(containerColor = DarkSurface),
+                            .border(1.dp, border, RoundedCornerShape(14.dp)),
+                        colors = CardDefaults.cardColors(containerColor = colors.surface),
                         shape = RoundedCornerShape(14.dp)
                     ) {
                         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -504,17 +511,17 @@ fun OrganDeepDiveDialog(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(item.title, color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                                Text(item.title, color = colors.textPrimary, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(6.dp))
-                                        .background(SleekGreen.copy(alpha = 0.15f))
+                                        .background(colors.green.copy(alpha = 0.15f))
                                         .padding(horizontal = 6.dp, vertical = 2.dp)
                                 ) {
-                                    Text(item.impact, color = SleekGreen, fontSize = 10.5.sp, fontWeight = FontWeight.ExtraBold)
+                                    Text(item.impact, color = colors.green, fontSize = 10.5.sp, fontWeight = FontWeight.ExtraBold)
                                 }
                             }
-                            Text(item.description, color = TextSecondary, fontSize = 11.5.sp, lineHeight = 16.sp)
+                            Text(item.description, color = colors.textSecondary, fontSize = 11.5.sp, lineHeight = 16.sp)
                         }
                     }
                 }
@@ -526,8 +533,8 @@ fun OrganDeepDiveDialog(
                             .fillMaxWidth()
                             .height(46.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = SleekPrimary,
-                            contentColor = SleekOnPrimary
+                            containerColor = colors.primary,
+                            contentColor = colors.onPrimary
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {

@@ -49,6 +49,7 @@ import com.example.ui.theme.SleekOnPrimary
 import com.example.ui.theme.SleekPrimary
 import com.example.ui.theme.SleekRose
 import com.example.ui.theme.SleekSecondary
+import java.util.Locale
 import kotlin.math.abs
 
 @Composable
@@ -58,7 +59,22 @@ fun HeroAgeCard(
 ) {
     val isYounger = result.ageDifference <= 0
     val diffYears = abs(result.ageDifference)
-    val diffTag = if (isYounger) "▼ ${String.format("%.1f", diffYears)} Yıl Daha Genç" else "▲ ${String.format("%.1f", diffYears)} Yıl İleri"
+    val diffTag = if (isYounger) "▼ ${String.format(Locale.US, "%.1f", diffYears)} yrs younger" else "▲ ${String.format(Locale.US, "%.1f", diffYears)} yrs older"
+    // Badge palette follows the verdict: mint when younger, rose when older than the calendar
+    val badgeBg = if (isYounger) Color(0xEEF0FDF4) else Color(0xEEFFF1F2)
+    val badgeBorder = if (isYounger) Color(0xFF10B981) else Color(0xFFF43F5E)
+    val badgeText = if (isYounger) Color(0xFF065F46) else Color(0xFF9F1239)
+    val isPaceSlow = result.paceOfAging <= 1.0
+    val paceColor = if (isPaceSlow) Color(0xFF047857) else Color(0xFFB91C1C)
+
+    val colors = AppTheme.colors
+    // Bright glass cyan in light mode; deeper teal in dark mode so the hero does not glare on OLED black
+    val heroGradient = if (colors.isDark) {
+        listOf(Color(0xFF0E7490), Color(0xFF0C5E78), Color(0xFF0B3B5C))
+    } else {
+        listOf(Color(0xFF00E5FF), Color(0xFF00B4D8), Color(0xFF0284C7))
+    }
+    val heroNumberColor = if (colors.isDark) Color.White else Color(0xFF0A192F)
 
     // High-Fidelity Glassmorphism Cyan Hero Card
     Card(
@@ -79,13 +95,7 @@ fun HeroAgeCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    androidx.compose.ui.graphics.Brush.linearGradient(
-                        listOf(
-                            Color(0xFF00E5FF),
-                            Color(0xFF00B4D8),
-                            Color(0xFF0284C7)
-                        )
-                    )
+                    androidx.compose.ui.graphics.Brush.linearGradient(heroGradient)
                 )
                 .padding(20.dp)
         ) {
@@ -110,7 +120,7 @@ fun HeroAgeCard(
                                 .background(Color(0xFF00FF88))
                         )
                         Text(
-                            text = "BİYOLOJİK YAŞ (PHENOAGE)",
+                            text = "BIOLOGICAL AGE",
                             color = Color.White,
                             fontSize = 11.5.sp,
                             fontWeight = FontWeight.ExtraBold,
@@ -119,7 +129,8 @@ fun HeroAgeCard(
                     }
 
                     Text(
-                        text = "KRONOLOJİK: ${String.format("%.1f", result.chronologicalAge)} YAŞ",
+                        text = "CHRONOLOGICAL ${String.format(Locale.US, "%.1f", result.chronologicalAge)} YRS",
+                        maxLines = 1,
                         color = Color.White.copy(alpha = 0.9f),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
@@ -138,15 +149,15 @@ fun HeroAgeCard(
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
                                 text = "${result.phenoAge}",
-                                color = Color(0xFF0A192F),
+                                color = heroNumberColor,
                                 fontSize = 48.sp,
                                 fontWeight = FontWeight.Black,
                                 letterSpacing = (-1.5).sp
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "yaş",
-                                color = Color(0xFF0A192F),
+                                text = "yrs",
+                                color = heroNumberColor,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(bottom = 6.dp)
@@ -161,13 +172,13 @@ fun HeroAgeCard(
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(12.dp))
-                                    .background(Color(0xDDF0FDF4))
-                                    .border(1.2.dp, Color(0xFF10B981), RoundedCornerShape(12.dp))
+                                    .background(badgeBg)
+                                    .border(1.2.dp, badgeBorder, RoundedCornerShape(12.dp))
                                     .padding(horizontal = 10.dp, vertical = 5.dp)
                             ) {
                                 Text(
                                     text = diffTag,
-                                    color = Color(0xFF065F46),
+                                    color = badgeText,
                                     fontSize = 11.5.sp,
                                     fontWeight = FontWeight.Black,
                                     letterSpacing = 0.2.sp
@@ -190,7 +201,7 @@ fun HeroAgeCard(
                                 }
                                 drawPath(
                                     path = path,
-                                    color = Color(0xFF065F46),
+                                    color = if (colors.isDark) badgeBorder else badgeText,
                                     style = Stroke(width = 2.dp.toPx())
                                 )
                             }
@@ -201,7 +212,7 @@ fun HeroAgeCard(
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
-                            .background(Color.White.copy(alpha = 0.38f))
+                            .background(Color.White.copy(alpha = 0.72f))
                             .border(1.2.dp, Color.White.copy(alpha = 0.75f), RoundedCornerShape(16.dp))
                             .padding(horizontal = 14.dp, vertical = 9.dp)
                     ) {
@@ -210,7 +221,7 @@ fun HeroAgeCard(
                             verticalArrangement = Arrangement.spacedBy(1.dp)
                         ) {
                             Text(
-                                text = "YAŞLANMA HIZI",
+                                text = "PACE OF AGING",
                                 color = Color(0xFF334155),
                                 fontSize = 9.5.sp,
                                 fontWeight = FontWeight.Bold,
@@ -218,13 +229,13 @@ fun HeroAgeCard(
                             )
                             Text(
                                 text = "${result.paceOfAging}x",
-                                color = if (result.paceOfAging <= 1.0) Color(0xFF059669) else Color(0xFFFF4848),
+                                color = paceColor,
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Black
                             )
                             Text(
-                                text = if (result.paceOfAging <= 1.0) "Biyolojik Kazanç" else "Hızlanmış Yıpranma",
-                                color = if (result.paceOfAging <= 1.0) Color(0xFF059669) else Color(0xFFDC2626),
+                                text = if (isPaceSlow) "Slower than calendar" else "Accelerated aging",
+                                color = paceColor,
                                 fontSize = 10.5.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -273,7 +284,7 @@ fun DominantAgingPhenotypeCard(
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
-                        text = "OPTIMAL",
+                        text = "FOCUS AREA",
                         color = colors.primary,
                         fontSize = 9.5.sp,
                         fontWeight = FontWeight.Bold
@@ -397,9 +408,9 @@ fun ReserveItemCard(
     var expanded by remember { mutableStateOf(false) }
 
     val scoreColor = when {
-        reserve.score >= 80 -> SleekGreen
+        reserve.score >= 80 -> colors.green
         reserve.score >= 60 -> colors.primary
-        else -> SleekRose
+        else -> colors.rose
     }
 
     Card(

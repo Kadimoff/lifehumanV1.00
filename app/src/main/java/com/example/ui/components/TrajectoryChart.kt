@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -149,11 +151,11 @@ fun TrajectoryChart(
 
                 // Draw Scenarios Lines in Sleek Palette
                 val scenarios = listOf(
-                    Triple("Scenario A (Status Quo)", SleekRose, points.map { Pair(it.year, it.scenarioABiologicalAge) }),
-                    Triple("Scenario B (Nutrition)", SleekAmber, points.map { Pair(it.year, it.scenarioBBiologicalAge) }),
-                    Triple("Scenario C (Strength)", SleekSecondary, points.map { Pair(it.year, it.scenarioCBiologicalAge) }),
-                    Triple("Scenario D (Sleep)", SleekCoral, points.map { Pair(it.year, it.scenarioDBiologicalAge) }),
-                    Triple("Scenario E (Synergistic)", SleekGreen, points.map { Pair(it.year, it.scenarioEBiologicalAge) })
+                    Triple("Scenario A (Status Quo)", colors.coral, points.map { Pair(it.year, it.scenarioABiologicalAge) }),
+                    Triple("Scenario B (Nutrition)", colors.amber, points.map { Pair(it.year, it.scenarioBBiologicalAge) }),
+                    Triple("Scenario C (Strength)", colors.primary, points.map { Pair(it.year, it.scenarioCBiologicalAge) }),
+                    Triple("Scenario D (Sleep)", colors.indigo, points.map { Pair(it.year, it.scenarioDBiologicalAge) }),
+                    Triple("Scenario E (Synergistic)", colors.green, points.map { Pair(it.year, it.scenarioEBiologicalAge) })
                 )
 
                 scenarios.forEach { (_, color, coords) ->
@@ -170,7 +172,7 @@ fun TrajectoryChart(
                     drawPath(
                         path = path,
                         color = color,
-                        style = Stroke(width = if (color == SleekGreen || color == SleekRose) 3f else 1.8f, cap = StrokeCap.Round)
+                        style = Stroke(width = if (color == colors.green || color == colors.coral) 3f else 1.8f, cap = StrokeCap.Round)
                     )
 
                     // Draw node circles
@@ -183,6 +185,35 @@ fun TrajectoryChart(
                             center = Offset(targetX, animatedY)
                         )
                     }
+                }
+            }
+        }
+
+        // Legend: same colors as the scenario cards below
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            listOf(
+                "A Status quo" to colors.coral,
+                "B Nutrition" to colors.amber,
+                "C Strength" to colors.primary,
+                "D Sleep" to colors.indigo,
+                "E Synergy" to colors.green
+            ).forEach { (label, color) ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(7.dp)
+                            .clip(CircleShape)
+                            .background(color)
+                    )
+                    Text(label, color = colors.textSecondary, fontSize = 9.5.sp, maxLines = 1)
                 }
             }
         }

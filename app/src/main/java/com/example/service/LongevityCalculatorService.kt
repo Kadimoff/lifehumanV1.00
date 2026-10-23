@@ -19,11 +19,13 @@ object LongevityCalculatorService {
      * Reference: Levine et al., Aging (Albany NY) 2018; 10(4): 573-591.
      */
     fun calculatePhenoAge(profile: BiomarkerProfile): Double {
+        // The Levine coefficients are fitted on SI / NHANES units, so convert the
+        // conventional units the app collects before applying them.
         val age = profile.chronologicalAge
-        val glucose = profile.glucoseMgDl
-        val albumin = profile.albuminGDl
+        val glucoseMmolL = profile.glucoseMgDl / 18.016
+        val albuminGL = profile.albuminGDl * 10.0
         val creatinine = profile.creatinineUmolL
-        val hsCrp = max(0.01, profile.hsCrpMgL)
+        val crpMgDl = max(0.001, profile.hsCrpMgL / 10.0)
         val lympPercent = profile.lymphocytePercent
         val mcv = profile.mcvFl
         val rdw = profile.rdwPercent
@@ -33,18 +35,18 @@ object LongevityCalculatorService {
         // 1. Linear predictor xb
         val xb = -19.9067 +
                 (0.0804 * age) +
-                (0.0104 * glucose) -
-                (0.0336 * albumin) +
+                (0.1953 * glucoseMmolL) -
+                (0.0336 * albuminGL) +
                 (0.0095 * creatinine) +
-                (0.1953 * ln(hsCrp)) -
+                (0.0954 * ln(crpMgDl)) -
                 (0.0120 * lympPercent) +
                 (0.0268 * mcv) +
                 (0.3306 * rdw) +
-                (0.0019 * alp) +
+                (0.00188 * alp) +
                 (0.0554 * wbc)
 
         // 2. Gompertz Mortality Risk (M) over 120 months (10 years)
-        val gamma = 0.007688
+        val gamma = 0.0076927
         val b0 = exp(xb)
         val term = (exp(gamma * 120.0) - 1.0) / gamma
         val mortalityExponent = -b0 * term
@@ -56,7 +58,7 @@ object LongevityCalculatorService {
         // 3. Phenotypic Age
         val innerLog = -0.00553 * ln(1.0 - m)
         val safeInner = max(0.0000001, innerLog)
-        val phenoAge = 141.50 + (ln(safeInner) / 0.090165)
+        val phenoAge = 141.50225 + (ln(safeInner) / 0.090165)
 
         return (min(115.0, max(18.0, phenoAge)) * 10.0).roundToInt() / 10.0
     }
@@ -212,7 +214,7 @@ object LongevityCalculatorService {
     fun computeDigitalTwin(profile: BiomarkerProfile): BiologicalTwinResult {
         val chronoAge = profile.chronologicalAge
         val phenoAge = calculatePhenoAge(profile)
-        val ageDiff = (phenoAge - chronoAge * 10.0).roundToInt() / 10.0
+        val ageDiff = ((phenoAge - chronoAge) * 10.0).roundToInt() / 10.0
         val paceOfAging = if (chronoAge > 0) ((phenoAge / chronoAge) * 100.0).roundToInt() / 100.0 else 1.0
 
         val reserves = calculateReserves(profile)
@@ -236,8 +238,9 @@ object LongevityCalculatorService {
         val dominantDesc = "Your digital twin exhibits greatest biological vulnerability within the ${lowestReserve.name} system (Score: ${lowestReserve.score.roundToInt()}/100). Accelerating interventions in this domain provides the largest leverage for biological age reversal."
 
         // Projected Functional Independence Years (years expected to remain disability-free)
-        val baseIndependence = max(chronoAge + 5.0, 85.0 - (phenoAge - chronoAge) * 1.5 + (lrs - 70.0) * 0.25)
-        val projectedIndependenceYears = (min(102.0, max(chronoAge + 2.0, baseIndependence)) * 10.0).roundToInt() / 10.0
+        // Anchored on ~82 years of disability-free life expectancy, shifted by the PhenoAge gap and reserve score
+        val baseIndependence = 82.0 - (phenoAge - chronoAge) * 0.8 + (lrs - 70.0) * 0.2
+        val projectedIndependenceYears = (min(100.0, max(chronoAge + 2.0, baseIndependence)) * 10.0).roundToInt() / 10.0
 
         // Data confidence
         val confidence = 95.0

@@ -213,7 +213,7 @@ fun ScenarioTrajectoryScreen(
             ScenarioOutcomeCard(
                 name = "Scenario A: Status Quo",
                 subtitle = "Natural biological decay at present biomarker rate",
-                color = SleekRose,
+                color = colors.coral,
                 icon = Icons.Default.Warning,
                 bioAge = currentPoint.scenarioABiologicalAge,
                 baseBio = forecast.baseBioAge,
@@ -225,7 +225,7 @@ fun ScenarioTrajectoryScreen(
             ScenarioOutcomeCard(
                 name = "Scenario B: Nutrition Optimization",
                 subtitle = "Lowers HOMA-IR, TyG index & systemic hs-CRP",
-                color = SleekAmber,
+                color = colors.amber,
                 icon = Icons.Default.Restaurant,
                 bioAge = currentPoint.scenarioBBiologicalAge,
                 baseBio = forecast.baseBioAge,
@@ -237,7 +237,7 @@ fun ScenarioTrajectoryScreen(
             ScenarioOutcomeCard(
                 name = "Scenario C: Physical Activity & Strength",
                 subtitle = "Zone 2 VO2max + Hypertrophy sarcopenia prevention",
-                color = SleekSecondary,
+                color = colors.primary,
                 icon = Icons.Default.FitnessCenter,
                 bioAge = currentPoint.scenarioCBiologicalAge,
                 baseBio = forecast.baseBioAge,
@@ -249,7 +249,7 @@ fun ScenarioTrajectoryScreen(
             ScenarioOutcomeCard(
                 name = "Scenario D: Sleep & Circadian",
                 subtitle = "Basal cortisol reduction & glymphatic clearance",
-                color = SleekCoral,
+                color = colors.indigo,
                 icon = Icons.Default.Bedtime,
                 bioAge = currentPoint.scenarioDBiologicalAge,
                 baseBio = forecast.baseBioAge,
@@ -261,7 +261,7 @@ fun ScenarioTrajectoryScreen(
             ScenarioOutcomeCard(
                 name = "Scenario E: Synergistic Protocol",
                 subtitle = "Concurrent nutrition, resistance, VO2max & restorative sleep",
-                color = SleekGreen,
+                color = colors.green,
                 icon = Icons.Default.AutoAwesome,
                 bioAge = currentPoint.scenarioEBiologicalAge,
                 baseBio = forecast.baseBioAge,

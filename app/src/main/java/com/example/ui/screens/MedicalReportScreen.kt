@@ -166,7 +166,7 @@ fun MedicalReportScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Report Ready", color = SleekGreen, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                Text("Report Ready", color = colors.green, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                 Text(file.name, color = colors.textMuted, fontSize = 10.sp)
                             }
                             Button(
@@ -240,8 +240,8 @@ fun MedicalReportScreen(
                             Text("${twinResult.phenoAge} yrs", color = colors.primary, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         }
                         Column {
-                            Text("LRS Reserve", color = SleekAmber, fontSize = 11.sp)
-                            Text("${twinResult.longevityReserveScore.toInt()}/100", color = SleekAmber, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                            Text("LRS Reserve", color = colors.amber, fontSize = 11.sp)
+                            Text("${twinResult.longevityReserveScore.toInt()}/100", color = colors.amber, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -270,7 +270,7 @@ fun MedicalReportScreen(
 
                     // Diagnosis & Action
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("Phenotype Focus: ${twinResult.dominantAgingPhenotype}", color = SleekAmber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text("Phenotype Focus: ${twinResult.dominantAgingPhenotype}", color = colors.amber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                         Text("Primary Action: ${twinResult.primaryRecommendation}", color = colors.textSecondary, fontSize = 11.5.sp)
                     }
                 }

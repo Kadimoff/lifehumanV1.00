@@ -105,9 +105,9 @@ fun AiMorningBriefingWidget(
                 1.dp,
                 Brush.horizontalGradient(
                     listOf(
-                        SleekCyan.copy(alpha = 0.6f),
+                        colors.cyan.copy(alpha = 0.6f),
                         colors.primary.copy(alpha = 0.4f),
-                        SleekIndigo.copy(alpha = 0.6f)
+                        colors.indigo.copy(alpha = 0.6f)
                     )
                 ),
                 RoundedCornerShape(24.dp)
@@ -135,7 +135,7 @@ fun AiMorningBriefingWidget(
                             .clip(CircleShape)
                             .background(
                                 Brush.linearGradient(
-                                    listOf(SleekCyan.copy(alpha = 0.3f), colors.primary.copy(alpha = 0.3f))
+                                    listOf(colors.cyan.copy(alpha = 0.3f), colors.primary.copy(alpha = 0.3f))
                                 )
                             ),
                         contentAlignment = Alignment.Center
@@ -165,13 +165,13 @@ fun AiMorningBriefingWidget(
                                     .clip(RoundedCornerShape(6.dp))
                                     .background(
                                         if (briefing?.isAiGenerated == true) colors.primary.copy(alpha = 0.2f)
-                                        else SleekIndigo.copy(alpha = 0.2f)
+                                        else colors.indigo.copy(alpha = 0.2f)
                                     )
                                     .padding(horizontal = 6.dp, vertical = 2.dp)
                             ) {
                                 Text(
                                     text = if (briefing?.isAiGenerated == true) "GEMINI 3.5 AI" else "CLINICAL TWIN ENGINE",
-                                    color = if (briefing?.isAiGenerated == true) colors.primary else SleekIndigo,
+                                    color = if (briefing?.isAiGenerated == true) colors.primary else colors.indigo,
                                     fontSize = 8.5.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -301,13 +301,13 @@ fun AiMorningBriefingWidget(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(6.dp))
                                             .background(
-                                                if (isYounger) SleekGreen.copy(alpha = 0.2f) else SleekAmber.copy(alpha = 0.2f)
+                                                if (isYounger) colors.green.copy(alpha = 0.2f) else colors.amber.copy(alpha = 0.2f)
                                             )
                                             .padding(horizontal = 4.dp, vertical = 1.dp)
                                     ) {
                                         Text(
                                             text = if (bioAgeDiff > 0.0) "+$bioAgeDiff yrs" else "$bioAgeDiff yrs",
-                                            color = if (isYounger) SleekGreen else SleekAmber,
+                                            color = if (isYounger) colors.green else colors.amber,
                                             fontSize = 9.sp,
                                             fontWeight = FontWeight.Bold
                                         )
@@ -334,7 +334,7 @@ fun AiMorningBriefingWidget(
                                 )
                                 Text(
                                     text = b.rateOfAgingSummary,
-                                    color = if (isYounger) SleekGreen else colors.primary,
+                                    color = if (isYounger) colors.green else colors.primary,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1
@@ -361,14 +361,14 @@ fun AiMorningBriefingWidget(
                             Brush.linearGradient(
                                 listOf(
                                     colors.primary.copy(alpha = 0.12f),
-                                    SleekCyan.copy(alpha = 0.08f)
+                                    colors.cyan.copy(alpha = 0.08f)
                                 )
                             )
                         )
                         .border(
                             1.dp,
                             Brush.linearGradient(
-                                listOf(colors.primary.copy(alpha = 0.4f), SleekCyan.copy(alpha = 0.3f))
+                                listOf(colors.primary.copy(alpha = 0.4f), colors.cyan.copy(alpha = 0.3f))
                             ),
                             RoundedCornerShape(16.dp)
                         )
@@ -444,13 +444,13 @@ fun AiMorningBriefingWidget(
                                 Icon(
                                     imageVector = Icons.Default.Lightbulb,
                                     contentDescription = null,
-                                    tint = SleekAmber,
+                                    tint = colors.amber,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Column {
                                     Text(
                                         text = "Target Action Protocol:",
-                                        color = SleekAmber,
+                                        color = colors.amber,
                                         fontSize = 10.5.sp,
                                         fontWeight = FontWeight.Bold
                                     )
@@ -518,7 +518,7 @@ fun AiMorningBriefingWidget(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
-                                Icon(imageVector = Icons.Default.LocalFireDepartment, contentDescription = null, tint = SleekAmber, modifier = Modifier.size(12.dp))
+                                Icon(imageVector = Icons.Default.LocalFireDepartment, contentDescription = null, tint = colors.amber, modifier = Modifier.size(12.dp))
                                 Text("${profile.activeCaloriesKcal.toInt()} kcal", color = colors.textPrimary, fontSize = 10.5.sp, fontWeight = FontWeight.Bold)
                             }
                         }

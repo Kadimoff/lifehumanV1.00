@@ -86,7 +86,7 @@ Patient Data:
 - Chronological Age: ${profile.chronologicalAge} years
 - Biological Age (Levine PhenoAge): ${result.phenoAge} years (Difference: ${if (bioAgeDiff > 0.0) "+$bioAgeDiff" else "$bioAgeDiff"} years)
 - Rate of Aging Pace: ${result.paceOfAging}x
-- 10-Year Mortality Risk: ${(result.gompertzMortalityRisk * 1000.0).roundToInt() / 10.0}%
+- 10-Year Mortality Risk: ${result.gompertzMortalityRisk}%
 - Lowest Functional Reserve: ${lowestReserve?.name} (Score: ${lowestReserve?.score}/100, Status: ${lowestReserve?.statusLabel})
 - Strongest Functional Reserve: ${highestReserve?.name} (Score: ${highestReserve?.score}/100)
 - Dominant Aging Phenotype: ${result.dominantAgingPhenotype}
@@ -192,12 +192,11 @@ Output MUST be a single raw valid JSON object with EXACTLY these string keys (no
         val diff = ((result.phenoAge - profile.chronologicalAge) * 10.0).roundToInt() / 10.0
         val isYouthful = diff <= 0.0
         val absDiff = abs(diff)
-        val agingSpeed = if (isYouthful) {
-            val speed = ((profile.chronologicalAge - absDiff * 0.4) / profile.chronologicalAge * 100.0).roundToInt() / 100.0
-            "${maxOf(0.72, speed)}x baseline rate (Longevity Advantage)"
+        // Same pace figure as the hero card, so the dashboard never shows two different rates
+        val agingSpeed = if (result.paceOfAging <= 1.0) {
+            "${result.paceOfAging}x baseline rate (Longevity Advantage)"
         } else {
-            val speed = ((profile.chronologicalAge + absDiff * 0.5) / profile.chronologicalAge * 100.0).roundToInt() / 100.0
-            "${minOf(1.35, speed)}x baseline rate (Accelerated Decay)"
+            "${result.paceOfAging}x baseline rate (Accelerated Decay)"
         }
 
         val lowestReserve = result.reserves.minByOrNull { it.score } ?: result.reserves.first()

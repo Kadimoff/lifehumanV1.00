@@ -246,12 +246,12 @@ fun NemotronOcrScreen(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(SleekGreen.copy(alpha = 0.15f))
+                        .background(colors.green.copy(alpha = 0.15f))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = "Zero-Retention",
-                        color = SleekGreen,
+                        color = colors.green,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -276,6 +276,7 @@ fun NemotronOcrScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(
+                        modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
@@ -302,7 +303,7 @@ fun NemotronOcrScreen(
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
-                                text = "vLLM / TensorRT-LLM • Zero-Retention HIPPA Compliant",
+                                text = "vLLM / TensorRT-LLM • Zero-Retention HIPAA Compliant",
                                 color = colors.textMuted,
                                 fontSize = 10.5.sp
                             )
@@ -311,16 +312,19 @@ fun NemotronOcrScreen(
 
                     Box(
                         modifier = Modifier
+                            .padding(start = 8.dp)
                             .clip(RoundedCornerShape(8.dp))
-                            .background(SleekGreen.copy(alpha = 0.15f))
-                            .border(1.dp, SleekGreen.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                            .background(colors.green.copy(alpha = 0.15f))
+                            .border(1.dp, colors.green.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
                         Text(
                             text = "ONLINE",
-                            color = SleekGreen,
+                            color = colors.green,
                             fontSize = 10.sp,
-                            fontWeight = FontWeight.ExtraBold
+                            fontWeight = FontWeight.ExtraBold,
+                            maxLines = 1,
+                            softWrap = false
                         )
                     }
                 }
@@ -397,7 +401,11 @@ fun NemotronOcrScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.DocumentScanner,
                                 contentDescription = null,
@@ -415,7 +423,10 @@ fun NemotronOcrScreen(
                         Text(
                             text = currentDoc.date,
                             color = colors.textMuted,
-                            fontSize = 11.sp
+                            fontSize = 11.sp,
+                            maxLines = 1,
+                            softWrap = false,
+                            modifier = Modifier.padding(start = 8.dp)
                         )
                     }
 
@@ -529,7 +540,7 @@ fun NemotronOcrScreen(
                     ) {
                         Text(
                             text = "LOINC Extracted Payload (Nemotron vLLM Output)",
-                            color = SleekPrimary,
+                            color = colors.primary,
                             fontSize = 11.5.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -569,7 +580,7 @@ fun NemotronOcrScreen(
                 if (pipelineStage == OcrPipelineStage.REVIEW) {
                     Text(
                         text = "Confidence: >98%",
-                        color = SleekGreen,
+                        color = colors.green,
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -623,7 +634,7 @@ fun NemotronOcrScreen(
                     ) {
                         Text(
                             text = "${bm.value} ${bm.unit}",
-                            color = if (bm.isOptimal) SleekGreen else SleekCoral,
+                            color = if (bm.isOptimal) colors.green else colors.coral,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
@@ -632,13 +643,13 @@ fun NemotronOcrScreen(
                             modifier = Modifier
                                 .size(24.dp)
                                 .clip(CircleShape)
-                                .background(if (bm.isOptimal) SleekGreen.copy(alpha = 0.15f) else SleekCoral.copy(alpha = 0.15f)),
+                                .background(if (bm.isOptimal) colors.green.copy(alpha = 0.15f) else colors.coral.copy(alpha = 0.15f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = if (bm.isOptimal) Icons.Default.Check else Icons.Default.Security,
                                 contentDescription = null,
-                                tint = if (bm.isOptimal) SleekGreen else SleekCoral,
+                                tint = if (bm.isOptimal) colors.green else colors.coral,
                                 modifier = Modifier.size(14.dp)
                             )
                         }
@@ -678,7 +689,7 @@ fun NemotronOcrScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(1.dp, SleekGreen.copy(alpha = 0.4f), RoundedCornerShape(12.dp)),
+                            .border(1.dp, colors.green.copy(alpha = 0.4f), RoundedCornerShape(12.dp)),
                         colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -696,12 +707,12 @@ fun NemotronOcrScreen(
                                 Icon(
                                     imageVector = Icons.Default.CheckCircle,
                                     contentDescription = null,
-                                    tint = SleekGreen,
+                                    tint = colors.green,
                                     modifier = Modifier.size(18.dp)
                                 )
                                 Text(
                                     text = appliedSuccessMessage ?: "",
-                                    color = SleekGreen,
+                                    color = colors.green,
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -710,7 +721,7 @@ fun NemotronOcrScreen(
                             Button(
                                 onClick = onNavigateToDashboard,
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = SleekGreen,
+                                    containerColor = colors.green,
                                     contentColor = Color.Black
                                 ),
                                 shape = RoundedCornerShape(8.dp),

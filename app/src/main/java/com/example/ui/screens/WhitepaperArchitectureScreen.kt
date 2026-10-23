@@ -121,7 +121,7 @@ fun WhitepaperArchitectureScreen(
                         ) {
                             Text(
                                 text = "Pure Client-Side Engine",
-                                color = SleekGreen,
+                                color = colors.green,
                                 fontSize = 10.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -302,7 +302,7 @@ fun Section8ReserveModels() {
                 shape = RoundedCornerShape(14.dp)
             ) {
                 Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Morgan Levine PhenoAge Equation:", color = SleekPrimary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text("Morgan Levine PhenoAge Equation:", color = colors.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Text(
                         text = """
 1. Linear Predictor (xb):
@@ -316,7 +316,7 @@ fun Section8ReserveModels() {
 3. Phenotypic Biological Age:
    PhenoAge = 141.50 + ( ln( -0.00553 * ln(1 - M) ) / 0.090165 )
                         """.trimIndent(),
-                        color = SleekPrimary,
+                        color = colors.primary,
                         fontSize = 10.sp,
                         fontFamily = FontFamily.Monospace,
                         lineHeight = 14.sp
@@ -461,7 +461,7 @@ fun SectionTrajectoriesDoc() {
                         .padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(name, color = SleekAmber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(name, color = colors.amber, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     Text(detail, color = colors.textSecondary, fontSize = 10.5.sp, lineHeight = 14.sp)
                 }
             }
@@ -530,7 +530,7 @@ fun SectionFinancialEvaluation() {
         ) {
             Text(
                 text = "6. FINANCIAL MODELING & UNIT ECONOMICS",
-                color = SleekGreen,
+                color = colors.green,
                 fontSize = 13.5.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -560,7 +560,7 @@ fun SectionFinancialEvaluation() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(item, color = colors.textPrimary, fontSize = 11.5.sp, fontWeight = FontWeight.Medium)
-                    Text(value, color = SleekGreen, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                    Text(value, color = colors.green, fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -769,7 +769,7 @@ class _LongevityRadarChartState extends State<LongevityRadarChart>
 }
                             """.trimIndent()
                         },
-                        color = SleekPrimary,
+                        color = colors.primary,
                         fontSize = 10.5.sp,
                         fontFamily = FontFamily.Monospace,
                         lineHeight = 15.sp

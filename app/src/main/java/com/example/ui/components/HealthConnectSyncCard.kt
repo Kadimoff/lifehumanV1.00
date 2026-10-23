@@ -120,7 +120,7 @@ fun HealthConnectSyncCard(
                             .clip(CircleShape)
                             .background(
                                 Brush.linearGradient(
-                                    listOf(colors.primary.copy(alpha = 0.25f), SleekGreen.copy(alpha = 0.25f))
+                                    listOf(colors.primary.copy(alpha = 0.25f), colors.green.copy(alpha = 0.25f))
                                 )
                             ),
                         contentAlignment = Alignment.Center
@@ -149,12 +149,12 @@ fun HealthConnectSyncCard(
                                 Box(
                                     modifier = Modifier
                                         .clip(RoundedCornerShape(6.dp))
-                                        .background(SleekGreen.copy(alpha = 0.15f))
+                                        .background(colors.green.copy(alpha = 0.15f))
                                         .padding(horizontal = 6.dp, vertical = 2.dp)
                                 ) {
                                     Text(
                                         text = "LIVE ACTIVE",
-                                        color = SleekGreen,
+                                        color = colors.green,
                                         fontSize = 8.5.sp,
                                         fontWeight = FontWeight.ExtraBold
                                     )
@@ -241,7 +241,7 @@ fun HealthConnectSyncCard(
                         )
                         Text(
                             text = "Cardio Target",
-                            color = SleekGreen,
+                            color = colors.green,
                             fontSize = 9.5.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -276,7 +276,7 @@ fun HealthConnectSyncCard(
                             )
                         }
                         Text(
-                            text = "${profile.dailySteps}",
+                            text = String.format(java.util.Locale.US, "%,d", profile.dailySteps),
                             color = colors.textPrimary,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.ExtraBold
@@ -307,7 +307,7 @@ fun HealthConnectSyncCard(
                             Icon(
                                 imageVector = Icons.Default.LocalFireDepartment,
                                 contentDescription = null,
-                                tint = SleekAmber,
+                                tint = colors.amber,
                                 modifier = Modifier.size(13.dp)
                             )
                             Text(
@@ -325,7 +325,7 @@ fun HealthConnectSyncCard(
                         )
                         Text(
                             text = "Lipid Oxidation",
-                            color = SleekAmber,
+                            color = colors.amber,
                             fontSize = 9.5.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -383,7 +383,7 @@ fun HealthConnectSyncCard(
                     ) {
                         Icon(imageVector = Icons.Default.Security, contentDescription = null, modifier = Modifier.size(14.dp))
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text("Connect Health SDK", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
+                        Text("Connect Health Data", fontSize = 11.5.sp, fontWeight = FontWeight.Bold)
                     }
                 } else {
                     Button(

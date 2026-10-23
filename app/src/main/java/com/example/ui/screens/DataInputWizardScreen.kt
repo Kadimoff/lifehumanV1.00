@@ -37,6 +37,8 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -215,7 +217,7 @@ fun DataInputWizardScreen(
                             value = profile.hsCrpMgL.toString(),
                             unit = "mg/L",
                             optimalRange = "< 0.5 mg/L (Optimal)",
-                            isOptimal = profile.hsCrpMgL < 0.8,
+                            isOptimal = profile.hsCrpMgL < 0.5,
                             onValueChange = { profile.copy(hsCrpMgL = it.toDoubleOrNull() ?: profile.hsCrpMgL).let(viewModel::updateProfile) }
                         )
                     }
@@ -533,6 +535,13 @@ fun BiomarkerInputField(
     onValueChange: (String) -> Unit
 ) {
     val colors = AppTheme.colors
+    // Local draft lets the field be cleared or hold "4." mid-typing; only parseable numbers reach the profile
+    var draft by remember { mutableStateOf(value) }
+    LaunchedEffect(value) {
+        if (draft.toDoubleOrNull() != value.toDoubleOrNull()) draft = value
+    }
+    val isDraftValid = draft.toDoubleOrNull() != null
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -556,12 +565,12 @@ fun BiomarkerInputField(
                 Box(
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(if (isOptimal) SleekGreen.copy(alpha = 0.15f) else SleekAmber.copy(alpha = 0.15f))
+                        .background(if (isOptimal) colors.green.copy(alpha = 0.15f) else colors.amber.copy(alpha = 0.15f))
                         .padding(horizontal = 9.dp, vertical = 3.dp)
                 ) {
                     Text(
                         text = if (isOptimal) "Optimal" else "Suboptimal",
-                        color = if (isOptimal) SleekGreen else SleekAmber,
+                        color = if (isOptimal) colors.green else colors.amber,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -576,8 +585,13 @@ fun BiomarkerInputField(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 OutlinedTextField(
-                    value = value,
-                    onValueChange = onValueChange,
+                    value = draft,
+                    onValueChange = { text ->
+                        val normalized = text.replace(',', '.')
+                        draft = normalized
+                        if (normalized.toDoubleOrNull() != null) onValueChange(normalized)
+                    },
+                    isError = !isDraftValid,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(12.dp),
@@ -587,7 +601,10 @@ fun BiomarkerInputField(
                         focusedBorderColor = colors.primary,
                         unfocusedBorderColor = colors.borderSubtle,
                         focusedTextColor = colors.textPrimary,
-                        unfocusedTextColor = colors.textPrimary
+                        unfocusedTextColor = colors.textPrimary,
+                        errorContainerColor = colors.surfaceVariant,
+                        errorBorderColor = colors.coral,
+                        errorTextColor = colors.textPrimary
                     ),
                     singleLine = true
                 )

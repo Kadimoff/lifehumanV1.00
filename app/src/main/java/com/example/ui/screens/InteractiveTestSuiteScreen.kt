@@ -331,7 +331,7 @@ fun StroopTestComponent(viewModel: LongevityViewModel) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = SleekGreen, modifier = Modifier.size(32.dp))
+                    Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null, tint = themeColors.green, modifier = Modifier.size(32.dp))
                     Text("Test Complete! Cognitive Twin Updated", color = themeColors.textPrimary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     Text("Mean Reaction Latency: ${meanLatency.toInt()} ms", color = themeColors.primary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                     Text("Accuracy: ${accuracy.toInt()}% ($correctCount/12 trials)", color = themeColors.textSecondary, fontSize = 12.sp)
@@ -396,7 +396,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                     .background(colors.surfaceVariant)
                     .border(
                         3.dp,
-                        Brush.sweepGradient(listOf(colors.primary, colors.secondary, SleekAmber, colors.primary)),
+                        Brush.sweepGradient(listOf(colors.primary, colors.secondary, colors.amber, colors.primary)),
                         CircleShape
                     ),
                 contentAlignment = Alignment.Center
@@ -404,7 +404,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = if (isRunning) "$secondsLeft s" else "$repCount Reps",
-                        color = if (isRunning) SleekAmber else colors.primary,
+                        color = if (isRunning) colors.amber else colors.primary,
                         fontSize = 32.sp,
                         fontWeight = FontWeight.ExtraBold
                     )
@@ -455,7 +455,7 @@ fun ChairStandTimerComponent(viewModel: LongevityViewModel) {
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text("Total: $repCount Reps in 30 seconds", color = colors.primary, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                    Text(rating, color = if (repCount >= 14) SleekGreen else SleekRose, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                    Text(rating, color = if (repCount >= 14) colors.green else colors.rose, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                 }
 
                 Row(
